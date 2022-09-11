@@ -1,0 +1,28 @@
+.page {
+  padding: 20px;
+
+  &__title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-top: 20px;
+    margin-bottom: 20px;
+  }
+
+  &__block {
+    margin: 5px 0;
+    &:not(:first-child) {
+      margin-top: 100px;
+    }
+  }
+
+  &__double-column {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-column-gap: 20px;
+
+    @media(max-width: $break-point) {
+      display: block;
+      & > * {margin: 5px 0}
+    }
+  }
+}

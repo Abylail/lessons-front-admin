@@ -1,7 +1,7 @@
 <script>
 export default {
   middleware({ redirect }) {
-    redirect("/company/settings");
+    redirect("/center/settings");
   }
 }
 </script>

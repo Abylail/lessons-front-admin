@@ -7,6 +7,7 @@
     <!-- NAVIGATION BAR -->
     <default-navigation-bar :open="navBarOpen" @input:open="navBarOpen = $event"/>
 
+    <!-- LAYOUT -->
     <v-main>
       <Nuxt/>
     </v-main>

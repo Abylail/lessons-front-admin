@@ -1,3 +1,17 @@
+const defaultUserInfo = {
+  username: "incode",
+  role: "center", // center, admin, teacher
+  name: "InCode academy",
+  description: "Robotics for children",
+  minAge: 5,
+  maxAge: 10,
+  instagram: "https://instagram.com/incode.academy",
+  whatsapp: "+7 (705) 670-78-91",
+  phone: "+7 (705) 670-78-91",
+  phone2: "+7 (705) 670-78-92",
+  addresses: [{city: "Алматы", address: "Наурызбай батыра 50"}],
+}
+
 export const state = () => ({
   userToken: null,
   userInfo: null,
@@ -5,7 +19,7 @@ export const state = () => ({
 
 export const getters = {
   isAuth: state => !!state.userToken,
-  getUserInfo: state => state.userInfo || {},
+  getUserInfo: state => state.userInfo || {}, // { name, description, maxAge, minAge }
 }
 
 export const mutations = {
@@ -20,7 +34,7 @@ export const actions = {
   login({ commit }, {username, password}) {
     if (!username || !password) return;
     commit("userToken", "SuperToken");
-    commit("userInfo", { username });
+    commit("userInfo", defaultUserInfo);
     this.$cookies.set("token", "SuperToken");
   },
 
@@ -28,6 +42,7 @@ export const actions = {
   async tokenAuth({ state, commit }) {
     const token = state.userToken || this.$cookies.get("token");
     commit("set", ["userToken", token]);
+    commit("set", ["userInfo", defaultUserInfo]);
   },
 
   // logout

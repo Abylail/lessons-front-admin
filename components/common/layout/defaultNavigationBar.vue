@@ -43,9 +43,9 @@ export default {
   },
   data: () => ({
     links: [
-      { icon: "mdi-domain", name: "Моя компания", route: "/company/settings"},
-      { icon: "mdi-percent-box-outline", name: "Моя акции", route: "/company/promotions"},
-      { icon: "mdi-timetable", name: "Расписание", route: "/company/timetable" },
+      { icon: "mdi-domain", name: "Моя компания", route: "/center/settings"},
+      { icon: "mdi-percent-box-outline", name: "Мои акции", route: "/center/promotions"},
+      { icon: "mdi-timetable", name: "Расписание", route: "/center/timetable" },
     ]
   }),
   computed: {
