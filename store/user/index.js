@@ -1,5 +1,6 @@
 const defaultUserInfo = {
   username: "incode",
+  userPhone: "+7 (705) 670-78-91",
   role: "center", // center, admin, teacher
   name: "InCode academy",
   description: "Robotics for children",
@@ -12,14 +13,26 @@ const defaultUserInfo = {
   addresses: [{city: "Алматы", address: "Наурызбай батыра 50"}],
 }
 
+const defaultWorkSchedule = {
+  monday: {start: "09:00", end: "18:00"},
+  tuesday: {start: "09:00", end: "18:00"},
+  wednesday: {start: "09:00", end: "18:00"},
+  thursday: {start: "09:00", end: "18:00"},
+  friday: {start: "09:00", end: "18:00"},
+  saturday: {start: "09:00", end: "18:00"},
+  sunday: null,
+}
+
 export const state = () => ({
   userToken: null,
   userInfo: null,
+  workSchedule: null
 })
 
 export const getters = {
   isAuth: state => !!state.userToken,
   getUserInfo: state => state.userInfo || {}, // { name, description, maxAge, minAge }
+  getWorkSchedule: state => state.workSchedule,
 }
 
 export const mutations = {
@@ -49,6 +62,11 @@ export const actions = {
   logout({ commit }) {
     commit("set", ["userToken", null]);
     this.$cookies.remove("userToken");
+  },
+
+  // Запросить график работы
+  fetchWorkSchedule({ commit }) {
+    commit("set", ["workSchedule", defaultWorkSchedule]);
   },
 
 }

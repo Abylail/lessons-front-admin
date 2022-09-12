@@ -9,10 +9,8 @@
   }
 
   &__block {
-    margin: 5px 0;
-    &:not(:first-child) {
-      margin-top: 100px;
-    }
+    margin-bottom: 50px;
+    &:not(:first-child) {margin-top: 50px}
   }
 
   &__double-column {

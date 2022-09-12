@@ -36,6 +36,8 @@
         />
       </div>
 
+      <h2 class="page__title">Контакты</h2>
+
       <!-- Instagram и WhatsApp -->
       <div class="page__double-column">
         <v-text-field
@@ -66,6 +68,8 @@
           v-mask="'+7 (###) ###-##-##'"
         />
       </div>
+
+      <h2 class="page__title">Адреса</h2>
 
       <!-- Адреса -->
       <div class="settings__address" v-for="(address, index) in mainInfo.addresses" :key="index">
@@ -99,11 +103,29 @@
       ><v-icon>mdi-plus</v-icon>Добавить адрес</v-btn>
 
       <!-- Сохранить и Отмена -->
-      <div class="page__double-column">
-        <v-btn block @click="cancelMainInfoHandle()">Отмена</v-btn>
-        <v-btn block color="primary" @click="saveMainInfoHandle()">Сохранить</v-btn>
+      <div class="page__double-column settings__actions">
+        <v-btn block x-large @click="cancelMainInfoHandle()">Отмена</v-btn>
+        <v-btn block x-large color="primary" @click="saveMainInfoHandle()">Сохранить</v-btn>
       </div>
     </div>
+
+    <v-divider/>
+
+    <!-- График работы -->
+    <div class="page__block">
+
+      <h2 class="page__title">График работы</h2>
+
+      <work-schedule v-model="workSchedule"/>
+
+      <!-- Сохранить и Отмена -->
+      <div class="page__double-column settings__actions">
+        <v-btn block x-large>Отмена</v-btn>
+        <v-btn block x-large color="primary">Сохранить</v-btn>
+      </div>
+    </div>
+
+    <v-divider/>
 
     <!-- ФОТО -->
     <div class="page__block">
@@ -115,20 +137,29 @@
 </template>
 
 <script>
-import {mapGetters} from "vuex";
+import {mapActions, mapGetters} from "vuex";
 import { activeCities } from "@/config/lists";
+import WorkSchedule from "@/components/common/workSchedule";
 
 export default {
   name: "settings",
+  components: {WorkSchedule},
   data: () => ({
+
+    // Основная инфа
     mainInfo: {},
+
+    // График работы
+    workSchedule: {},
+
     isLoading: false,
 
     activeCities,
   }),
   computed: {
     ...mapGetters({
-      _userInfo: "user/getUserInfo"
+      _userInfo: "user/getUserInfo",
+      _workSchedule: "user/getWorkSchedule"
     }),
     canAddAddress() {
       return !this.mainInfo.addresses
@@ -137,13 +168,17 @@ export default {
     }
   },
   methods: {
+    ...mapActions({
+      _fetchWorkSchedule: "user/fetchWorkSchedule",
+    }),
+
     async getMainInfo() {
-      this.isLoading = true;
       this.mainInfo = JSON.parse(JSON.stringify(this._userInfo));
-      this.isLoading = false;
     },
-    cancelMainInfoHandle() {
-      this.getMainInfo();
+    async cancelMainInfoHandle() {
+      this.isLoading = true;
+      await this.getMainInfo();
+      this.isLoading = false;
     },
     async saveMainInfoHandle() {
       console.log(this.mainInfo);
@@ -155,9 +190,17 @@ export default {
     removeAddressHandle(index) {
       this.mainInfo.addresses.splice(index, 1);
     },
+
+    async getWorkSchedule() {
+      await this._fetchWorkSchedule();
+      this.workSchedule = JSON.parse(JSON.stringify(this._workSchedule));
+    },
   },
-  mounted() {
-    this.getMainInfo();
+  async mounted() {
+    this.isLoading = true;
+    await this.getMainInfo();
+    await this.getWorkSchedule();
+    this.isLoading = false;
   }
 }
 </script>
@@ -189,6 +232,10 @@ export default {
 
   &__address-remove {
     @media (min-width: $break-point) {min-height: 56px}
+  }
+
+  &__actions {
+    margin-top: 70px;
   }
 
 }
