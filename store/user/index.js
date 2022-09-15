@@ -23,16 +23,28 @@ const defaultWorkSchedule = {
   sunday: null,
 }
 
+const defaultPromotions = [
+  {
+    content: "", // html
+    title: "", // title
+    status: "", // status
+    created: "", // Дата создания
+    updated: "", // Дата обновления
+  },
+]
+
 export const state = () => ({
   userToken: null,
   userInfo: null,
-  workSchedule: null
+  workSchedule: null,
+  promotions: null,
 })
 
 export const getters = {
   isAuth: state => !!state.userToken,
   getUserInfo: state => state.userInfo || {}, // { name, description, maxAge, minAge }
   getWorkSchedule: state => state.workSchedule,
+  getPromotions: state => state.promotions,
 }
 
 export const mutations = {
@@ -67,6 +79,11 @@ export const actions = {
   // Запросить график работы
   fetchWorkSchedule({ commit }) {
     commit("set", ["workSchedule", defaultWorkSchedule]);
+  },
+
+  // Запросить список акций
+  fetchPromotions({ commit }) {
+    commit("set", ["promotions", defaultPromotions]);
   },
 
 }
