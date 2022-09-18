@@ -3,32 +3,40 @@
 
     <h2 class="page__title">Список акций</h2>
 
-    <!-- Список акций -->
     <div class="promotions__list">
-      <div class="promotions__item" v-for="(promotion, index) in promotions" :key="index">
-        <v-text-field v-model="promotion.title" label="Оглавление" outlined/>
-        <vue-editor v-model="promotion.content"/>
+      <div class="promotions__item" v-for="(item, index) in promotions" :key="index">
+        <div class="promotions__item-title">{{ item.title }}</div>
+        <div class="promotions__item-status">Статус: {{ item.status || "Не подан" }}</div>
+        <div class="promotions__item-actions">
+          <v-btn title="Редактировать" icon @click="editPromotionHandle(index)"><v-icon>mdi-pencil</v-icon></v-btn>
+          <v-btn color="red" title="Удалить" icon><v-icon>mdi-delete</v-icon></v-btn>
+        </div>
+      </div>
+      <div class="promotions__create promotions__item" @click="editPromotionHandle(null)">
+        Создать акцию +
       </div>
     </div>
 
-    <!-- Создать акцию -->
-    <v-btn
-      class="promotions__create"
-      v-show="canCreate" block outlined x-large
-      @click="createPromotionHandle()"
-    ><v-icon>mdi-plus</v-icon>Создать акцию</v-btn>
+    <!-- Модалки -->
+    <promotion-edit-modal :value="promotionsEdit" :show.sync="showPromotionsEdit" @input="editPromotion($event)"/>
 
   </div>
 </template>
 
 <script>
 import {mapActions, mapGetters} from "vuex";
+import PromotionEditModal from "@/components/common/modal/promotionEditModal";
 
 export default {
   name: "promotions",
+  components: {PromotionEditModal},
   data: () => ({
     promotions: [],
     isLoading: false,
+
+    showPromotionsEdit: false,
+    promotionsEdit: null,
+    promotionsEditIndex: null,
   }),
   computed: {
     ...mapGetters({
@@ -48,11 +56,17 @@ export default {
       this.promotions = JSON.parse(JSON.stringify(this._promotions));
       this.isLoading = false;
     },
-    createPromotionHandle() {
-      this.promotions.push({
-        content: "", // html
-        title: "", // title
-      });
+
+    // Нажатие на кнопку создать или редактировать
+    editPromotionHandle(index = null) {
+      this.promotionsEditIndex = index;
+      this.promotionsEdit = this.promotions[index] || {title: "", content: "", status: "Ожидает ответа"};
+      this.showPromotionsEdit = true;
+    },
+    editPromotion(value) {
+      if (this.promotionsEditIndex === null) this.promotions.push(null);
+      this.promotionsEditIndex = this.promotions.length - 1;
+      this.promotions[this.promotionsEditIndex] = value;
     },
   },
   mounted() {
@@ -69,9 +83,25 @@ export default {
   }
 
   &__item {
-    padding: 20px 0 40px;
-    margin: 20px 0;
-    &:not(:last-child) {border-bottom: 1px solid black}
+    display: grid;
+    grid-template-columns: 1fr 1fr 100px;
+    border: 1px solid #ccc;
+    line-height: 36px;
+    padding-left: 10px;
+    &:not(:first-child) {border-top: transparent;}
+    &:first-child {border-top-left-radius: 5px;border-top-right-radius: 5px;}
+    &:last-child {border-bottom-left-radius: 5px;border-bottom-right-radius: 5px;}
+  }
+
+  &__create {
+    display: block;
+    text-align: center;
+    cursor: pointer;
+    color: #1976d2;
+    transition: .3s;
+    user-select: none;
+    &:hover {background: rgba(0, 0, 0, .05)}
+    &:active {background: rgba(0, 0, 0, .1)}
   }
 
 }

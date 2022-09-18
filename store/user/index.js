@@ -26,8 +26,8 @@ const defaultWorkSchedule = {
 const defaultPromotions = [
   {
     content: "", // html
-    title: "", // title
-    status: "", // status
+    title: "Скидка на первый урок", // title
+    status: "Ожидает ответа", // status
     created: "", // Дата создания
     updated: "", // Дата обновления
   },

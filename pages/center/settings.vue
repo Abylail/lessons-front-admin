@@ -69,7 +69,7 @@
         />
       </div>
 
-      <h2 class="page__title">Адреса</h2>
+      <h2 class="page__title">Филиалы</h2>
 
       <!-- Адреса -->
       <div class="settings__address" v-for="(address, index) in mainInfo.addresses" :key="index">

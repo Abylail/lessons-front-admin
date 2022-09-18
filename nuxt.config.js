@@ -51,7 +51,8 @@ export default {
     "cookie-universal-nuxt",
     "@nuxtjs/device",
     "@nuxtjs/axios",
-    "vue2-editor/nuxt"
+    "vue2-editor/nuxt",
+    "@nuxtjs/toast",
   ],
 
   // Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify
