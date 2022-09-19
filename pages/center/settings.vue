@@ -10,14 +10,17 @@
         label="Название центра"
         v-model="mainInfo.name"
         outlined
+        dense
       />
 
       <!-- Описание -->
       <v-textarea
         label="Описание"
         v-model="mainInfo.description"
+        rows="2"
         outlined
         auto-grow
+        dense
       />
 
       <!-- Максимальный и минимальный возраст -->
@@ -25,14 +28,16 @@
         <v-text-field
           label="Максимальный возраст"
           v-model="mainInfo.maxAge"
-          outlined
           type="number"
+          outlined
+          dense
         />
         <v-text-field
           label="Минимальный возраст"
           v-model="mainInfo.minAge"
-          outlined
           type="number"
+          outlined
+          dense
         />
       </div>
 
@@ -44,12 +49,14 @@
           label="Ссылка на Instagram"
           v-model="mainInfo.instagram"
           outlined
+          dense
         />
         <v-text-field
           label="Номер для WhatsApp"
           v-model="mainInfo.whatsapp"
-          outlined
           v-mask="'+7 (###) ###-##-##'"
+          outlined
+          dense
         />
       </div>
 
@@ -58,14 +65,16 @@
         <v-text-field
           label="Главный сотовый номер"
           v-model="mainInfo.phone"
-          outlined
           v-mask="'+7 (###) ###-##-##'"
+          outlined
+          dense
         />
         <v-text-field
           label="Главный сотовый номер"
           v-model="mainInfo.phone2"
-          outlined
           v-mask="'+7 (###) ###-##-##'"
+          outlined
+          dense
         />
       </div>
 
@@ -81,11 +90,13 @@
           item-text="name"
           item-value="name"
           outlined
+          dense
         />
         <v-text-field
           label="Адрес"
           v-model="address.address"
           outlined
+          dense
         />
         <v-btn
           class="settings__address-remove"
@@ -226,16 +237,16 @@ export default {
   }
 
   &__address-add {
-    min-height: 56px;
+    min-height: 40px;
     margin-bottom: 30px;
   }
 
   &__address-remove {
-    @media (min-width: $break-point) {min-height: 56px}
+    @media (min-width: $break-point) {min-height: 40px}
   }
 
   &__actions {
-    margin-top: 70px;
+    margin-top: 40px;
   }
 
 }

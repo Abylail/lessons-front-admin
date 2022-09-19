@@ -86,11 +86,21 @@ export default {
     display: grid;
     grid-template-columns: 1fr 1fr 100px;
     border: 1px solid #ccc;
-    line-height: 36px;
+    line-height: 20px;
     padding-left: 10px;
     &:not(:first-child) {border-top: transparent;}
     &:first-child {border-top-left-radius: 5px;border-top-right-radius: 5px;}
     &:last-child {border-bottom-left-radius: 5px;border-bottom-right-radius: 5px;}
+  }
+
+  &__item-title {
+    display: flex;
+    align-items: center;
+  }
+
+  &__item-status {
+    display: flex;
+    align-items: center;
   }
 
   &__create {
@@ -100,6 +110,7 @@ export default {
     color: #1976d2;
     transition: .3s;
     user-select: none;
+    line-height: 40px;
     &:hover {background: rgba(0, 0, 0, .05)}
     &:active {background: rgba(0, 0, 0, .1)}
   }
