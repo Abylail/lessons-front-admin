@@ -21,7 +21,7 @@ export default {
   }),
   methods: {
     ...mapActions({
-      _logout: "user/logout",
+      _logout: "center/logout",
     }),
     logoutHandle() {
       this._logout();

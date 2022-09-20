@@ -34,17 +34,38 @@ const defaultPromotions = [
 ]
 
 export const state = () => ({
+  // Токен юзер
   userToken: null,
+
+  // Информация юзера
   userInfo: null,
+
+  // Рабочий график
   workSchedule: null,
+
+  // Список акций
   promotions: null,
+
+  // Список учителей
+  teachers: [],
 })
 
 export const getters = {
+
+  // Авторизован ли пользователь
   isAuth: state => !!state.userToken,
+
+  // Информация юзера
   getUserInfo: state => state.userInfo || {}, // { name, description, maxAge, minAge }
+
+  // Рабочий график
   getWorkSchedule: state => state.workSchedule,
+
+  // Список акций
   getPromotions: state => state.promotions,
+
+  // Список учителей
+  getTeachers: state => state.teachers, // [ {id, name} ]
 }
 
 export const mutations = {
@@ -84,6 +105,11 @@ export const actions = {
   // Запросить список акций
   fetchPromotions({ commit }) {
     commit("set", ["promotions", defaultPromotions]);
+  },
+
+  // Запросить список учителей
+  fetchTeachers({ commit }) {
+    commit("set", ["teachers", [{id: 1, name: "Феликс"}, {id: 2, name: "Марат"}]]);
   },
 
 }

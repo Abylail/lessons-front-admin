@@ -40,7 +40,7 @@ export default {
   }),
   computed: {
     ...mapGetters({
-      _promotions: "user/getPromotions",
+      _promotions: "center/getPromotions",
     }),
     canCreate() {
       return true;
@@ -48,7 +48,7 @@ export default {
   },
   methods: {
     ...mapActions({
-      _fetchPromotions: "user/fetchPromotions",
+      _fetchPromotions: "center/fetchPromotions",
     }),
     async getPromotions() {
       this.isLoading = true;

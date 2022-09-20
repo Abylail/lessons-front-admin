@@ -61,7 +61,8 @@ export default {
       return this.value && !!this.value[dayKey];
     },
     getName(dayKey) {
-      return this.dayDescription[dayKey].shortName;
+      if (!this.$device.isMobile) return this.dayDescription[dayKey].shortName;
+      return this.dayDescription[dayKey].name;
     },
 
 
@@ -117,7 +118,7 @@ export default {
     cursor: pointer;
     margin: 5px;
     transition: .3s;
-    min-height: 190px;
+    //min-height: 190px;
 
     &--active {
       color: #1976d2;
@@ -129,6 +130,14 @@ export default {
     display: flex;
     flex-direction: row;
     align-items: center;
+  }
+
+  &__day-times {
+    @media (max-width: $break-point) {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-column-gap: 10px;
+    }
   }
 
 }
