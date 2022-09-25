@@ -91,14 +91,11 @@ export default {
     isLoading: false,
   }),
   computed: {
-    ...mapGetters({
-      teachers: "center/getTeachers",
-    }),
+    teachers() {
+      return [{id: 1, name: "Феликс"}, {id: 2, name: "Марат"}, {id: 3, name: "Всеволод"}]
+    }
   },
   methods: {
-    ...mapActions({
-      _fetchTeachers: "center/fetchTeachers",
-    }),
 
     // Выбран ли день недели
     weekdayIsActive({ code }) {
@@ -128,7 +125,6 @@ export default {
   },
   async mounted() {
     this.isLoading = true;
-    await this._fetchTeachers();
 
     // Выбираю всех учителей
     this.filter.teachers = this.teachers.map(t => t.id);

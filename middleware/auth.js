@@ -1,7 +1,7 @@
 export default async function ({ store, redirect, route }) {
-  if (!store.getters["center/isAuth"]) {
+  if (!store.getters["auth/isAuth"]) {
 
-    await store.dispatch("center/tokenAuth");
-    if (!store.getters["center/isAuth"]) redirect("/login");
+    await store.dispatch("auth/tokenAuth");
+    if (!store.getters["auth/isAuth"]) redirect("/login");
   }
 }

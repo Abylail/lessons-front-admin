@@ -47,7 +47,7 @@ export default {
   }),
   methods: {
     ...mapActions({
-      _login: "center/login"
+      _login: "auth/login"
     }),
     async loginHandle() {
       this.isLoading = true;
