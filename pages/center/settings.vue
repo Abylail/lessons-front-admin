@@ -5,13 +5,10 @@
 </template>
 
 <script>
-import {mapActions, mapGetters} from "vuex";
 import { activeCities } from "@/config/lists";
-import WorkSchedule from "@/components/common/workSchedule";
 
 export default {
   name: "settings",
-  components: {WorkSchedule},
   data: () => ({
     isLoading: false,
 

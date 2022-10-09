@@ -20,49 +20,6 @@
       </v-btn>
     </div>
 
-    <!-- Фильтры -->
-    <slide>
-      <div v-show="showFilter">
-        <div class="timetable__filters">
-
-          <h3 class="mb-2">Фильтры</h3>
-
-          <!-- Дни недели -->
-          <div class="timetable__filters-row">
-            <span class="timetable__filters-title">Дни недели:</span>
-            <v-chip
-              v-for="weekday in weekdays"
-              :key="weekday.code"
-              class="mr-1 mb-1"
-              color="blue"
-              :outlined="!weekdayIsActive(weekday)"
-              label
-              dark
-              small
-              @click="weekdayToggle(weekday)"
-            >{{ weekday.name }}</v-chip>
-          </div>
-
-          <!-- Учителя -->
-          <div class="timetable__filters-row">
-            <span class="timetable__filters-title">Учителя:</span>
-            <v-chip
-              v-for="teacher in teachers"
-              :key="teacher.id"
-              class="mr-1 mb-1"
-              color="primary"
-              :outlined="!teacherIsActive(teacher)"
-              label
-              dark
-              small
-              @click="teacherToggle(teacher)"
-            >{{ teacher.name }}</v-chip>
-          </div>
-
-        </div>
-      </div>
-    </slide>
-
   </div>
 </template>
 

@@ -19,6 +19,9 @@ export const getters = {
   // Авторизован ли пользователь
   isAuth: state => !!state.userToken,
 
+  // Роль юзера
+  getRole: state => state.userInfo?.role,
+
   // Информация юзера
   getUserInfo: state => state.userInfo || {},
 }
@@ -33,8 +36,8 @@ export const actions = {
   // Логин через username ang password
   login({ commit }, {username, password}) {
     if (!username || !password) return;
-    commit("userToken", "SuperToken");
-    commit("userInfo", defaultUserInfo);
+    commit("set", ["userToken", "SuperToken"]);
+    commit("set", ["userInfo", defaultUserInfo]);
     this.$cookies.set("token", "SuperToken");
   },
 

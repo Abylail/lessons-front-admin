@@ -1,62 +1,54 @@
 <template>
   <div class="registration-page">
-
-    <v-card class="registration-page__card">
-      <v-stepper v-model="step">
-        <v-stepper-header>
-          <v-stepper-step
-            v-for="({ title }, index) in steps" :key="index"
-            :complete="step > (index + 1)"
-            :step="(index + 1)">{{ title }}</v-stepper-step>
-        </v-stepper-header>
-      </v-stepper>
-    </v-card>
-
-
-<!--    <v-card class="registration-page__card">-->
-<!--      <v-card-title>Регистрация</v-card-title>-->
-<!--      <div class="registration-page__main">-->
-
-<!--        &lt;!&ndash; USERNAME &ndash;&gt;-->
-<!--        <v-text-field-->
-<!--          label="Логин"-->
-<!--          v-model="registrationInfo.username"-->
-<!--          outlined-->
-<!--        />-->
-
-<!--      </div>-->
-<!--    </v-card>-->
-
+    <div class="registration-page__card">
+      <h1 class="registration-page__title">Регистрация</h1>
+      <h2 class="registration-page__sub-title">{{ steps[step].title }}</h2>
+      <step1 v-show="step === 0" @next="step++"/>
+      <step2 v-if="step === 1" @next="step++" @prev="step--"/>
+      <step3 v-if="step === 2"/>
+    </div>
   </div>
 </template>
 
 <script>
+import Step1 from "@/components/common/registration/step1";
+import Step2 from "@/components/common/registration/step2";
+import Step3 from "@/components/common/registration/step3";
+
 export default {
   name: "index",
+  components: {Step3, Step2, Step1},
   layout: "empty",
   data: () => ({
-    step: 1,
-    registrationInfo: {},
+    step: 0,
     steps: [
       {title: "Основная информация"},
       {title: "Подтверждение телефона"},
       {title: "Создание пароля"},
     ]
-  })
+  }),
 }
 </script>
 
 <style lang="scss" scoped>
 .registration-page {
   min-height: 100vh;
-  display: flex;
-  justify-content: center;
 
   &__card {
     margin: auto;
-    padding: 20px;
+    padding: 30px;
     width: 90%;
-    max-width: 1000px;
+    max-width: 500px;
+    max-height: 700px;
+  }
+
+  &__title {
+    font-size: 24px;
+  }
+
+  &__sub-title {
+    font-size: 20px;
+    margin-bottom: 30px;
   }
 
 }

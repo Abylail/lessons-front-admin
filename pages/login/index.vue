@@ -1,5 +1,5 @@
 <template>
-  <div class="login-page">
+  <div class="login-page" @keyup.enter="loginHandle()">
 
     <v-card class="login-page__card">
       <v-card-title>Вход</v-card-title>
@@ -50,6 +50,7 @@ export default {
       _login: "auth/login"
     }),
     async loginHandle() {
+      if (!this.username || !this.password) return;
       this.isLoading = true;
       this.showPassword = true;
       await this._login({
