@@ -9,11 +9,11 @@
       @finish="submitHandle()"
     ></v-otp-input>
 
-    <v-btn
-      class="mt-4"
-      large block
-      @click="backHandle()"
-    >Назад</v-btn>
+<!--    <v-btn-->
+<!--      class="mt-4"-->
+<!--      large block-->
+<!--      @click="backHandle()"-->
+<!--    >Назад</v-btn>-->
 
   </div>
 </template>
@@ -30,7 +30,6 @@ export default {
       return true;
     },
     async submitHandle() {
-      console.log(this.code);
       if (await this.validate()) {
         this.$emit("next");
       }
@@ -41,9 +40,9 @@ export default {
     }
   },
   mounted() {
-    setTimeout(() => {
+    this.$nextTick(() => {
       this.$refs.input.focus();
-    }, 500);
+    });
   }
 }
 </script>

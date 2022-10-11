@@ -9,16 +9,7 @@
       ref="phoneInput"
       outlined
       dense
-    />
-
-    <v-select
-      label="Ваша роль"
-      v-model="userInfo.role"
-      :items="roles"
-      item-value="code"
-      item-text="name"
-      outlined
-      dense
+      autofocus
     />
 
     <v-btn
@@ -26,12 +17,11 @@
       color="primary"
       large
       @click="submitHandle()"
-    >Продолжить</v-btn>
+    >Отправить смс</v-btn>
   </div>
 </template>
 
 <script>
-import { role } from "@/config/standarts";
 import {mapActions} from "vuex";
 
 export default {
@@ -85,12 +75,6 @@ export default {
         return false;
       }
 
-      // Отсутсвует роль
-      if (!this.userInfo.role) {
-        this.error.role = "Выберите роль";
-        return false;
-      }
-
       return true;
     },
     async submitHandle() {
@@ -105,9 +89,6 @@ export default {
   mounted() {
     // Что бы клава была для телефона
     this.$refs.phoneInput.$refs.input.setAttribute("inputmode", "tel");
-    setTimeout(() => {
-      this.$refs.phoneInput.focus();
-    }, 500);
   }
 }
 </script>
