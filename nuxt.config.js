@@ -55,6 +55,10 @@ export default {
     "@nuxtjs/toast",
   ],
 
+  axios: {
+    baseURL: process.env.BACKEND_URL,
+  },
+
   // Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify
   vuetify: {
     customVariables: ['~/assets/styles/variables.scss'],

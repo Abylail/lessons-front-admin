@@ -31,6 +31,7 @@
 
 <script>
 import { role } from "@/config/standarts";
+import {mapActions} from "vuex";
 
 export default {
   name: "step1",
@@ -61,6 +62,9 @@ export default {
     }
   },
   methods: {
+    ...mapActions({
+      _sendSmsCode: "registration/sendSmsCode",
+    }),
 
     // Валидация (true -> все хорошо)
     validate() {
@@ -86,8 +90,9 @@ export default {
 
       return true;
     },
-    submitHandle() {
+    async submitHandle() {
       if (this.validate()) {
+        await this._sendSmsCode({phone: this.userInfo.phone})
         this.$emit("next");
       }
     }
@@ -95,9 +100,9 @@ export default {
   mounted() {
     // Что бы клава была для телефона
     this.$refs.phoneInput.$refs.input.setAttribute("inputmode", "tel");
-    this.$nextTick(() => {
+    setTimeout(() => {
       this.$refs.phoneInput.focus();
-    })
+    }, 500);
   }
 }
 </script>

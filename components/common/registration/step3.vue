@@ -5,6 +5,7 @@
       label="Пароль"
       v-model="userInfo.password"
       type="password"
+      ref="password"
       outlined
       dense
     />
@@ -38,6 +39,11 @@ export default {
     submitHandle() {
       this.$router.push("/");
     }
+  },
+  mounted() {
+    setTimeout(() => {
+      this.$refs.password.focus();
+    }, 100)
   }
 }
 </script>
