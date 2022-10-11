@@ -38,15 +38,12 @@ export default {
 
     isLoading: false,
   }),
-  computed: {
-    roles() {
-      return Object.keys(role).map(key => role[key]);
-    }
-  },
   watch: {
     userInfo: {
       deep: true,
       handler(val) {
+
+        // Валидирую если есть ошибка
         if (Object.keys(this.error).length) {
           this.validate();
         }
