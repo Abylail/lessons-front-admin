@@ -21,7 +21,8 @@ export const actions = {
 
   // Отправка смс кода
   sendSmsCode({}, {phone}) {
-    this.$axios.$post("/api/v1/user/signup/send-sms", {phone})
+    const serializedPhone = "+" + phone.replaceAll(/\D+/g, "");
+    this.$axios.$post("/api/v1/user/signup/send-sms", {phone: serializedPhone})
       .then((response) => {
         console.log(response);
       })
