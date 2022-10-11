@@ -1,6 +1,5 @@
 const defaultUserInfo = {
   username: "",
-  full_name: "",
   phone: "",
   role: "center",
   center_id: 1,

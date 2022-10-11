@@ -6,6 +6,8 @@
       v-model="userInfo.phone"
       v-mask="'+7 (###) ###-##-##'"
       :error-messages="error.phone"
+      ref="phoneInput"
+      type="number"
       outlined
       dense
     />
@@ -90,6 +92,9 @@ export default {
         this.$emit("next");
       }
     }
+  },
+  mounted() {
+    this.$refs.phoneInput.focus();
   }
 }
 </script>
