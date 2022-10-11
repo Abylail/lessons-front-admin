@@ -7,7 +7,6 @@
       v-mask="'+7 (###) ###-##-##'"
       :error-messages="error.phone"
       ref="phoneInput"
-      type="number"
       outlined
       dense
     />
@@ -94,7 +93,11 @@ export default {
     }
   },
   mounted() {
-    this.$refs.phoneInput.focus();
+    // Что бы клава была для телефона
+    this.$refs.phoneInput.$refs.input.setAttribute("inputmode", "tel");
+    this.$nextTick(() => {
+      this.$refs.phoneInput.focus();
+    })
   }
 }
 </script>

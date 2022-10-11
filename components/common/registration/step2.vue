@@ -5,7 +5,6 @@
       ref="input"
       v-model="code"
       length="4"
-      type="number"
       @finish="submitHandle()"
     ></v-otp-input>
 
@@ -41,6 +40,7 @@ export default {
     }
   },
   mounted() {
+    this.$refs.input.$refs.input.setAttribute("inputmode", "numeric");
     this.$refs.input.focus()
   }
 }
