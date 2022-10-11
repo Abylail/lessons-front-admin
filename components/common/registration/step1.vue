@@ -22,6 +22,7 @@
     />
 
     <v-btn
+      :loading="isLoading"
       color="primary"
       large
       @click="submitHandle()"
@@ -45,6 +46,8 @@ export default {
 
     // Ошибки
     error: {},
+
+    isLoading: false,
   }),
   computed: {
     roles() {
@@ -92,7 +95,9 @@ export default {
     },
     async submitHandle() {
       if (this.validate()) {
-        await this._sendSmsCode({phone: this.userInfo.phone})
+        this.isLoading = true;
+        await this._sendSmsCode({phone: this.userInfo.phone});
+        this.isLoading = false;
         this.$emit("next");
       }
     }
