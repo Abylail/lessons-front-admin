@@ -37,8 +37,6 @@
 </template>
 
 <script>
-import {role} from "@/config/standarts";
-
 export default {
   name: "step3",
   data: () => ({
@@ -46,12 +44,8 @@ export default {
       password: null,
       repeatPassword: null,
     },
+    roles: [{code: "center", name: "Детский центр"}]
   }),
-  computed: {
-    roles() {
-      return Object.keys(role).map(key => role[key]);
-    }
-  },
   methods: {
     submitHandle() {
       this.$router.push("/");

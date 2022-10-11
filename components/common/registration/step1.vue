@@ -9,7 +9,6 @@
       ref="phoneInput"
       outlined
       dense
-      autofocus
     />
 
     <v-btn
@@ -89,6 +88,8 @@ export default {
   mounted() {
     // Что бы клава была для телефона
     this.$refs.phoneInput.$refs.input.setAttribute("inputmode", "tel");
+
+    window.on("load", () => {this.$refs.phoneInput.focus()})
   }
 }
 </script>
