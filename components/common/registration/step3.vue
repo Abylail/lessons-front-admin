@@ -37,6 +37,8 @@
 </template>
 
 <script>
+import {mapActions, mapGetters} from "vuex";
+
 export default {
   name: "step3",
   data: () => ({
@@ -44,13 +46,30 @@ export default {
       password: null,
       repeatPassword: null,
     },
-    roles: [{code: "center", name: "Детский центр"}]
   }),
+  computed: {
+    ...mapGetters({
+      roles: "getRoles"
+    })
+  },
   methods: {
-    submitHandle() {
-      this.$router.push("/");
+    ...mapActions({
+      _fetchRoles: "fetchRoles",
+      _setPassword: "registration/setPassword",
+    }),
+    async validate() {
+      return true;
+    },
+    async submitHandle() {
+      if (await this.validate()) {
+        await this._setPassword({password: this.userInfo.password});
+        this.$router.push("/");
+      }
     }
   },
+  mounted() {
+    this._fetchRoles();
+  }
 }
 </script>
 

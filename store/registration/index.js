@@ -1,5 +1,5 @@
 export const state = () => ({
-
+  token: null,
 })
 
 export const getters = {
@@ -20,22 +20,29 @@ export const actions = {
   },
 
   // Отправка смс кода
-  sendSmsCode({}, {phone}) {
+  async sendSmsCode({ commit }, {phone}) {
     const serializedPhone = "+" + phone.replaceAll(/\D+/g, "");
-    this.$axios.$post("/api/v1/user/signup/send-sms", {phone: serializedPhone})
-      .then((response) => {
-        console.log(response);
+    await this.$axios.$post("/api/v1/user/signup/send-sms", {phone: serializedPhone})
+      .then(({body}) => {
+        commit("set", ["token", body]);
       })
   },
 
   // Подтверждение телефона
-  confirmSmsCode({}, {code}) {
-
+  async confirmSmsCode({ commit, state }, {code}) {
+    await this.$axios.$post("/api/v1/user/signup/check-sms", {sms_code: code, token: state.token})
+      .then(({body}) => {
+        console.log(body)
+      })
+    return true;
   },
 
   // Создание пароля
-  setPassword({}, {password}) {
-
+  setPassword({ state }, { password }) {
+    this.$axios.$post("/api/v1/user/signup/passwords", {password, re_password: password, token: state.token})
+      .then(({body}) => {
+        console.log(body)
+      })
   },
 
 }

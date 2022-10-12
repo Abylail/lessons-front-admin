@@ -30,7 +30,6 @@ export default {
     // Информацию пользователя
     userInfo: {
       phone: null,
-      role: null,
     },
 
     // Ошибки
@@ -85,8 +84,6 @@ export default {
   mounted() {
     // Что бы клава была для телефона
     this.$refs.phoneInput.$refs.input.setAttribute("inputmode", "tel");
-
-    window.onload = () => {this.$refs.phoneInput.focus()}
   }
 }
 </script>

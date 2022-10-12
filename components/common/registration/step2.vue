@@ -19,6 +19,8 @@
 </template>
 
 <script>
+import {mapActions} from "vuex";
+
 export default {
   name: "step2",
   data: () => ({
@@ -26,13 +28,24 @@ export default {
     code: null,
   }),
   methods: {
+    ...mapActions({
+      _confirmSmsCode: "registration/confirmSmsCode"
+    }),
     async validate() {
-      return true;
+      if (!this.code) {
+        return false;
+      }
+      else if (this.code.length !== 4) {
+        return false;
+      }
+      return this._confirmSmsCode({code: this.code});
     },
     async submitHandle() {
+      this.isLoading = true;
       if (await this.validate()) {
         this.$emit("next");
       }
+      this.isLoading = false;
     },
     backHandle() {
       this.code = null;
