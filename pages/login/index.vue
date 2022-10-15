@@ -10,6 +10,7 @@
           label="Телефон"
           v-mask="'+7 (###) ###-##-##'"
           v-model="authData.phone"
+          ref="phoneInput"
           outlined
         />
 
@@ -74,6 +75,10 @@ export default {
       this.isLoading = false;
       this.$router.push("/");
     }
+  },
+  mounted() {
+    // Что бы клава была для телефона
+    this.$refs.phoneInput.$refs.input.setAttribute("inputmode", "tel");
   }
 }
 </script>
