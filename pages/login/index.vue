@@ -5,17 +5,18 @@
       <v-card-title>Вход</v-card-title>
       <div class="login-page__main">
 
-        <!-- USERNAME -->
+        <!-- phone -->
         <v-text-field
-          label="Логин"
-          v-model="username"
+          label="Телефон"
+          v-mask="'+7 (###) ###-##-##'"
+          v-model="authData.phone"
           outlined
         />
 
         <!-- PASSWORD -->
         <v-text-field
           label="Пароль"
-          v-model="password"
+          v-model="authData.password"
           :type="showPassword ? 'text' : 'password'"
           :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
           outlined
@@ -40,22 +41,35 @@ export default {
   name: "index",
   layout: "empty",
   data: () => ({
-    username: "",
+    phone: "",
     password: "",
     showPassword: false,
-    isLoading: false
+    isLoading: false,
+
+    authData: {
+      phone: null,
+      password: null,
+    },
+
+    errors: {
+      phone: null,
+      password: null,
+    },
   }),
   methods: {
     ...mapActions({
       _login: "auth/login"
     }),
+    validate() {
+
+    },
     async loginHandle() {
-      if (!this.username || !this.password) return;
+      if (!this.authData.phone || !this.authData.password) return;
       this.isLoading = true;
-      this.showPassword = true;
+      this.showPassword = false;
       await this._login({
-        username: this.username,
-        password: this.password,
+        phone: this.authData.phone,
+        password: this.authData.password,
       })
       this.isLoading = false;
       this.$router.push("/");

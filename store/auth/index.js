@@ -33,18 +33,40 @@ export const mutations = {
 
 export const actions = {
   // Логин через username ang password
-  login({ commit }, {username, password}) {
-    if (!username || !password) return;
-    commit("set", ["userToken", "SuperToken"]);
-    commit("set", ["userInfo", defaultUserInfo]);
-    this.$cookies.set("token", "SuperToken");
+  async login({ commit }, {phone, password}) {
+    if (!phone || !password) return;
+    const phonePreparing = "+" + phone.replaceAll(/\D+/g, "")
+    await this.$api.$post("/api/v1/user/login/phone", {phone: phonePreparing, password})
+      .then(({err, body}) => {
+        if (!err) {
+          commit("set", ["userInfo", body]);
+          commit("set", ["userToken", body.token]);
+          this.$cookies.set("token", body.token);
+        }
+        else {
+          this.$toast.error("Ошибка при авторизации");
+        }
+      })
   },
 
   // Логин через token
-  async tokenAuth({ state, commit }) {
-    const token = state.userToken || this.$cookies.get("token");
-    commit("set", ["userToken", token]);
-    commit("set", ["userInfo", defaultUserInfo]);
+  async tokenAuth({ state, commit }, newToken) {
+
+    // Если новый токен
+    if (newToken !== state.token) {
+      commit("set", ["userToken", newToken]);
+      this.$cookies.set("token", newToken);
+    }
+
+    const token = newToken || state.userToken || this.$cookies.get("token");
+    if (!token) return;
+    await this.$api.$post("/api/v1/user/login/token", {token})
+      .then(({err, body}) => {
+        if (!err) {
+          commit("set", ["userInfo", body]);
+          commit("set", ["userToken", body.token]);
+        }
+      })
   },
 
   // Выход

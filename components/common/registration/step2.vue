@@ -38,12 +38,17 @@ export default {
       else if (this.code.length !== 4) {
         return false;
       }
-      return this._confirmSmsCode({code: this.code});
+      return await this._confirmSmsCode({code: this.code});
     },
     async submitHandle() {
       this.isLoading = true;
       if (await this.validate()) {
         this.$emit("next");
+      }
+      else {
+        this.code = null;
+        this.$toast.error("Неверный код");
+        this.$refs.input.focus();
       }
       this.isLoading = false;
     },

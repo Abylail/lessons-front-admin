@@ -30,6 +30,7 @@ export default {
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
     "~/plugins/external",
+    "~/plugins/apiLayer",
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -48,15 +49,23 @@ export default {
 
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
+    "vue-toastification/nuxt",
     "cookie-universal-nuxt",
     "@nuxtjs/device",
     "@nuxtjs/axios",
     "vue2-editor/nuxt",
-    "@nuxtjs/toast",
   ],
 
+  // Axios
   axios: {
     baseURL: process.env.BACKEND_URL,
+  },
+
+  // Toastification
+  toast: {
+    timeout: 2000,
+    closeOnClick: true,
+    hideProgressBar: true,
   },
 
   // Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify
