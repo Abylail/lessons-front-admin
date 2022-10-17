@@ -62,7 +62,8 @@ export default {
   }),
   computed: {
     ...mapGetters({
-      _userInfo: "auth/getUserInfo"
+      _userInfo: "auth/getUserInfo",
+      _centerInfo: "center/getCenterInfo",
     })
   },
   watch: {
@@ -71,12 +72,19 @@ export default {
         this.userInfo = JSON.parse(JSON.stringify(val));
       },
       immediate: true
+    },
+    _centerInfo: {
+      handler(val) {
+        this.centerInfo = JSON.parse(JSON.stringify(val));
+      },
+      immediate: true
     }
   },
   methods: {
     ...mapActions({
       _saveUserInfo: "auth/saveUserInfo",
-      _updateUserInfo: "auth/tokenAuth",
+      _saveCenterInfo: "center/saveCenterInfo",
+      _fetchCenterInfo: "center/fetchCenterInfo",
     }),
 
     // Валидация информации пользователя
@@ -100,9 +108,20 @@ export default {
     },
 
     // Сохранения информации центра
-    saveCenterInfo() {
-
+    async saveCenterInfo() {
+      this.centerInfoLoading = true;
+      this.centerInfoLoading = false;
     },
+
+    // Запросить информацию центра
+    async fetchCenterInfo() {
+      this.centerInfoLoading = true;
+      await this._fetchCenterInfo();
+      this.centerInfoLoading = false;
+    },
+  },
+  mounted() {
+    this.fetchCenterInfo();
   }
 }
 </script>
