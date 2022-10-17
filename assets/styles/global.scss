@@ -1,26 +1,20 @@
 .page {
   padding: 20px;
+}
 
-  &__title {
-    font-size: 24px;
-    font-weight: bold;
-    margin-top: 10px;
-    margin-bottom: 10px;
-  }
+// Колонки которые превращаются в список на телефоне  (relative-columns-3 три колонки)
+.relative-columns {
+  @for $columnCount from 2 through 5 {
+    &-#{$columnCount} {
+      display: grid;
+      grid-template-columns: repeat($columnCount, 1fr);
+      grid-column-gap: 15px;
 
-  &__block {
-    margin-bottom: 50px;
-    &:not(:first-child) {margin-top: 50px}
-  }
-
-  &__double-column {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-column-gap: 20px;
-
-    @media(max-width: $break-point) {
-      display: block;
-      & > * {margin: 5px 0}
+      @media (max-width: $break-point) {
+        display: flex;
+        flex-direction: column;
+      }
     }
   }
 }
+

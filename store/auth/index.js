@@ -53,7 +53,7 @@ export const actions = {
   async tokenAuth({ state, commit }, newToken = null) {
 
     // Если новый токен
-    if (newToken && newToken !== state.token) {
+    if (newToken && newToken !== state.userToken) {
       commit("set", ["userToken", newToken]);
       this.$cookies.set("token", newToken);
     }
@@ -65,7 +65,7 @@ export const actions = {
       .then(({err, body}) => {
         if (!err) {
           commit("set", ["userInfo", body]);
-          if (!state.token) commit("set", ["userToken", token]);
+          if (!state.userToken) commit("set", ["userToken", token]);
         }
       })
   },
@@ -74,5 +74,15 @@ export const actions = {
   logout({ commit }) {
     commit("set", ["userToken", null]);
     this.$cookies.remove("userToken");
+  },
+
+  // Информация пользователя
+  async saveUserInfo({ commit, state }, {last_name, first_name}) {
+    await this.$api.$post("/api/v1/user/signup/full-name", {auth_token: state.userToken, last_name, first_name})
+      .then(({err, body}) => {
+        if (!err) {
+          this.$toast.success("Данные пользователя обновленны");
+        }
+      })
   },
 }

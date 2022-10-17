@@ -1,12 +1,12 @@
 <template>
-  <div class="timetable">
-    
+  <div>
+    teachers
   </div>
 </template>
 
 <script>
 export default {
-  name: "timetable"
+  name: "teachers"
 }
 </script>
 

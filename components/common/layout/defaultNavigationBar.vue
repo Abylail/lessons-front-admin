@@ -45,6 +45,7 @@ export default {
     links: [
       { icon: "mdi-domain", name: "Моя компания", route: "/center/settings", role: "center"},
       { icon: "mdi-timetable", name: "Расписание", route: "/center/timetable", role: "center"},
+      { icon: "mdi-human", name: "Учителя", route: "/center/teachers", role: "center"},
     ]
   }),
   computed: {
