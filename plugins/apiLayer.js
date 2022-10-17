@@ -1,34 +1,42 @@
 
+const createCatcher = toast => err => {
+  if (err && err.response && err.response.data && err.response.data.message) {
+    toast.error(err.response.data.message);
+  }
+}
+
 /** Создание options */
 const createOptions = (options, store) => {
-
+  return options;
 }
 
 /** GET */
-const createGet = ({ axios, store }) => {
+const createGet = ({ axios, store, toast }) => {
   return (url, options = {}) => new Promise(resolve => {
     const prepareOptions = createOptions(options, store);
+    const catcher = createCatcher(toast);
     axios.$get(url, prepareOptions)
       .then(resolve)
-      .catch(err => resolve({ err }))
+      .catch(err => {catcher(err);resolve({ err });})
   })
 }
 
 /** POST */
-const createPost = ({ axios, store }) => {
+const createPost = ({ axios, store, toast }) => {
   return (url, body = {}, options = {}) => new Promise(resolve => {
     const prepareOptions = createOptions(options, store);
+    const catcher = createCatcher(toast);
     axios.$post(url, body, prepareOptions)
       .then(resolve)
-      .catch(err => resolve({ err }))
+      .catch(err => {catcher(err);resolve({ err })})
   })
 }
 
-const createApiLayer = ({ axios, store }) => ({
-  $get: createGet({ axios, store }),
-  $post: createPost({ axios, store }),
+const createApiLayer = ({ axios, store, toast }) => ({
+  $get: createGet({ axios, store, toast }),
+  $post: createPost({ axios, store, toast }),
 })
 
-export default function ({ $axios, store }, inject) {
-  inject("api", createApiLayer({ axios: $axios, store }))
+export default function ({ $axios, store, $toast }, inject) {
+  inject("api", createApiLayer({ axios: $axios, store, toast: $toast }))
 }

@@ -14,18 +14,16 @@ export const mutations = {
 
 export const actions = {
 
-  // Отправка основной информации (телефон + роль)
-  sendInfo({  }, {phone, role}) {
-
-  },
-
   // Отправка смс кода
-  async sendSmsCode({ commit }, {phone}) {
+  sendSmsCode({ commit }, {phone}) {
     const serializedPhone = "+" + phone.replaceAll(/\D+/g, "");
-    await this.$api.$post("/api/v1/user/signup/send-sms", {phone: serializedPhone})
-      .then(({err, body}) => {
-        if (!err) commit("set", ["token", body]);
-      })
+    return new Promise(resolve => {
+      this.$api.$post("/api/v1/user/signup/send-sms", {phone: serializedPhone})
+        .then(({err, body}) => {
+          if (!err) commit("set", ["token", body]);
+          resolve(!err);
+        })
+    })
   },
 
   // Подтверждение телефона

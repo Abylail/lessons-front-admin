@@ -50,21 +50,22 @@ export const actions = {
   },
 
   // Логин через token
-  async tokenAuth({ state, commit }, newToken) {
+  async tokenAuth({ state, commit }, newToken = null) {
 
     // Если новый токен
-    if (newToken !== state.token) {
+    if (newToken && newToken !== state.token) {
       commit("set", ["userToken", newToken]);
       this.$cookies.set("token", newToken);
     }
 
     const token = newToken || state.userToken || this.$cookies.get("token");
     if (!token) return;
+
     await this.$api.$post("/api/v1/user/login/token", {token})
       .then(({err, body}) => {
         if (!err) {
           commit("set", ["userInfo", body]);
-          commit("set", ["userToken", body.token]);
+          if (!state.token) commit("set", ["userToken", token]);
         }
       })
   },

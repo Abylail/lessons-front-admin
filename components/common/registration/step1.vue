@@ -75,9 +75,10 @@ export default {
     async submitHandle() {
       if (this.validate()) {
         this.isLoading = true;
-        await this._sendSmsCode({phone: this.userInfo.phone});
+        const canReg = await this._sendSmsCode({phone: this.userInfo.phone});
+        console.log("canReg", canReg);
         this.isLoading = false;
-        this.$emit("next");
+        if (canReg) {this.$emit("next");}
       }
     }
   },
