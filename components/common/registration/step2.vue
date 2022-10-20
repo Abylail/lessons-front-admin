@@ -47,7 +47,6 @@ export default {
       }
       else {
         this.code = null;
-        this.$toast.error("Неверный код");
         this.$refs.input.focus();
       }
       this.isLoading = false;

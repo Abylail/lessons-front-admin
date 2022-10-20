@@ -15,6 +15,13 @@ export const state = () => ({
 })
 
 export const getters = {
+
+  // Токен
+  getUserToken: state => state.userToken,
+
+  // Id центра
+  getCenterId: state => state.userInfo?.center_id,
+
   // Авторизован ли пользователь
   isAuth: state => !!state.userToken,
 
@@ -41,24 +48,21 @@ export const actions = {
         if (!err) {
           commit("set", ["userInfo", body]);
           commit("set", ["userToken", body.token]);
-          this.$cookies.set("token", body.token);
-        }
-        else {
-          this.$toast.error("Ошибка при авторизации");
+          this.$cookies.set("userToken", body.token);
         }
       })
   },
 
   // Логин через token
-  async tokenAuth({ state, commit }, newToken = null) {
+  async tokenAuth({ state, commit, dispatch }, newToken = null) {
 
     // Если новый токен
     if (newToken && newToken !== state.userToken) {
       commit("set", ["userToken", newToken]);
-      this.$cookies.set("token", newToken);
+      this.$cookies.set("userToken", newToken);
     }
 
-    const token = newToken || state.userToken || this.$cookies.get("token");
+    const token = newToken || state.userToken || this.$cookies.get("userToken");
     if (!token) return;
 
     await this.$api.$post("/api/v1/user/login/token", {token})
@@ -66,6 +70,9 @@ export const actions = {
         if (!err) {
           commit("set", ["userInfo", body]);
           if (!state.userToken) commit("set", ["userToken", token]);
+        }
+        else {
+          dispatch("logout");
         }
       })
   },

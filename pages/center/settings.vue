@@ -19,17 +19,17 @@
       <div class="relative-columns-2">
         <div>
           <h2 class="settings__sub-title">Информация на русском</h2>
-          <v-text-field label="Название центра (Рус)" outlined dense/>
-          <v-textarea label="Описание центра (Рус)" outlined dense/>
+          <v-text-field label="Название центра (Рус)" v-model="centerInfo.ru.name" outlined dense/>
+          <v-textarea label="Описание центра (Рус)" v-model="centerInfo.ru.description" outlined dense/>
         </div>
         <div>
           <h2 class="settings__sub-title">Информация на казахском</h2>
-          <v-text-field label="Название центра (Каз)" outlined dense/>
-          <v-textarea label="Описание центра (Каз)" outlined dense/>
+          <v-text-field label="Название центра (Каз)" v-model="centerInfo.kz.name" outlined dense/>
+          <v-textarea label="Описание центра (Каз)" v-model="centerInfo.kz.description" outlined dense/>
         </div>
       </div>
+      <v-text-field label="Ссылка на инстаграм" v-model="centerInfo.instagram" outlined dense/>
       <v-btn
-        class="mt-3"
         color="primary"
         :loading="centerInfoLoading"
         block
@@ -57,7 +57,7 @@ export default {
     userInfoLoading: false,
 
     // Центрер
-    centerInfo: {},
+    centerInfo: { kz: {name: null, description: null}, ru: {} }, // { instagram, ru: { name, description } }
     centerInfoLoading: false,
   }),
   computed: {
@@ -69,12 +69,15 @@ export default {
   watch: {
     _userInfo: {
       handler(val) {
+        if (!val) return;
         this.userInfo = JSON.parse(JSON.stringify(val));
       },
       immediate: true
     },
     _centerInfo: {
       handler(val) {
+        if (!val) return;
+        console.log("this.centerInfo", this.centerInfo)
         this.centerInfo = JSON.parse(JSON.stringify(val));
       },
       immediate: true
@@ -100,6 +103,11 @@ export default {
        return true;
     },
 
+    // Валидация информации центра
+    async validateCenterInfo() {
+      return true;
+    },
+
     // Сохранение информации пользователя
     async saveUserInfo() {
       this.userInfoLoading = true;
@@ -110,6 +118,7 @@ export default {
     // Сохранения информации центра
     async saveCenterInfo() {
       this.centerInfoLoading = true;
+      if (await this.validateCenterInfo()) await this._saveCenterInfo(this.centerInfo);
       this.centerInfoLoading = false;
     },
 
