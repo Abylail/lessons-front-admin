@@ -14,7 +14,8 @@
     <!-- LINKS -->
     <v-list>
       <v-list-item
-        v-for="({icon, name, route}, index) in links"
+        v-for="({icon, name, route, role}, index) in links"
+        v-show="roleAccess(role)"
         :key="index"
         :to="route"
         link
@@ -43,13 +44,20 @@ export default {
   },
   data: () => ({
     links: [
-      { icon: "mdi-domain", name: "Моя компания", route: "/center/settings", role: "center"},
-      { icon: "mdi-timetable", name: "Расписание", route: "/center/timetable", role: "center"},
-      { icon: "mdi-human", name: "Учителя", route: "/center/teachers", role: "center"},
+      { icon: "mdi-domain", name: "Моя компания", route: "/center/settings", role: "center_director"},
+      { icon: "mdi-timetable", name: "Расписание", route: "/center/timetable", role: "center_director"},
+      { icon: "mdi-human", name: "Учителя", route: "/center/teachers", role: "center_director"},
     ]
   }),
   computed: {
-    ...mapGetters({})
+    ...mapGetters({
+      role: "auth/getRole",
+    })
+  },
+  methods: {
+    roleAccess(linkRole) {
+      return linkRole === this.role;
+    }
   }
 }
 </script>

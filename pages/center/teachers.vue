@@ -23,6 +23,7 @@
 
     <!-- MODALS -->
     <edit-teacher-modal/>
+    <remove-teacher-modal/>
 
   </div>
 </template>
@@ -30,9 +31,10 @@
 <script>
 import EditTeacherModal from "@/components/common/modals/center/editTeacherModal";
 import {mapActions, mapGetters} from "vuex";
+import RemoveTeacherModal from "../../components/common/modals/center/removeTeacherModal";
 export default {
   name: "teachers",
-  components: {EditTeacherModal},
+  components: {RemoveTeacherModal, EditTeacherModal},
   data: () => ({
     tableHeaders: [
       { text: 'Имя', value: 'full_name', sortable: false},
@@ -73,13 +75,12 @@ export default {
 
     // Редактировать учителя (кнопка)
     editHandle(teacher) {
-      console.log("edit:", teacher);
       this.$modal.show("edit-teacher", { teacher });
     },
 
     // Удалить учителя (кнопка)
     deleteHandle(teacher) {
-      console.log("delete:", teacher);
+      this.$modal.show("remove-teacher", { teacher });
     },
   },
   mounted() {

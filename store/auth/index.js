@@ -26,7 +26,7 @@ export const getters = {
   isAuth: state => !!state.userToken,
 
   // Роль юзера
-  getRole: state => state.userInfo?.role,
+  getRole: state => state.userInfo?.role_code,
 
   // Информация юзера
   getUserInfo: state => state.userInfo || {},
