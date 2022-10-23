@@ -4,8 +4,15 @@
 <script>
 export default {
   middleware({ redirect, store }) {
-    if (store.getters["auth/getRole"] === "center_director") {
+
+    // Директор центра
+    if (["center_director"].includes(store.getters["auth/getRole"])) {
       redirect("/center/settings");
+    }
+
+    // Админ
+    else if (["admin"].includes(store.getters["auth/getRole"])) {
+      redirect("/admin/settings");
     }
   }
 }
