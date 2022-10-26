@@ -80,6 +80,7 @@ export const actions = {
   // Выход
   logout({ commit }) {
     commit("set", ["userToken", null]);
+    commit("set", ["userInfo", null]);
     this.$cookies.remove("userToken");
   },
 

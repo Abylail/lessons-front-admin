@@ -62,7 +62,7 @@ export default {
     },
     async submitHandle() {
       if (await this.validate()) {
-        await this._setPassword({password: this.userInfo.password});
+        await this._setPassword({password: this.userInfo.password, role: this.userInfo.role});
         this.$router.push("/");
       }
     }

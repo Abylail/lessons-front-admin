@@ -47,6 +47,7 @@ export default {
       { icon: "mdi-domain", name: "Моя компания", route: "/center/settings", roles: ["center_director"]},
       { icon: "mdi-timetable", name: "Расписание", route: "/center/timetable", roles: ["center_director"]},
       { icon: "mdi-human", name: "Учителя", route: "/center/teachers", roles: ["center_director"]},
+      { icon: "mdi-cog", name: "Основные настройки", route: "/admin/settings", roles: ["admin"]},
       { icon: "mdi-format-list-bulleted", name: "Категории", route: "/admin/categories", roles: ["admin"]},
     ]
   }),

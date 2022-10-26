@@ -37,6 +37,63 @@
       >Сохранить информацию центра</v-btn>
     </div>
 
+    <v-divider class="mt-3 mb-3"/>
+
+    <!-- Контактная информация -->
+    <div class="settings__center">
+      <h2 class="settings__title">Контактная информация</h2>
+      <v-card class="settings__contact-card" v-for="(contact, index) in contactInfo" :key="index">
+        <div class="settings__contact-card-head">
+          <h3 class="mb-2">Контакт {{ index+1 }}</h3>
+          <v-btn title="Удалить контакт" icon @click="deleteContact(contact)"><v-icon color="red" small>mdi-delete</v-icon></v-btn>
+        </div>
+        <div class="relative-columns-2">
+          <v-text-field
+            label="Название на русском"
+            v-model="contact.ru.name"
+            hint="Пример: Номер менеджера"
+            persistent-hint outlined dense
+          />
+          <v-text-field
+            label="Название на казахском"
+            v-model="contact.kz.name"
+            hint="Пример: Номер менеджера"
+            persistent-hint outlined dense
+          />
+        </div>
+        <div class="relative-columns-2">
+          <v-text-field
+            label="Номер"
+            v-model="contact.phone"
+            v-mask="'+7 (###) ###-##-##'"
+            outlined dense hide-details
+          />
+          <v-switch
+            class="mt-1"
+            v-model="contact.whatsapp"
+            label="Это номер Whatsapp"
+            color="green"
+            hide-details
+          />
+        </div>
+      </v-card>
+      <div class="relative-columns-2">
+      <v-btn
+        class="mt-5"
+        color="primary"
+        block outlined
+        @click="addContact()"
+      >+ добавить контакт</v-btn>
+      <v-btn
+        class="mt-5"
+        color="primary"
+        :loading="contactInfoLoading"
+        block
+        @click="saveContactInfo()"
+      >Сохранить контакты центра</v-btn>
+      </div>
+    </div>
+
   </div>
 </template>
 
@@ -56,14 +113,19 @@ export default {
     userInfo: {},
     userInfoLoading: false,
 
-    // Центрер
+    // Центр
     centerInfo: { kz: {name: null, description: null}, ru: {} }, // { instagram, ru: { name, description } }
     centerInfoLoading: false,
+
+    // Контакты
+    contactInfo: [{"phone": "", "whatsapp": true, "center_id": 1, "ru": {"name": "манагер"}, "kz": {"name": "манагер"}}],
+    contactInfoLoading: false,
   }),
   computed: {
     ...mapGetters({
       _userInfo: "auth/getUserInfo",
       _centerInfo: "center/getCenterInfo",
+      _contactInfo: "center/getContactInfo",
     })
   },
   watch: {
@@ -77,8 +139,14 @@ export default {
     _centerInfo: {
       handler(val) {
         if (!val) return;
-        console.log("this.centerInfo", this.centerInfo)
         this.centerInfo = JSON.parse(JSON.stringify(val));
+      },
+      immediate: true
+    },
+    _contactInfo: {
+      handler(val) {
+        if (!val) return;
+        this.contactInfo = JSON.parse(JSON.stringify(val));
       },
       immediate: true
     }
@@ -88,6 +156,9 @@ export default {
       _saveUserInfo: "auth/saveUserInfo",
       _saveCenterInfo: "center/saveCenterInfo",
       _fetchCenterInfo: "center/fetchCenterInfo",
+      _fetchContactInfo: "center/fetchContactInfo",
+      _saveContactInfo: "center/saveContactInfo",
+      _deleteContact: "center/deleteContact",
     }),
 
     // Валидация информации пользователя
@@ -128,9 +199,42 @@ export default {
       await this._fetchCenterInfo();
       this.centerInfoLoading = false;
     },
+
+    // Добавить контакт
+    addContact() {
+      this.contactInfo.push({
+        "phone": null,
+        "whatsapp": false,
+        "ru": {"name": null}, "kz": {"name": null}
+      })
+    },
+
+    // Сохранить контакты
+    async saveContactInfo() {
+      this.contactInfoLoading = true;
+      await this._saveContactInfo(this.contactInfo);
+      await this._fetchContactInfo();
+      this.contactInfoLoading = false;
+    },
+
+    // Получить контакты
+    async fetchContactInfo() {
+      this.contactInfoLoading = true;
+      await this._fetchContactInfo();
+      this.contactInfoLoading = false;
+    },
+
+    async deleteContact(contact) {
+      this.contactInfoLoading = true;
+      await this._deleteContact(contact);
+      await this._fetchContactInfo();
+      this.contactInfoLoading = false;
+    },
+
   },
   mounted() {
     this.fetchCenterInfo();
+    this.fetchContactInfo();
   }
 }
 </script>
@@ -145,6 +249,20 @@ export default {
   &__sub-title {
     font-size: 16px;
     margin-bottom: 10px;
+  }
+
+  &__contact-card {
+    padding: 15px;
+
+    &:not(:first-child) {
+      margin-top: 20px;
+    }
+  }
+
+  &__contact-card-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
   }
 
 }
