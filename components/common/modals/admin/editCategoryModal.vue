@@ -1,6 +1,17 @@
 <template>
-  <modal name="edit-category" size="small" close-button @onShow="getPayload()" @onHide="clear()">
-
+  <modal name="edit-category" size="small" :close-on-out-click="false" close-button @onShow="getPayload()" @onHide="clear()">
+    <div class="edit-category">
+      <h2>Категория</h2>
+      <div class="edit-category__form">
+        <v-text-field label="Название на русском" v-model="category.ru.name" outlined dense/>
+        <v-text-field label="Название на казахском" v-model="category.kz.name" outlined dense/>
+        <v-text-field label="Код" v-if="category.code" :value="category.code" outlined dense disabled/>
+      </div>
+      <div class="edit-teacher__actions">
+        <v-btn @click="closeSelf()">Отменить</v-btn>
+        <v-btn class="ml-3" color="primary" :loading="isLoading" @click="saveCategory()">Сохранить</v-btn>
+      </div>
+    </div>
   </modal>
 </template>
 
@@ -11,7 +22,7 @@ export default {
   name: "editCategoryModal",
   data: () => ({
     // Информация категории
-    category: {},
+    category: {ru: {name: null}, kz: {name: null}},
 
     isLoading: false,
   }),
@@ -34,7 +45,7 @@ export default {
     },
     // Очистить
     clear() {
-      this.category = {};
+      this.category = {ru: {name: null}, kz: {name: null}};
     },
     // Закрыть себя (Модалку)
     closeSelf() {
@@ -64,6 +75,16 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+.edit-category {
 
+  &__form {
+    margin-top: 20px;
+  }
+
+  &__actions {
+    text-align: right;
+  }
+
+}
 </style>

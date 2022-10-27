@@ -1,6 +1,6 @@
 export const state = () => ({
   // Список учителей
-  categoryList: [{ru: {name: "russ"}, kz: {name: "kazz"}}],
+  categoryList: [],
 })
 
 export const getters = {
@@ -16,23 +16,19 @@ export const mutations = {
 
 export const actions = {
   // Получить список категорий
-  async fetchCategoryList({ commit, rootGetters }) {
-    const centerId = rootGetters["auth/getCenterId"];
-    if (!centerId) return;
-    await this.$api.$get(`/api/v1/admin/category/get`)
+  async fetchCategoryList({ commit, state }, optimize = false) {
+    if (optimize && state.categoryList.length) return;
+    await this.$api.$get(`/api/v1/subject/category/get`)
       .then(({err, body}) => {
         if (!err) {
-          commit("set", ["CategoryList", body]);
+          commit("set", ["categoryList", body]);
         }
       })
   },
 
   // Создать категорию
-  async createCategory({ commit, rootGetters, dispatch  }, categoryInfo) {
-
-    await this.$api.$post(`/api/v1/admin/category/add`, {
-      ...categoryInfo,
-    })
+  async createCategory({ rootGetters, dispatch  }, categoryInfo) {
+    await this.$api.$post(`/api/v1/subject/category/add`, categoryInfo)
       .then(({err, body}) => {
         if (!err) {
           this.$toast.success("Категория создан");
@@ -42,11 +38,8 @@ export const actions = {
   },
 
   // Обновить информацию категории
-  async updateCategory({ commit, rootGetters, dispatch  }, categoryInfo) {
-
-    await this.$api.$put(`/api/v1/admin/category/update/${categoryInfo.id}`, {
-      ...categoryInfo,
-    })
+  async updateCategory({ rootGetters, dispatch  }, categoryInfo) {
+    await this.$api.$put(`/api/v1/subject/category/update/${categoryInfo.id}`, categoryInfo)
       .then(({err, body}) => {
         if (!err) {
           this.$toast.success("Категория обновлена");
@@ -57,12 +50,12 @@ export const actions = {
 
   // Удалить категорию
   async deleteCategory({ dispatch }, categoryInfo) {
-    await this.$api.$delete(`/api/v1/admin/category/delete/${categoryInfo.id}`)
+    await this.$api.$delete(`/api/v1/subject/category/delete/${categoryInfo.id}`)
       .then(({err, body}) => {
         if (!err) {
           this.$toast("Категория удалена");
           dispatch("fetchCategoryList");
         }
       })
-  }
+  },
 }

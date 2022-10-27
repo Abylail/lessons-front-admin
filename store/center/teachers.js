@@ -59,6 +59,7 @@ export const actions = {
       })
   },
 
+  // Удалить учителя
   async deleteTeacher({ dispatch }, teacherInfo) {
     await this.$api.$delete(`/api/v1/center/teacher/delete/${teacherInfo.id}`)
       .then(({err, body}) => {

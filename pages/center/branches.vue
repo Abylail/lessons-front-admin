@@ -1,0 +1,102 @@
+<template>
+  <div class="branches page">
+    <h2 class="branches__title">Адреса и филиалы</h2>
+
+    <div class="branches__tools">
+      <v-btn color="primary" outlined @click="createHandle()">Добавить филиал +</v-btn>
+    </div>
+
+    <v-data-table
+      class="branches__table elevation-1"
+      :headers="tableHeaders"
+      :items="branchList"
+      :loading="isLoading"
+      item-key="id"
+      hide-default-footer
+    >
+      <template v-slot:item.actions="{ item }">
+        <v-btn icon><v-icon>mdi-timetable</v-icon></v-btn>
+        <v-btn icon @click="editHandle(item)"><v-icon>mdi-pencil</v-icon></v-btn>
+        <v-btn icon @click="deleteHandle(item)"><v-icon color="red">mdi-delete</v-icon></v-btn>
+      </template>
+    </v-data-table>
+
+    <!-- MODALS -->
+    <edit-branch-modal/>
+    <remove-branch-modal/>
+
+  </div>
+</template>
+
+<script>
+import {mapActions, mapGetters} from "vuex";
+import EditBranchModal from "../../components/common/modals/center/editBranchModal";
+import RemoveBranchModal from "../../components/common/modals/center/removeBranchModal";
+
+export default {
+  name: "branches",
+  components: {RemoveBranchModal, EditBranchModal},
+  data: () => ({
+    tableHeaders: [
+      { text: 'Адрес', value: 'address', sortable: false},
+      { text: 'Телефон', value: 'phone', sortable: false},
+      { text: 'Есть whatsapp', value: 'whatsapp', sortable: false},
+      { text: 'Ссылка 2гис', value: 'two_gis', sortable: false},
+      { text: 'Ссылка яндекс карты', value: 'yandex', sortable: false},
+      { text: 'Город', value: 'city_name', sortable: false},
+      { text: '', value: 'actions', sortable: false},
+    ],
+
+    isLoading: false,
+  }),
+  computed: {
+    ...mapGetters({
+      branchList: "center/branches/getBranchList",
+    })
+  },
+  methods: {
+    ...mapActions({
+      _fetchList: "center/branches/fetchBranchList",
+    }),
+
+    // Получить список филиалов
+    async fetchList() {
+      this.isLoading = true;
+      await this._fetchList();
+      this.isLoading = false;
+    },
+
+    // Создать филиал
+    createHandle() {
+      this.$modal.show("edit-branch");
+    },
+
+    // Редактировать филиал
+    editHandle(branch) {
+      this.$modal.show("edit-branch", {branch});
+    },
+
+    // Удалить филиал
+    deleteHandle(branch) {
+      this.$modal.show("remove-branch", {branch});
+    },
+  },
+  mounted() {
+    this.fetchList();
+  }
+}
+</script>
+
+<style lang="scss" scoped>
+.branches {
+
+  &__title {
+    margin-bottom: 20px;
+  }
+
+  &__table {
+    margin-top: 20px;
+  }
+
+}
+</style>

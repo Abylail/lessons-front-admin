@@ -21,21 +21,30 @@
     </v-data-table>
 
 
+    <!-- MODALS -->
+    <edit-category-modal/>
+    <remove-category-modal/>
+
   </div>
 </template>
 
 <script>
 import {mapActions, mapGetters} from "vuex";
+import EditCategoryModal from "../../components/common/modals/admin/editCategoryModal";
+import RemoveCategoryModal from "../../components/common/modals/admin/removeCategoryModal";
 
 export default {
   name: "categories",
+  components: {RemoveCategoryModal, EditCategoryModal},
   data: () => ({
+    // Заголовки для таблицы
     tableHeaders: [
       { text: 'Название на русском', value: 'ru.name', sortable: false},
       { text: 'Название на казахском', value: 'kz.name', sortable: false},
       { text: '', value: 'actions', sortable: false, width: 150},
     ],
 
+    // Список
     categoryList: [],
 
     isLoading: true,
@@ -67,17 +76,17 @@ export default {
 
     // Создать категорию
     createHandle() {
-
+      this.$modal.show("edit-category");
     },
 
     // Редактировать категорию (Кнопка)
-    editHandle() {
-
+    editHandle(category) {
+      this.$modal.show("edit-category", {category});
     },
 
     // Удалить категорию
-    deleteHandle() {
-
+    deleteHandle(category) {
+      this.$modal.show("remove-category", {category});
     },
   },
   mounted() {

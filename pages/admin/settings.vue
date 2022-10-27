@@ -1,6 +1,6 @@
 <template>
   <div>
-    settings
+    Добрый день
   </div>
 </template>
 

@@ -1,5 +1,5 @@
 <template>
-  <modal name="edit-teacher" size="small" close-button @onShow="getPayload()" @onHide="clear()">
+  <modal name="edit-teacher" size="small" :close-on-out-click="false" close-button @onShow="getPayload()" @onHide="clear()">
     <div class="edit-teacher">
       <h2>Учитель</h2>
       <div class="edit-teacher__form">

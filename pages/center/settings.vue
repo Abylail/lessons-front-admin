@@ -47,6 +47,7 @@
           <h3 class="mb-2">Контакт {{ index+1 }}</h3>
           <v-btn title="Удалить контакт" icon @click="deleteContact(contact)"><v-icon color="red" small>mdi-delete</v-icon></v-btn>
         </div>
+
         <div class="relative-columns-2">
           <v-text-field
             label="Название на русском"
@@ -61,13 +62,24 @@
             persistent-hint outlined dense
           />
         </div>
+
         <div class="relative-columns-2">
           <v-text-field
             label="Номер"
             v-model="contact.phone"
             v-mask="'+7 (###) ###-##-##'"
+            type="tel"
             outlined dense hide-details
           />
+          <v-switch
+            class="mt-1"
+            v-model="contact.can_call"
+            label="Можно звонить"
+            hide-details
+          />
+        </div>
+
+        <div class="relative-columns-2">
           <v-switch
             class="mt-1"
             v-model="contact.whatsapp"
@@ -76,6 +88,23 @@
             hide-details
           />
         </div>
+
+        <slide>
+        <div class="relative-columns-2 mt-2" v-if="contact.whatsapp">
+          <v-text-field
+            label="Сообщение при переходе на whatsapp (русское)"
+            v-model="contact.ru.whatsapp_message"
+            hint="Здавствуйте пишу по поводу..."
+            persistent-hint outlined dense
+          />
+          <v-text-field
+            label="Сообщение при переходе на whatsapp (казахское)"
+            v-model="contact.kz.whatsapp_message"
+            hint="Здавствуйте пишу по поводу..."
+            persistent-hint outlined dense
+          />
+        </div>
+        </slide>
       </v-card>
       <div class="relative-columns-2">
       <v-btn
@@ -100,9 +129,11 @@
 <script>
 import { activeCities } from "@/config/lists";
 import {mapActions, mapGetters} from "vuex";
+import Slide from "../../components/transitions/slide";
 
 export default {
   name: "settings",
+  components: {Slide},
   data: () => ({
     isLoading: false,
 
@@ -205,6 +236,7 @@ export default {
       this.contactInfo.push({
         "phone": null,
         "whatsapp": false,
+        "can_call": false,
         "ru": {"name": null}, "kz": {"name": null}
       })
     },
