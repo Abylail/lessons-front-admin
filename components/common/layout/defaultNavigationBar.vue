@@ -3,11 +3,14 @@
 
     <!-- USER CARD -->
     <v-sheet class="pa-4">
-      <div>
+      <div class="navigation-bar__avatar">
       <v-avatar class="mr-2" color="primary" size="48">
         <span class="white--text">A</span>
       </v-avatar>
-      <span class="navigation-bar__name">Incode academy</span>
+        <div>
+          <div class="navigation-bar__name">{{ userFullName }}</div>
+          <div class="navigation-bar__role">{{ roleDescription }}</div>
+        </div>
       </div>
     </v-sheet>
 
@@ -57,7 +60,16 @@ export default {
   computed: {
     ...mapGetters({
       role: "auth/getRole",
-    })
+      userFullName: "auth/getUserFullName",
+    }),
+
+    // Роль на русском
+    roleDescription() {
+      return {
+        admin: "Администратор",
+        center_director: "Директор центра",
+      }[this.role] || "";
+    },
   },
   methods: {
     roleAccess(linkRoles) {
@@ -70,8 +82,19 @@ export default {
 <style lang="scss" scoped>
 .navigation-bar {
 
+  &__avatar {
+    display: grid;
+    grid-template-columns: 50px 1fr;
+    grid-column-gap: 10px;
+  }
+
   &__name {
-    padding: 10px 0;
+    padding-top: 10px;
+  }
+
+  &__role {
+    font-size: 14px;
+    color: $color--gray;
   }
 
 }

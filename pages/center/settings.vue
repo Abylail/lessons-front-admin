@@ -2,14 +2,7 @@
   <div class="settings page">
 
     <!-- Информация пользователя -->
-    <div class="settings__user">
-      <h2 class="settings__title">Информация пользователя</h2>
-      <div class="relative-columns-3">
-        <v-text-field v-model="userInfo.last_name" label="Фамилия" outlined dense/>
-        <v-text-field v-model="userInfo.first_name" label="Имя" outlined dense/>
-        <v-btn color="primary" :loading="userInfoLoading" @click="saveUserInfo()">Сохранить пользователя</v-btn>
-      </div>
-    </div>
+    <user-info/>
 
     <v-divider class="mt-3 mb-3"/>
 
@@ -130,19 +123,16 @@
 import { activeCities } from "@/config/lists";
 import {mapActions, mapGetters} from "vuex";
 import Slide from "../../components/transitions/slide";
+import UserInfo from "../../components/common/user/userInfo";
 
 export default {
   name: "settings",
-  components: {Slide},
+  components: {UserInfo, Slide},
   data: () => ({
     isLoading: false,
 
     // Список городов
     activeCities,
-
-    // Пользователь
-    userInfo: {},
-    userInfoLoading: false,
 
     // Центр
     centerInfo: { kz: {name: null, description: null}, ru: {} }, // { instagram, ru: { name, description } }
@@ -154,19 +144,11 @@ export default {
   }),
   computed: {
     ...mapGetters({
-      _userInfo: "auth/getUserInfo",
       _centerInfo: "center/getCenterInfo",
       _contactInfo: "center/getContactInfo",
     })
   },
   watch: {
-    _userInfo: {
-      handler(val) {
-        if (!val) return;
-        this.userInfo = JSON.parse(JSON.stringify(val));
-      },
-      immediate: true
-    },
     _centerInfo: {
       handler(val) {
         if (!val) return;
@@ -184,7 +166,6 @@ export default {
   },
   methods: {
     ...mapActions({
-      _saveUserInfo: "auth/saveUserInfo",
       _saveCenterInfo: "center/saveCenterInfo",
       _fetchCenterInfo: "center/fetchCenterInfo",
       _fetchContactInfo: "center/fetchContactInfo",
@@ -192,29 +173,9 @@ export default {
       _deleteContact: "center/deleteContact",
     }),
 
-    // Валидация информации пользователя
-    async validateUserInfo() {
-      if (!this.userInfo.last_name) {
-        this.$toast.error("Введите фамилию");
-        return false;
-      }
-       else if (!this.userInfo.first_name) {
-        this.$toast.error("Введите имя");
-        return false;
-      }
-       return true;
-    },
-
     // Валидация информации центра
     async validateCenterInfo() {
       return true;
-    },
-
-    // Сохранение информации пользователя
-    async saveUserInfo() {
-      this.userInfoLoading = true;
-      if (await this.validateUserInfo()) await this._saveUserInfo(this.userInfo);
-      this.userInfoLoading = false;
     },
 
     // Сохранения информации центра

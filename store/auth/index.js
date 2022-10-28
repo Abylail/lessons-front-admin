@@ -30,6 +30,13 @@ export const getters = {
 
   // Информация юзера
   getUserInfo: state => state.userInfo || {},
+
+  // Полное имя пользователя
+  getUserFullName: state => {
+    if (state.userInfo && (state.userInfo.last_name || state.userInfo.first_name))
+      return `${state.userInfo?.last_name || ''} ${state.userInfo?.first_name || ''}`
+    return "Неизвестный"
+  }
 }
 
 export const mutations = {
