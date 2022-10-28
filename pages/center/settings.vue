@@ -116,6 +116,10 @@
       </div>
     </div>
 
+
+    <!-- MODAL -->
+    <remove-contact-modal/>
+
   </div>
 </template>
 
@@ -124,10 +128,11 @@ import { activeCities } from "@/config/lists";
 import {mapActions, mapGetters} from "vuex";
 import Slide from "../../components/transitions/slide";
 import UserInfo from "../../components/common/user/userInfo";
+import RemoveContactModal from "@/components/common/modals/center/removeContactModal";
 
 export default {
   name: "settings",
-  components: {UserInfo, Slide},
+  components: {RemoveContactModal, UserInfo, Slide},
   data: () => ({
     isLoading: false,
 
@@ -218,10 +223,7 @@ export default {
     },
 
     async deleteContact(contact) {
-      this.contactInfoLoading = true;
-      await this._deleteContact(contact);
-      await this._fetchContactInfo();
-      this.contactInfoLoading = false;
+      this.$modal.show("remove-contact", {contact})
     },
 
   },

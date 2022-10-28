@@ -40,11 +40,8 @@ export default {
     tableHeaders: [
       { text: 'Адрес', value: 'address', sortable: false},
       { text: 'Телефон', value: 'phone', sortable: false},
-      { text: 'Есть whatsapp', value: 'whatsapp', sortable: false},
-      { text: 'Ссылка 2гис', value: 'two_gis', sortable: false},
-      { text: 'Ссылка яндекс карты', value: 'yandex', sortable: false},
       { text: 'Город', value: 'city_name', sortable: false},
-      { text: '', value: 'actions', sortable: false},
+      { text: '', value: 'actions', sortable: false, width: 150},
     ],
 
     isLoading: false,
@@ -92,6 +89,12 @@ export default {
 
   &__title {
     margin-bottom: 20px;
+  }
+
+  &__link {
+    max-width: 100px;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   &__table {

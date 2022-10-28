@@ -5,7 +5,7 @@
     <v-sheet class="pa-4">
       <div class="navigation-bar__avatar">
       <v-avatar class="mr-2" color="primary" size="48">
-        <span class="white--text">A</span>
+        <span class="white--text">{{ userFullName[0] }}</span>
       </v-avatar>
         <div>
           <div class="navigation-bar__name">{{ userFullName }}</div>
