@@ -1,11 +1,16 @@
 export const state = () => ({
-  // Список предметов
+  // Список предметов (общий)
   subjectList: [],
+
+  // Список предметов
+  subjectCenterList: [],
 })
 
 export const getters = {
-  // Список предметов
+  // Список предметов (общий)
   getSubjectList: state => state.subjectList,
+  // Список предметов центра
+  getCenterSubjectList: state => state.subjectCenterList,
 }
 
 export const mutations = {
@@ -15,14 +20,26 @@ export const mutations = {
 }
 
 export const actions = {
-  // Получить список предметов
-  async fetchSubjectList({ rootGetters, commit }) {
+
+  // Получить список предметов (общий)
+  async fetchSubjectList({ commit, state }) {
+    if (state.subjectList.length) return;
+    await this.$api.$get(`/api/v1/subject/get/`)
+      .then(({err, body}) => {
+        if (!err) {
+          commit("set", ["subjectList", body]);
+        }
+      })
+  },
+
+  // Получить список предметов у центра
+  async fetchSubjectCenterList({ rootGetters, commit }) {
     const centerId = rootGetters["auth/getCenterId"];
     if (!centerId) return;
     await this.$api.$get(`/api/v1/center/subject/get/${centerId}`)
       .then(({err, body}) => {
         if (!err) {
-          commit("set", ["branchList", body]);
+          commit("set", ["subjectCenterList", body]);
         }
       })
   },
@@ -38,7 +55,7 @@ export const actions = {
       .then(({err, body}) => {
         if (!err) {
           this.$toast.success("Предмет создан");
-          dispatch("fetchSubjectList");
+          dispatch("fetchSubjectCenterList");
         }
       })
   },
@@ -54,7 +71,7 @@ export const actions = {
       .then(({err, body}) => {
         if (!err) {
           this.$toast.success("Предмет обновлен");
-          dispatch("fetchSubjectList");
+          dispatch("fetchSubjectCenterList");
         }
       })
   },
@@ -65,7 +82,7 @@ export const actions = {
       .then(({err, body}) => {
         if (!err) {
           this.$toast("Предмет удален");
-          dispatch("fetchSubjectList");
+          dispatch("fetchSubjectCenterList");
         }
       })
   }

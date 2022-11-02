@@ -9,10 +9,11 @@
     <v-data-table
       class="subjects__table elevation-1"
       :headers="tableHeaders"
-      :items="subjectList"
+      :items="subjectCenterList"
       :loading="isLoading"
       item-key="id"
       hide-default-footer
+      mobile-breakpoint="0"
     >
       <template v-slot:item.actions="{ item }">
         <v-btn icon><v-icon>mdi-timetable</v-icon></v-btn>
@@ -37,35 +38,41 @@ export default {
   components: {removeSubjectModal, editSubjectModal},
   data: () => ({
     tableHeaders: [
+      { text: 'Название предмета', value: 'ru.name', sortable: false },
       { text: '', value: 'actions', sortable: false, width: 150},
     ],
-    subjectList: [],
+    subjectCenterList: [],
 
     isLoading: true,
   }),
   computed: {
     ...mapGetters({
-      _subjectList: "center/subjects/getSubjectList",
+      _subjectCenterList: "center/subjects/getCenterSubjectList",
     })
   },
   watch: {
-    _subjectList: {
+    _subjectCenterList: {
       handler(val) {
-        this.subjectList = JSON.parse(JSON.stringify(val));
+        this.subjectCenterList = JSON.parse(JSON.stringify(val));
       },
       immediate: true
     }
   },
   methods: {
     ...mapActions({
-      _fetchList: "center/subjects/fetchSubjectList",
+      _fetchCenterSubjectList: "center/subjects/fetchSubjectCenterList",
+      _fetchSubjectList: "center/subjects/fetchSubjectList",
     }),
 
     async fetchList() {
       this.isLoading = true;
-      await this._fetchList();
+      // Беру список всех предметов
+      this._fetchSubjectList();
+      //  Беру список предметов центра
+      await this._fetchCenterSubjectList();
       this.isLoading = false;
     },
+
     // Создать предмет (кнопка)
     createHandle() {
       this.$modal.show("edit-subject");

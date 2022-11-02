@@ -1,9 +1,11 @@
 <template>
   <modal name="edit-subject" size="small" :close-on-out-click="false" close-button @onShow="getPayload()" @onHide="clear()">
     <div class="edit-subject">
-      <h2>Учитель</h2>
+      <h2>Предмет</h2>
       <div class="edit-subject__form">
-        <v-text-field label="Имя" v-model="subject.name" outlined dense/>
+        <v-autocomplete label="Предмет" v-model="subject.subject_id" item-value="id" item-text="ru.name" :items="subjectList" outlined dense :disabled="!isNewSubject" @change="subjectChanged($event)"/>
+        <v-text-field label="Имя предмета на русском" v-model="subject.ru.name" maxlength="50" counter outlined dense/>
+        <v-text-field label="Имя предмета на казахском" v-model="subject.kz.name" maxlength="50" counter outlined dense/>
       </div>
       <div class="edit-subject__actions">
         <v-btn @click="closeSelf()">Отменить</v-btn>
@@ -14,18 +16,21 @@
 </template>
 
 <script>
-import {mapActions} from "vuex";
+import {mapActions, mapGetters} from "vuex";
 
 export default {
   name: "editSubjectModal",
   data: () => ({
     // Информация учителя
-    subject: {},
+    subject: {ru: {}, kz: {}},
 
     isLoading: false,
   }),
   computed: {
-    // Новый ли учитель (создане или апдейт)
+    ...mapGetters({
+      subjectList: "center/subjects/getSubjectList",
+    }),
+    // Новый ли предмет (создание или апдейт)
     isNewSubject() {
       return !this.subject.id;
     },
@@ -45,7 +50,7 @@ export default {
 
     // Очистка информации
     clear() {
-      this.subject = {};
+      this.subject = {ru: {}, kz: {}};
     },
 
     // Закрыть себя (модалку)
@@ -53,8 +58,35 @@ export default {
       this.$modal.hide("edit-subject");
     },
 
+    // Изменение предмет
+    subjectChanged(subjectId) {
+      if (!subjectId) {
+        // Выбор предмета убран
+        this.subject.ru.name = null;
+        this.subject.kz.name = null;
+      }
+      else {
+        // Предмет выбран
+        const selectedSubject = this.subjectList.find(s => +s.id === +subjectId);
+        this.subject.ru.name = selectedSubject.ru.name;
+        this.subject.kz.name = selectedSubject.kz.name;
+      }
+    },
+
     // Валидация информации предмета
     async validate() {
+      if (!this.subject.ru.name) {
+        this.$toast.error("Введите название предмета на русском");
+        return false;
+      }
+      if (!this.subject.kz.name) {
+        this.$toast.error("Введите название предмета на казахском");
+        return false;
+      }
+      if (!this.subject.subject_id) {
+        this.$toast.error("Выберите предмет");
+        return false;
+      }
       return true;
     },
 

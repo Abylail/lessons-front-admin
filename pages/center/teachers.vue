@@ -39,7 +39,6 @@ export default {
   data: () => ({
     tableHeaders: [
       { text: 'Имя', value: 'full_name', sortable: false},
-      { text: 'Телефон', value: 'phone', sortable: false},
       { text: '', value: 'actions', sortable: false, width: 150},
     ],
     teacherList: [],
