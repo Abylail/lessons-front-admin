@@ -3,7 +3,7 @@ export const activeCities = [
 ]
 
 export const weekdays = [
-  {code: "monday", name: "Понедельника"},
+  {code: "monday", name: "Понедельник"},
   {code: "tuesday", name: "Вторник"},
   {code: "wednesday", name: "Среда"},
   {code: "thursday", name: "Четверг"},

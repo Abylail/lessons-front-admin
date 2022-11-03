@@ -7,16 +7,38 @@
         <h2>Фильтр</h2>
       </div>
       <div class="toolbar__bottom relative-columns-4">
-        <v-select label="Учителя" outlined dense hide-details/>
-        <v-select label="Предметы" outlined dense hide-details/>
-        <v-select label="Дни недели" outlined dense hide-details/>
+        <v-select
+          label="Учителя" placeholder="Все учителя"
+          v-model="filterParams.teacher_id"
+          :items="teacherList"
+          item-text="full_name" item-value="id"
+          multiple outlined dense hide-details persistent-placeholder
+        />
+        <v-select
+          label="Предметы" placeholder="Все предметы"
+          v-model="filterParams.center_subject_id"
+          :items="centerSubjectList"
+          item-text="ru.name" item-value="id"
+          multiple outlined dense hide-details persistent-placeholder
+        />
+        <v-select
+          label="Дни недели" placeholder="Все дни недели"
+          v-model="filterParams.day_code"
+          :items="weekdays"
+          item-text="name" item-value="code" height="40"
+          multiple outlined dense hide-details persistent-placeholder
+        />
         <v-btn color="primary">Применить</v-btn>
       </div>
     </div>
 
     <!-- MOBILE VIEW -->
     <div class="toolbar--mobile">
-
+      <h2>Расписание</h2>
+      <v-btn color="primary">
+        <v-icon>mdi-filter</v-icon>
+        Фильтр
+      </v-btn>
     </div>
 
 
@@ -24,16 +46,32 @@
 </template>
 
 <script>
-import {mapActions} from "vuex";
+import {mapActions, mapGetters} from "vuex";
+import {weekdays} from "@/config/lists";
 
 export default {
   name: "toolbar",
   data: () => ({
 
+    // Дни недели
+    weekdays,
+
     // Загрузка учителей
     isTeacherLoading: true,
 
+    // Загрузка предметов центра
+    isCenterSubjectLoading: false,
+
+    // Параметры фильтра
+    filterParams: {},
+
   }),
+  computed: {
+    ...mapGetters({
+      teacherList: "center/teachers/getTeacherList",
+      centerSubjectList: "center/subjects/getCenterSubjectList",
+    })
+  },
   methods: {
     ...mapActions({
       _fetchTeachers: "center/teachers/fetchTeacherList",
@@ -45,10 +83,18 @@ export default {
       this.isTeacherLoading = true;
       await this._fetchTeachers();
       this.isTeacherLoading = false;
-    }
+    },
+
+    // Запросить предметы центра
+    async fetchCenterSubjects() {
+      this.isCenterSubjectLoading = true;
+      await this._fetchCenterSubjects();
+      this.isCenterSubjectLoading = false;
+    },
   },
   mounted() {
-    this.fetchTeachers()
+    this.fetchTeachers();
+    this.fetchCenterSubjects();
   }
 }
 </script>
@@ -60,6 +106,11 @@ export default {
     display: grid;
     grid-template-rows: 1fr 1fr;
     grid-row-gap: 10px;
+  }
+
+  &--mobile {
+    display: flex;
+    justify-content: space-between;
   }
 
 
