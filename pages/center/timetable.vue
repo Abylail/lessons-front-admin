@@ -1,22 +1,22 @@
 <template>
-  <div class="timetable">
+  <div class="page timetable">
 
     <!-- Настройки поиска -->
-    <div class="timetable__search">
-
-    </div>
+    <toolbar class="timetable__toolbar"/>
 
     <!-- Таблица -->
     <div class="timetable__table">
-      
+
     </div>
 
   </div>
 </template>
 
 <script>
+import Toolbar from "@/components/common/timetable/toolbar";
 export default {
-  name: "timetable"
+  name: "timetable",
+  components: {Toolbar}
 }
 </script>
 
@@ -25,6 +25,11 @@ export default {
   display: grid;
   grid-template-rows: 100px 1fr;
   height: 100%;
+  padding: 20px;
+
+  &__toolbar {
+
+  }
 
   &__table {
     overflow: auto;

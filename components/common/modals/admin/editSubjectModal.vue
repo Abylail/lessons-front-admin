@@ -8,6 +8,7 @@
         <v-text-field label="Название на казахском" v-model="subject.kz.name" outlined dense hide-details/>
         <v-switch label="Спорт" v-model="subject.is_sport" dense/>
         <v-select label="Категории" item-text="ru.name" item-value="id" v-model="subject.categories" :items="categories" outlined dense multiple/>
+        <base-color-picker label="Цвет предмета" v-model="subject.color"/>
       </div>
 
       <div class="edit-teacher__actions">
@@ -20,9 +21,11 @@
 
 <script>
 import {mapActions, mapGetters} from "vuex";
+import BaseColorPicker from "@/components/base/BaseColorPicker";
 
 export default {
   name: "editSubjectModal",
+  components: {BaseColorPicker},
   data: () => ({
     // Информация категории
     subject: {ru: {name: null}, kz: {name: null}},
