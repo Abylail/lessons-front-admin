@@ -24,7 +24,7 @@
           @click:append="showPassword = !showPassword"
         />
 
-        <v-btn color="primary" block @click="loginHandle()">Войти</v-btn>
+        <v-btn color="primary" :loading="isLoading" block @click="loginHandle()">Войти</v-btn>
 
         <div class="login-page__registration">
           <nuxt-link to="/registration">Зарегестрироваться</nuxt-link>

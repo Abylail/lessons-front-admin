@@ -35,11 +35,49 @@
     <!-- MOBILE VIEW -->
     <div class="toolbar--mobile">
       <h2>Расписание</h2>
-      <v-btn color="primary">
+      <v-btn color="primary" @click="showMobileFilterBar = !showMobileFilterBar">
         <v-icon>mdi-filter</v-icon>
         Фильтр
       </v-btn>
     </div>
+
+    <!-- Боковой фильтр -->
+    <v-navigation-drawer v-model="showMobileFilterBar" width="300" right fixed app>
+      <div class="toolbar__aside pa-3">
+        <div class="toolbar__aside-title">
+          <h2>Фильтр</h2>
+        </div>
+        <div class="toolbar__aside-filters">
+          <v-select
+            label="Учителя" placeholder="Все учителя"
+            v-model="filterParams.teacher_id"
+            :items="teacherList"
+            item-text="full_name" item-value="id"
+            multiple outlined dense hide-details persistent-placeholder
+          />
+          <v-select
+            label="Предметы" placeholder="Все предметы"
+            v-model="filterParams.center_subject_id"
+            :items="centerSubjectList"
+            item-text="ru.name" item-value="id"
+            multiple outlined dense hide-details persistent-placeholder
+          />
+          <v-select
+            label="Дни недели" placeholder="Все дни недели"
+            v-model="filterParams.day_code"
+            :items="weekdays"
+            item-text="name" item-value="code" height="40"
+            multiple outlined dense hide-details persistent-placeholder
+          />
+        </div>
+      </div>
+      <template v-slot:append>
+        <div class="pa-3">
+          <v-btn class="mb-2" block>Отменить</v-btn>
+          <v-btn color="primary" block>Применить</v-btn>
+        </div>
+      </template>
+    </v-navigation-drawer>
 
 
   </div>
@@ -64,6 +102,9 @@ export default {
 
     // Параметры фильтра
     filterParams: {},
+
+    // Показать боковое фильтр (мобилка)
+    showMobileFilterBar: false,
 
   }),
   computed: {
@@ -113,7 +154,9 @@ export default {
     justify-content: space-between;
   }
 
+  &__aside {
 
+  }
 
 
   @media (max-width: $break-point) {

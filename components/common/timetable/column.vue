@@ -22,7 +22,7 @@ export default {
 <style lang="scss" scoped>
 .column {
   display: inline-block;
-  width: 250px;
+  width: 270px;
   background: $color--light-gray;
   height: 100%;
   margin: 0 5px;
