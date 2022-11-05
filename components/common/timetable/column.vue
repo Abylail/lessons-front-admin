@@ -26,6 +26,7 @@ export default {
   background: $color--light-gray;
   height: 100%;
   margin: 0 5px;
+  border-radius: 5px;
   &:first-child {margin-left: 0}
   &:last-child {margin-right: 0}
 

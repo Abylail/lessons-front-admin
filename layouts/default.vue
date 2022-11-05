@@ -1,5 +1,5 @@
 <template>
-  <v-app>
+  <v-app class="default-layout">
 
     <!-- HEADER -->
     <default-header :navBarPosition="navBarOpen" @input:navBarPosition="navBarOpen = $event"/>
@@ -33,8 +33,14 @@ export default {
 </script>
 <style lang="scss" scoped>
   .default-layout {
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
 
-
-
+    ::v-deep {
+      .v-application--wrap {min-height: 100% !important;}
+    }
   }
 </style>
