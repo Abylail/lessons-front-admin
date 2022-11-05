@@ -4,6 +4,7 @@
     <column
       v-for="weekDay in weekdays" :key="weekDay.code"
       :label="weekDay.name"
+      @create="createElement({dayCode: weekDay.code})"
     />
 
   </div>
@@ -18,7 +19,12 @@ export default {
   components: {Column},
   data: () => ({
     weekdays,
-  })
+  }),
+  methods: {
+    createElement(event) {
+      this.$emit("create", event);
+    }
+  }
 }
 </script>
 
@@ -29,6 +35,7 @@ export default {
   overflow-x: auto;
   overflow-y: hidden;
   white-space: nowrap;
+  padding-bottom: 20px;
 
   @media (max-width: $break-point) {
     scroll-snap-type: x mandatory;
