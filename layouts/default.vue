@@ -40,7 +40,10 @@ export default {
     bottom: 0;
 
     ::v-deep {
-      .v-application--wrap {min-height: 100% !important;}
+      .v-application--wrap {
+        min-height: 100% !important;
+        overflow: auto;
+      }
     }
   }
 </style>
