@@ -4,7 +4,10 @@
     <column
       v-for="weekDay in weekdays" :key="weekDay.code"
       :label="weekDay.name"
-      @create="createElement({dayCode: weekDay.code})"
+      :list="listByWeekDay[weekDay.code]"
+      :week-day-code="weekDay.code"
+      @create="editItem({dayCode: weekDay.code})"
+      @update="editItem({ group: $event })"
     />
 
   </div>
@@ -17,13 +20,39 @@ import Column from "@/components/common/timetable/column";
 export default {
   name: "timeTable",
   components: {Column},
+  props: {
+    list: {
+      type: Array,
+      default: () => []
+    }
+  },
   data: () => ({
+    // Дни недели
     weekdays,
   }),
+  computed: {
+    // Объект с ключами дней недели и списком
+    listByWeekDay() {
+      let result = {};
+
+      // Пробегаюсь по группам
+      this.list.forEach(group => {
+        // Пробегаюсь по дням группы что бы везде записать
+        group.days.forEach(({code}) => {
+          if (!result[code]) result[code] = [];
+          result[code].push(group);
+        });
+      })
+
+      return result;
+    },
+  },
   methods: {
-    createElement(event) {
-      this.$emit("create", event);
-    }
+
+    // Создать
+    editItem(event) {
+      this.$emit("editGroup", event);
+    },
   }
 }
 </script>

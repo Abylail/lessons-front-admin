@@ -24,3 +24,9 @@
   min-height: 30px !important;
 }
 
+// Переписываю стиль vue-modal-service
+@media (max-width: $break-point) {
+  .modal__content {
+    padding: 12px !important;
+  }
+}

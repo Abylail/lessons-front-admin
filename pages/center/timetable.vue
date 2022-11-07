@@ -5,7 +5,7 @@
     <toolbar class="timetable__toolbar"/>
 
     <!-- Таблица -->
-    <time-table class="timetable__table" @create="createGroupHandle($event)"/>
+    <time-table class="timetable__table" :list="groupList" @editGroup="editGroupHandle($event)"/>
 
     <!-- Модалка создания группы -->
     <edit-group-modal/>
@@ -14,18 +14,39 @@
 </template>
 
 <script>
-import Toolbar from "@/components/common/timetable/toolbar";
+import Toolbar from "@/components/common/timetable/center/toolbar";
 import TimeTable from "@/components/common/timetable/timetable";
 import EditGroupModal from "@/components/common/modals/center/editGroupModal";
+import {mapActions, mapGetters} from "vuex";
 export default {
   name: "timetable",
   components: {EditGroupModal, Toolbar, TimeTable},
+  data: () => ({
+    isLoading: false
+  }),
+  computed: {
+    ...mapGetters({
+      groupList: "center/timetable/getGroupList"
+    })
+  },
   methods: {
+    ...mapActions({
+      _fetchTimetable: "center/timetable/fetchTimetable",
+    }),
+
     // Создать группу (кнопка)
-    createGroupHandle({ dayCode }) {
-      console.log("dayCode", dayCode);
-      this.$modal.show("edit-group", { dayCode });
-    }
+    editGroupHandle({ group, dayCode }) {
+      this.$modal.show("edit-group", { group, dayCode });
+    },
+
+    async fetchTimetable() {
+      this.isLoading = true;
+      await this._fetchTimetable();
+      this.isLoading = false;
+    },
+  },
+  mounted() {
+    this.fetchTimetable();
   }
 }
 </script>

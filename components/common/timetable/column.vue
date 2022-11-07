@@ -5,7 +5,12 @@
 
       <!-- Список в колонке -->
       <div class="column__list">
-
+        <group-card
+          v-for="group in list" :key="group.id"
+          :value="group"
+          :week-day-code="weekDayCode"
+          @click="editHandle(group)"
+        />
       </div>
 
       <div class="column__create">
@@ -16,18 +21,32 @@
 </template>
 
 <script>
+import GroupCard from "@/components/common/timetable/center/groupCard";
 export default {
   name: "column",
+  components: {GroupCard},
   props: {
     label: {
       type: String,
+    },
+    list: {
+      type: Array,
+      default: () => []
+    },
+    weekDayCode: {
+      type: String,
+      default: null
     }
   },
   methods: {
     // Добавить (кнопка)
     createHandle() {
-      this.$emit("create")
-    }
+      this.$emit("editItem")
+    },
+
+    editHandle(group) {
+      this.$emit("update", group);
+    },
   }
 }
 </script>
@@ -60,6 +79,8 @@ export default {
   }
 
   &__list {
+    padding: 8px;
+    font-size: 14px;
     overflow-y: auto;
     overflow-x: hidden;
   }
