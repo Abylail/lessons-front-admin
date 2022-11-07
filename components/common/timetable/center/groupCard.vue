@@ -1,7 +1,7 @@
 <template>
   <div class="group-card" @click="$emit('click')">
 
-    <div class="group-card__title">
+    <div class="group-card__title" :style="{borderColor: indicatorColor}">
       {{ myTime }}
     </div>
 
@@ -23,6 +23,8 @@
       {{ value.branch_address }}
     </div>
 
+    <div class="group-card__color-indicator" :style="{backgroundColor: indicatorColor}"/>
+
   </div>
 </template>
 
@@ -43,8 +45,11 @@ export default {
     myTime() {
       const day = this.value.days.find(d => d.code === this.weekDayCode);
       return `${day.start} - ${day.end}`;
-    }
-  }
+    },
+    indicatorColor() {
+      return this.value.subject_color;
+    },
+  },
 }
 </script>
 
@@ -65,7 +70,7 @@ export default {
     text-align: center;
     font-size: 14px;
     font-weight: bold;
-    border-bottom: 1px solid $color--gray;
+    border-bottom: 3px solid $color--gray;
   }
 
   &__info {

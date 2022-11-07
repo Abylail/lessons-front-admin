@@ -178,6 +178,7 @@ export default {
       if (await this.validate()) {
         if (this.isNewGroup) await this._createGroup(this.group);
         // else await this._updateGroup(this.group);
+        this.closeSelf();
       }
       this.isLoading = false;
       console.log(this.group);

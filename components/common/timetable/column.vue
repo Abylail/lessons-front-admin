@@ -54,11 +54,9 @@ export default {
 <style lang="scss" scoped>
 .column {
   display: inline-block;
-  width: 270px;
-  background: $color--light-gray;
+  width: 230px;
   height: 100%;
   margin: 0 5px;
-  border-radius: 5px;
   &:first-child {margin-left: 0}
   &:last-child {margin-right: 0}
 
@@ -66,6 +64,8 @@ export default {
   @media (max-width: $break-point) {scroll-snap-align: center;}
 
   &__content {
+    background: $color--light-gray;
+    border-radius: 5px;
     height: 100%;
     display: grid;
     grid-template-rows: 40px 1fr 40px;
@@ -79,10 +79,11 @@ export default {
   }
 
   &__list {
-    padding: 8px;
+    padding: 0 8px;
     font-size: 14px;
     overflow-y: auto;
     overflow-x: hidden;
+    height: 100%;
   }
 
   &__create {
