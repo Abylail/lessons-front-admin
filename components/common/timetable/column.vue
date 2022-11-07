@@ -41,7 +41,7 @@ export default {
   methods: {
     // Добавить (кнопка)
     createHandle() {
-      this.$emit("editItem")
+      this.$emit("create")
     },
 
     editHandle(group) {
