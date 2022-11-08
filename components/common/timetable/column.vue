@@ -57,6 +57,7 @@ export default {
   width: 230px;
   height: 100%;
   margin: 0 5px;
+  position: relative;
   &:first-child {margin-left: 0}
   &:last-child {margin-right: 0}
 
@@ -64,9 +65,11 @@ export default {
   @media (max-width: $break-point) {scroll-snap-align: center;}
 
   &__content {
+    position: absolute;
+    width: 230px;
     background: $color--light-gray;
     border-radius: 5px;
-    height: 100%;
+    max-height: 100%;
     display: grid;
     grid-template-rows: 40px 1fr 40px;
   }

@@ -70,7 +70,7 @@ export default {
     text-align: center;
     font-size: 14px;
     font-weight: bold;
-    border-bottom: 3px solid $color--gray;
+    border-bottom: 4px solid $color--gray;
   }
 
   &__info {

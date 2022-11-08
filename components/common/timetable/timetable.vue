@@ -61,8 +61,8 @@ export default {
 .time-table {
   user-select: none;
   height: 100%;
-  overflow-x: auto;
-  overflow-y: hidden;
+  overflow-x: auto !important;
+  overflow-y: hidden !important;
   white-space: nowrap;
   padding-bottom: 20px;
 

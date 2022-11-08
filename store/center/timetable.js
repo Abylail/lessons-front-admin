@@ -22,7 +22,13 @@ export const mutations = {
     else newList.push(group);
 
     state.groupList = newList;
-  }
+  },
+  deleteGroup(state, groupId) {
+    const groupIndex = state.groupList.findIndex(g => g.id === groupId);
+    let newList = state.groupList.slice();
+    newList.splice(groupIndex, 1);
+    state.groupList = newList;
+  },
 }
 
 
@@ -57,12 +63,31 @@ export const actions = {
   },
 
   // Обновить группу
-  async updateGroup({ rootGetters, commit }, groupInfo) {
+  async updateGroup({ rootGetters, commit }, {newGroupInfo, oldGroupInfo}) {
     const centerId = rootGetters["auth/getCenterId"];
 
-    await this.$api.$put(`/api/v1/center/schedule/group/update/${groupInfo.id}`, {
+    // Подготваливаю дни в отправке
+    let days = [];
+    const oldDays = oldGroupInfo.days || [];
+    const newDays = newGroupInfo.days || [];
+
+    // Пробегаю по новым дням, если день новый добавляю is_new, если день не новый и отличается то добавляю is_update
+    newDays.forEach(newDay => {
+      const sameInOld = oldDays.find(od => od.code === newDay.code);
+      if (!sameInOld) days.push({...newDay, is_new: true});
+      else if (sameInOld.start !== newDay.start || sameInOld.end !== newDay.end) days.push({...newDay, is_update: true});
+    });
+
+    // Пробегаю по старым дням, если день удален то добавляю is_delete
+    newDays.forEach(oldDay => {
+      const sameInNew = newDays.find(nd => nd.code === oldDay.code);
+      if (!sameInNew) days.push({...oldDay, is_delete: true})
+    });
+
+    await this.$api.$put(`/api/v1/center/schedule/group/update/${oldGroupInfo.id}`, {
       center_id: centerId,
-      ...groupInfo,
+      ...newGroupInfo,
+      days,
     })
       .then(({err, body}) => {
         if (!err) {
@@ -73,7 +98,13 @@ export const actions = {
   },
 
   // Удалить группу
-  deleteGroup() {
-
+  async deleteGroup({ commit }, groupId) {
+    await this.$api.$delete(`/api/v1/center/schedule/group/delete/${groupId}`)
+      .then(({err, body}) => {
+        if (!err) {
+          this.$toast("Группа удалена");
+          commit("deleteGroup", groupId);
+        }
+      })
   },
 }

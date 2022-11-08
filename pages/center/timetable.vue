@@ -9,6 +9,7 @@
 
     <!-- Модалка создания группы -->
     <edit-group-modal/>
+    <remove-group-modal/>
 
   </div>
 </template>
@@ -18,9 +19,10 @@ import Toolbar from "@/components/common/timetable/center/toolbar";
 import TimeTable from "@/components/common/timetable/timetable";
 import EditGroupModal from "@/components/common/modals/center/editGroupModal";
 import {mapActions, mapGetters} from "vuex";
+import RemoveGroupModal from "@/components/common/modals/center/removeGroupModal";
 export default {
   name: "timetable",
-  components: {EditGroupModal, Toolbar, TimeTable},
+  components: {RemoveGroupModal, EditGroupModal, Toolbar, TimeTable},
   data: () => ({
     isLoading: false
   }),

@@ -102,7 +102,7 @@
           <v-btn class="mb-2" color="primary" :loading="isLoading" block @click="saveGroup()">Сохранить</v-btn>
           <!-- Удалить и отменить -->
           <div class="edit-group__extra-actions">
-            <v-btn color="red" dark block><v-icon>mdi-delete</v-icon></v-btn>
+            <v-btn color="red" dark block @click="deleteHandle()"><v-icon>mdi-delete</v-icon></v-btn>
             <v-btn block outlined @click="closeSelf()">Отменить</v-btn>
           </div>
         </div>
@@ -177,12 +177,20 @@ export default {
       this.isLoading = true;
       if (await this.validate()) {
         if (this.isNewGroup) await this._createGroup(this.group);
-        // else await this._updateGroup(this.group);
+        else await this._updateGroup({newGroupInfo: this.group,  oldGroupInfo: JSON.parse(JSON.stringify(this.$modal.$payload.group))});
         this.closeSelf();
       }
       this.isLoading = false;
-      console.log(this.group);
     },
+
+    // Удалить кнопка
+    async deleteHandle() {
+      const deleteGroup = JSON.parse(JSON.stringify(this.group));
+      this.closeSelf();
+      setTimeout(() => {
+        this.$modal.show("remove-group", {group: deleteGroup});
+      }, 300);
+    }
   }
 }
 </script>
