@@ -34,10 +34,10 @@ export const actions = {
       center_id: centerId,
       ...branchInfo,
     })
-      .then(({err, body}) => {
+      .then(async ({err, body}) => {
         if (!err) {
           this.$toast.success("Филиал создан");
-          dispatch("fetchBranchList");
+          await dispatch("fetchBranchList");
         }
       })
   },
@@ -49,10 +49,10 @@ export const actions = {
       center_id: centerId,
       ...branchInfo,
     })
-      .then(({err, body}) => {
+      .then(async ({err, body}) => {
         if (!err) {
           this.$toast.success("Филиал создан");
-          dispatch("fetchBranchList");
+          await dispatch("fetchBranchList");
         }
       })
   },

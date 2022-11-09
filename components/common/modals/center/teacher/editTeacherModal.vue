@@ -15,7 +15,7 @@
 </template>
 
 <script>
-import {mapActions} from "vuex";
+import {mapActions, mapGetters} from "vuex";
 
 export default {
   name: "editTeacherModal",
@@ -23,9 +23,15 @@ export default {
     // Информация учителя
     teacher: {},
 
+    // После успешного действия колбэк
+    successCallback: null,
+
     isLoading: false,
   }),
   computed: {
+    ...mapGetters({
+      teacherList: "center/teachers/getTeacherList",
+    }),
     // Новый ли учитель (создане или апдейт)
     isNewTeacher() {
       return !this.teacher.id;
@@ -39,14 +45,16 @@ export default {
 
     // Получить вложения
     getPayload() {
-      if (this.$modal.$payload && this.$modal.$payload.teacher) {
-        this.teacher = {...this.$modal.$payload.teacher};
-      }
+      // Инфа по учителю
+      if (this.$modal.$payload?.teacher) this.teacher = {...this.$modal.$payload.teacher};
+      // Колбэк после успеха
+      if (this.$modal.$payload?.successCallback) this.successCallback = this.$modal.$payload.successCallback;
     },
 
     // Очистка информации
     clear() {
       this.teacher = {};
+      this.successCallback = null;
     },
 
     // Закрыть себя (модалку)
@@ -62,12 +70,24 @@ export default {
       return true;
     },
 
+    // Вызов успешного колбэка (Вызывается после закрытия модалки)
+    callSuccessCallback() {
+      if (this.successCallback) {
+        const newTeacher = this.teacherList.find(t => t.full_name === this.teacher.full_name && t.phone === this.teacher.phone) || {};
+        const successCallback = this.successCallback;
+        setTimeout(() => {
+          successCallback(newTeacher);
+        }, 300)
+      }
+    },
+
     // Сохранить учителя
     async saveTeacher() {
       this.isLoading = true;
       if (await this.validate()) {
         if (this.isNewTeacher) await this._createTeacher(this.teacher);
         else await this._updateTeacher(this.teacher);
+        this.callSuccessCallback();
         this.closeSelf();
       }
       this.isLoading = false;

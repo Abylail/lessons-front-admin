@@ -3,6 +3,7 @@
 
     <column
       v-for="weekDay in weekdays" :key="weekDay.code"
+      v-show="canShow(weekDay.code)"
       :label="weekDay.name"
       :list="listByWeekDay[weekDay.code]"
       :week-day-code="weekDay.code"
@@ -22,6 +23,10 @@ export default {
   components: {Column},
   props: {
     list: {
+      type: Array,
+      default: () => []
+    },
+    hideDaysCode: {
       type: Array,
       default: () => []
     }
@@ -48,6 +53,11 @@ export default {
     },
   },
   methods: {
+
+    // Можно ли показывать колонку
+    canShow(dayCode) {
+      return this.hideDaysCode.indexOf(dayCode) < 0;
+    },
 
     // Создать
     editItem(event) {

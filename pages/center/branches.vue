@@ -30,8 +30,8 @@
 
 <script>
 import {mapActions, mapGetters} from "vuex";
-import EditBranchModal from "../../components/common/modals/center/editBranchModal";
-import RemoveBranchModal from "../../components/common/modals/center/removeBranchModal";
+import EditBranchModal from "../../components/common/modals/center/branch/editBranchModal";
+import RemoveBranchModal from "../../components/common/modals/center/branch/removeBranchModal";
 
 export default {
   name: "branches",

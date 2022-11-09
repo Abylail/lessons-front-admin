@@ -52,10 +52,10 @@ export const actions = {
       center_id: centerId,
       ...subjectInfo,
     })
-      .then(({err, body}) => {
+      .then(async ({err, body}) => {
         if (!err) {
           this.$toast.success("Предмет создан");
-          dispatch("fetchSubjectCenterList");
+          await dispatch("fetchSubjectCenterList");
         }
       })
   },
@@ -68,10 +68,10 @@ export const actions = {
       center_id: centerId,
       ...subjectInfo,
     })
-      .then(({err, body}) => {
+      .then(async ({err, body}) => {
         if (!err) {
           this.$toast.success("Предмет обновлен");
-          dispatch("fetchSubjectCenterList");
+          await dispatch("fetchSubjectCenterList");
         }
       })
   },

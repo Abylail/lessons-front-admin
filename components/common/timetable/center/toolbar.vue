@@ -9,36 +9,38 @@
       <div class="toolbar__bottom relative-columns-4">
         <v-select
           label="Учителя" placeholder="Все учителя"
-          v-model="filterParams.teacher_id"
+          v-model="innerFilterParams.teacher_id"
           :items="teacherList"
           item-text="full_name" item-value="id"
           multiple outlined dense hide-details persistent-placeholder
         />
         <v-select
           label="Предметы" placeholder="Все предметы"
-          v-model="filterParams.center_subject_id"
+          v-model="innerFilterParams.center_subject_id"
           :items="centerSubjectList"
           item-text="ru.name" item-value="id"
           multiple outlined dense hide-details persistent-placeholder
         />
         <v-select
           label="Дни недели" placeholder="Все дни недели"
-          v-model="filterParams.day_code"
+          v-model="innerFilterParams.days"
           :items="weekdays"
           item-text="name" item-value="code" height="40"
           multiple outlined dense hide-details persistent-placeholder
         />
-        <v-btn color="primary">Применить</v-btn>
+        <v-btn color="primary" @click="filterHandle()">Применить</v-btn>
       </div>
     </div>
 
     <!-- MOBILE VIEW -->
     <div class="toolbar--mobile">
       <h2>Расписание</h2>
-      <v-btn color="primary" small @click="showMobileFilterBar = !showMobileFilterBar">
-        <v-icon>mdi-filter</v-icon>
-        Фильтр
-      </v-btn>
+      <v-badge color="green" :content="filterCount" overlap :value="!!filterCount">
+        <v-btn color="primary" small @click="showMobileFilterBar = !showMobileFilterBar">
+          <v-icon>mdi-filter</v-icon>
+          Фильтр
+        </v-btn>
+      </v-badge>
     </div>
 
     <!-- Боковой фильтр -->
@@ -50,21 +52,21 @@
         <div class="toolbar__aside-filters">
           <v-select
             class="mb-3" label="Учителя" placeholder="Все учителя"
-            v-model="filterParams.teacher_id"
+            v-model="innerFilterParams.teacher_id"
             :items="teacherList"
             item-text="full_name" item-value="id"
             multiple outlined dense hide-details persistent-placeholder
           />
           <v-select
             class="mb-3" label="Предметы" placeholder="Все предметы"
-            v-model="filterParams.center_subject_id"
+            v-model="innerFilterParams.center_subject_id"
             :items="centerSubjectList"
             item-text="ru.name" item-value="id"
             multiple outlined dense hide-details persistent-placeholder
           />
           <v-select
             class="mb-3" label="Дни недели" placeholder="Все дни недели"
-            v-model="filterParams.day_code"
+            v-model="innerFilterParams.days"
             :items="weekdays"
             item-text="name" item-value="code" height="40"
             multiple outlined dense hide-details persistent-placeholder
@@ -73,8 +75,8 @@
       </div>
       <template v-slot:append>
         <div class="pa-3">
-          <v-btn class="mb-2" color="primary" block>Применить</v-btn>
-          <v-btn block outlined>Отменить</v-btn>
+          <v-btn class="mb-2" color="primary" block @click="filterHandle()">Применить</v-btn>
+          <v-btn block outlined @click="cancelHandle()">Отменить</v-btn>
         </div>
       </template>
     </v-navigation-drawer>
@@ -89,6 +91,12 @@ import {weekdays} from "@/config/lists";
 
 export default {
   name: "toolbar",
+  props: {
+    filterParams: {
+      type: Object,
+      default: () => ({})
+    }
+  },
   data: () => ({
 
     // Дни недели
@@ -104,7 +112,7 @@ export default {
     isBranchesLoading: true,
 
     // Параметры фильтра
-    filterParams: {},
+    innerFilterParams: {},
 
     // Показать боковое фильтр (мобилка)
     showMobileFilterBar: false,
@@ -115,7 +123,22 @@ export default {
       teacherList: "center/teachers/getTeacherList",
       centerSubjectList: "center/subjects/getCenterSubjectList",
       branchList: "center/branches/getBranchList",
-    })
+    }),
+
+    // Колличество использованных фильтров
+    filterCount() {
+      if (!this.filterParams) return 0;
+      let count = 0;
+      Object.keys(this.filterParams).forEach(fKey => {
+        if (this.filterParams[fKey].length) count++;
+      })
+      return count;
+    }
+  },
+  watch: {
+    filterParams(val) {
+      this.innerFilterParams = JSON.parse(JSON.stringify(val));
+    }
   },
   methods: {
     ...mapActions({
@@ -143,6 +166,27 @@ export default {
       this.isBranchesLoading = true;
       await this._fetchBranches();
       this.isBranchesLoading = false;
+    },
+
+    // Очистить фильтр
+    clear() {
+      this.innerFilterParams = {};
+    },
+
+    // Закрыть боковой фильтр
+    closeSelf() {
+      this.showMobileFilterBar = false;
+    },
+
+    // Кнопка применить фильтр
+    filterHandle() {
+      this.$emit("update:filterParams", this.innerFilterParams);
+      this.closeSelf();
+    },
+
+    // Отменить фильтр
+    cancelHandle() {
+      this.closeSelf();
     },
   },
   mounted() {

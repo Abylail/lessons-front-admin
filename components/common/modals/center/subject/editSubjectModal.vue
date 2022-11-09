@@ -24,11 +24,15 @@ export default {
     // Информация учителя
     subject: {ru: {}, kz: {}},
 
+    // После успешного действия колбэк
+    successCallback: null,
+
     isLoading: false,
   }),
   computed: {
     ...mapGetters({
       subjectList: "center/subjects/getSubjectList",
+      centerSubjectList: "center/subjects/getCenterSubjectList",
     }),
     // Новый ли предмет (создание или апдейт)
     isNewSubject() {
@@ -37,20 +41,31 @@ export default {
   },
   methods: {
     ...mapActions({
+      _fetchSubjectList: "center/subjects/fetchSubjectList",
       _createSubject: "center/subjects/createSubject",
       _updateSubject: "center/subjects/updateSubject",
     }),
 
+    // Список предметов для выбора
+    async fetchSubjectList() {
+      this.isLoading = true;
+      await this._fetchSubjectList();
+      this.isLoading = false;
+    },
+
     // Получить вложения
-    getPayload() {
-      if (this.$modal.$payload && this.$modal.$payload.subject) {
-        this.subject = {...this.$modal.$payload.subject};
-      }
+    async getPayload() {
+      await this.fetchSubjectList();
+      // Получить инфо предмета центра
+      if (this.$modal.$payload?.subject) this.subject = JSON.parse(JSON.stringify(this.$modal.$payload.subject));
+      // Колбэк после успеха
+      if (this.$modal.$payload?.successCallback) this.successCallback = this.$modal.$payload.successCallback;
     },
 
     // Очистка информации
     clear() {
       this.subject = {ru: {}, kz: {}};
+      this.successCallback = null;
     },
 
     // Закрыть себя (модалку)
@@ -90,12 +105,24 @@ export default {
       return true;
     },
 
+    // Вызов успешного колбэка (Вызывается после закрытия модалки)
+    callSuccessCallback() {
+      if (this.successCallback) {
+        const newCenterSubject = this.centerSubjectList.find(s => s.ru.name === this.subject.ru.name && s.kz.name === this.subject.kz.name && s.subject_id === this.subject.subject_id) || {};
+        const successCallback = this.successCallback;
+        setTimeout(() => {
+          successCallback(newCenterSubject);
+        }, 300)
+      }
+    },
+
     // Сохранить предмет
     async saveSubject() {
       this.isLoading = true;
       if (await this.validate()) {
         if (this.isNewSubject) await this._createSubject(this.subject);
         else await this._updateSubject(this.subject);
+        this.callSuccessCallback();
         this.closeSelf();
       }
       this.isLoading = false;

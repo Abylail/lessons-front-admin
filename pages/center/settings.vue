@@ -128,7 +128,7 @@ import { activeCities } from "@/config/lists";
 import {mapActions, mapGetters} from "vuex";
 import Slide from "../../components/transitions/slide";
 import UserInfo from "../../components/common/user/userInfo";
-import RemoveContactModal from "@/components/common/modals/center/removeContactModal";
+import RemoveContactModal from "@/components/common/modals/center/contact/removeContactModal";
 
 export default {
   name: "settings",

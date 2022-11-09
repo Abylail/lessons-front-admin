@@ -10,23 +10,26 @@
           <v-select
             label="Учитель"
             v-model="group.teacher_id"
-            :items="teacherList"
+            :items="[...teacherList, {full_name: '+ новый учитель', id: 'new'}]"
             item-text="full_name" item-value="id"
             outlined dense
+            @change="$event === 'new' ? createNewTeacher() : null"
           />
           <v-select
             label="Предмет"
             v-model="group.center_subject_id"
-            :items="centerSubjectList"
+            :items="[...centerSubjectList, {ru: {name: '+ новый предмет'}, id: 'new'}]"
             item-text="ru.name" item-value="id"
             outlined dense
+            @change="$event === 'new' ? createNewCenterSubject() : null"
           />
           <v-select
             label="Филиал"
             v-model="group.branch_id"
-            :items="branchList"
+            :items="[...branchList, {address: '+ новый филиал', id: 'new'}]"
             item-text="address" item-value="id"
             outlined dense
+            @change="$event === 'new' ? createNewBranch() : null"
           />
         </div>
 
@@ -102,7 +105,7 @@
           <v-btn class="mb-2" color="primary" :loading="isLoading" block @click="saveGroup()">Сохранить</v-btn>
           <!-- Удалить и отменить -->
           <div class="edit-group__extra-actions">
-            <v-btn color="red" dark block @click="deleteHandle()"><v-icon>mdi-delete</v-icon></v-btn>
+            <v-btn class="edit-group__delete" color="red" dark block @click="deleteHandle()"><v-icon>mdi-delete</v-icon></v-btn>
             <v-btn block outlined @click="closeSelf()">Отменить</v-btn>
           </div>
         </div>
@@ -190,7 +193,55 @@ export default {
       setTimeout(() => {
         this.$modal.show("remove-group", {group: deleteGroup});
       }, 300);
-    }
+    },
+
+    // Создание нового учителя (открывается модалка по созданию, затем обратно в эту модалку)
+    createNewTeacher() {
+      this.group.teacher_id = null;
+      let groupInfo = JSON.parse(JSON.stringify(this.group));
+
+      setTimeout(() => {
+        this.$modal.show("edit-teacher", {
+          successCallback: ({ id }) => {
+            groupInfo.teacher_id = id;
+            this.$modal.show("edit-group", {group: groupInfo});
+          }});
+      }, 300);
+
+      this.closeSelf();
+    },
+
+    // Создание нового учителя (открывается модалка по созданию, затем обратно в эту модалку)
+    createNewBranch() {
+      this.group.branch_id = null;
+      let groupInfo = JSON.parse(JSON.stringify(this.group));
+
+      setTimeout(() => {
+        this.$modal.show("edit-branch", {
+          successCallback: ({ id }) => {
+            groupInfo.branch_id = id;
+            this.$modal.show("edit-group", {group: groupInfo});
+          }});
+      }, 300);
+
+      this.closeSelf();
+    },
+
+    // Создание нового учителя (открывается модалка по созданию, затем обратно в эту модалку)
+    createNewCenterSubject() {
+      this.group.center_subject_id = null;
+      let groupInfo = JSON.parse(JSON.stringify(this.group));
+
+      setTimeout(() => {
+        this.$modal.show("edit-subject", {
+          successCallback: ({ id }) => {
+            groupInfo.center_subject_id = id;
+            this.$modal.show("edit-group", {group: groupInfo});
+          }});
+      }, 300);
+
+      this.closeSelf();
+    },
   }
 }
 </script>
@@ -203,6 +254,8 @@ export default {
     padding-top: 10px;
     max-height: calc(80vh - 100px);
     overflow-y: auto;
+    overflow-x: hidden;
+    width: 100%;
   }
 
   &__actions {
@@ -213,6 +266,11 @@ export default {
     display: grid;
     grid-template-columns: 40px 1fr;
     grid-column-gap: 10px;
+  }
+
+  &__delete {
+    min-width: 0 !important;
+    max-width: 40px !important;
   }
 
 }

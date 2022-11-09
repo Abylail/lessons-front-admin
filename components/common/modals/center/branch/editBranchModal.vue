@@ -27,10 +27,14 @@ export default {
     // Информация филиала
     branch: {},
 
+    // После успешного действия колбэк
+    successCallback: null,
+
     isLoading: false,
   }),
   computed: {
     ...mapGetters({
+      branchList: "center/branches/getBranchList",
       cities: "getCities",
     }),
     // Новый ли филиал (создание или апдейт)
@@ -47,14 +51,16 @@ export default {
 
     // Получить вложения
     getPayload() {
-      if (this.$modal.$payload && this.$modal.$payload.branch) {
-        this.branch = {...this.$modal.$payload.branch};
-      }
+      // Получить инфо филиала
+      if (this.$modal.$payload?.branch) this.branch = JSON.parse(JSON.stringify(this.$modal.$payload.branch));
+      // Колбэк после успеха
+      if (this.$modal.$payload?.successCallback) this.successCallback = this.$modal.$payload.successCallback;
     },
 
     // Очистка информации
     clear() {
       this.branch = {};
+      this.successCallback = null;
     },
 
     // Закрыть себя (модалку)
@@ -67,12 +73,24 @@ export default {
       return true;
     },
 
+    // Вызов успешного колбэка (Вызывается после закрытия модалки)
+    callSuccessCallback() {
+      if (this.successCallback) {
+        const newBranch = this.branchList.find(b => b.address === this.branch.address && b.city_id === this.branch.city_id) || {};
+        const successCallback = this.successCallback;
+        setTimeout(() => {
+          successCallback(newBranch);
+        }, 300)
+      }
+    },
+
     // Сохранить филиал
     async saveBranch() {
       this.isLoading = true;
       if (await this.validate()) {
         if (this.isNewBranch) await this._createBranch(this.branch);
         else await this._updateBranch(this.branch);
+        this.callSuccessCallback();
         this.closeSelf();
       }
       this.isLoading = false;

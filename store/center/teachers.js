@@ -35,10 +35,10 @@ export const actions = {
       center_id: centerId,
       ...teacherInfo,
     })
-      .then(({err, body}) => {
+      .then(async ({err, body}) => {
         if (!err) {
           this.$toast.success("Учитель создан");
-          dispatch("fetchTeacherList");
+          await dispatch("fetchTeacherList");
         }
       })
   },

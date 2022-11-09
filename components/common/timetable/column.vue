@@ -6,7 +6,7 @@
       <!-- Список в колонке -->
       <div class="column__list">
         <group-card
-          v-for="group in list" :key="group.id"
+          v-for="group in sortedList" :key="group.id"
           :value="group"
           :week-day-code="weekDayCode"
           @click="editHandle(group)"
@@ -36,9 +36,25 @@ export default {
     weekDayCode: {
       type: String,
       default: null
-    }
+    },
+  },
+  computed: {
+    // Лист сортированный по времени
+    sortedList() {
+      if (!this.list || !this.list.length) return [];
+      return this.list.sort((group1, group2) => {
+        return this.getGroupIndex(group1) - this.getGroupIndex(group2);
+      })
+    },
   },
   methods: {
+
+    // Получить индекс группы (Выщитывается прибываляя время старта и конца)
+    getGroupIndex(group) {
+      const {start, end} = group?.days?.find(d => d.code === this.weekDayCode) || {start: "0", end: "0"};
+      return +start.replace(":", "") + +end.replace(":", "");
+    },
+
     // Добавить (кнопка)
     createHandle() {
       this.$emit("create")

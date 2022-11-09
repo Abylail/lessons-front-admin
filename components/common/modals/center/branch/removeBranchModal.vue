@@ -1,8 +1,8 @@
 <template>
-  <modal name="remove-teacher" size="small" close-button @onShow="getPayload()" @onHide="clear()">
-    <div class="remove-teacher">
-      <div class="remove-teacher__text">Вы уверены что хотите удалить <strong>{{ teacher.full_name }}</strong>?</div>
-      <div class="remove-teacher__actions">
+  <modal name="remove-branch" size="small" close-button @onShow="getPayload()" @onHide="clear()">
+    <div class="remove-branch">
+      <div class="remove-branch__text">Вы уверены что хотите удалить <strong>{{ branch.address }}</strong>?</div>
+      <div class="remove-branch__actions">
         <v-btn @click="closeSelf()">Отменить</v-btn>
         <v-btn class="ml-3" color="red" dark :loading="isLoading" @click="deleteHandle()">Удалить</v-btn>
       </div>
@@ -14,39 +14,39 @@
 import {mapActions} from "vuex";
 
 export default {
-  name: "removeTeacherModal",
+  name: "removeBranchModal",
   data: () => ({
     // Информация учителя
-    teacher: {},
+    branch: {},
 
     isLoading:false,
   }),
   methods: {
     ...mapActions({
-      _deleteTeacher: "center/teachers/deleteTeacher",
+      _deleteBranch: "center/branches/deleteBranch",
     }),
 
     // Получить вложения
     getPayload() {
-      if (this.$modal.$payload && this.$modal.$payload.teacher) {
-        this.teacher = {...this.$modal.$payload.teacher};
+      if (this.$modal.$payload && this.$modal.$payload.branch) {
+        this.branch = {...this.$modal.$payload.branch};
       }
     },
 
     // Очистка информации
     clear() {
-      this.teacher = {};
+      this.branch = {};
     },
 
     // Закрыть себя (модалку)
     closeSelf() {
-      this.$modal.hide("remove-teacher");
+      this.$modal.hide("remove-branch");
     },
 
     // Удалить кнопка
     async deleteHandle() {
       this.isLoading = true;
-      await this._deleteTeacher(this.teacher);
+      await this._deleteBranch(this.branch);
       this.closeSelf();
       this.isLoading = false;
     },
@@ -55,11 +55,12 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.remove-teacher {
-  padding-top: 40px;
+.remove-branch {
+  padding-top: 10px;
 
   &__text {
-    max-width: 300px;
+    height: 40px;
+    padding-right: 60px;
     margin-bottom: 20px;
   }
 

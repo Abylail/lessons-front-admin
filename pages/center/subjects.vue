@@ -30,9 +30,9 @@
 </template>
 
 <script>
-import editSubjectModal from "../../components/common/modals/center/editSubjectModal";
+import editSubjectModal from "@/components/common/modals/center/subject/editSubjectModal";
 import {mapActions, mapGetters} from "vuex";
-import removeSubjectModal from "../../components/common/modals/center/removeSubjectModal";
+import removeSubjectModal from "@/components/common/modals/center/subject/removeSubjectModal";
 export default {
   name: "subjects",
   components: {removeSubjectModal, editSubjectModal},

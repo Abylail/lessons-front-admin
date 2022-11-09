@@ -21,3 +21,13 @@ export const weekdaysDictionary = {
   saturday: "Суббота",
   sunday: "Воскресение",
 }
+
+export const weekdaysShortDictionary = {
+  monday: "Пн",
+  tuesday: "Вт",
+  wednesday: "Ср",
+  thursday: "Чт",
+  friday: "Пт",
+  saturday: "Сб",
+  sunday: "Вс",
+}

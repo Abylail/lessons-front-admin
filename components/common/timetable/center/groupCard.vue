@@ -2,19 +2,14 @@
   <div class="group-card" @click="$emit('click')">
 
     <div class="group-card__title" :style="{borderColor: indicatorColor}">
-      {{ myTime }}
+      <span class="group-card__title-left">{{value.teacher_full_name || ""}}</span>
+      <span class="group-card__title-right">{{ myTime }}</span>
     </div>
 
     <!-- Предмет -->
     <div class="group-card__info">
       <v-icon class="mr-1" small>mdi-book-open-blank-variant</v-icon>
-      {{ value.center_subject_name || value.subject_name }}
-    </div>
-
-    <!-- Учитель -->
-    <div class="group-card__info">
-      <v-icon class="mr-1" small>mdi-account</v-icon>
-      {{ value.teacher_full_name }}
+      {{ value.center_subject_name }}
     </div>
 
     <!-- Адрес -->
@@ -23,12 +18,26 @@
       {{ value.branch_address }}
     </div>
 
+    <!-- Дни недели -->
+    <div class="group-card__info" v-if="value.days?.length">
+      <v-icon class="mr-1" small>mdi-calendar-month</v-icon>
+      <v-chip
+        v-for="({code, start}) in value.days" :key="code"
+        class="mr-1 mb-1" color="primary"
+        x-small :outlined="code !== weekDayCode"
+      >{{ weekdaysShortDictionary[code] }} {{ start }}</v-chip>
+    </div>
+
+
+
     <div class="group-card__color-indicator" :style="{backgroundColor: indicatorColor}"/>
 
   </div>
 </template>
 
 <script>
+import { weekdaysShortDictionary } from "@/config/lists";
+
 export default {
   name: "groupCard",
   props: {
@@ -41,6 +50,10 @@ export default {
       default: null,
     }
   },
+  data: () => ({
+    // Название дня по коду
+    weekdaysShortDictionary,
+  }),
   computed: {
     myTime() {
       const day = this.value.days.find(d => d.code === this.weekDayCode);
@@ -67,16 +80,29 @@ export default {
   }
 
   &__title {
-    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     font-size: 14px;
     font-weight: bold;
     border-bottom: 4px solid $color--gray;
   }
 
+  &__title-left {
+    display: inline-block;
+    max-width: 75px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-right: 5px;
+  }
+
   &__info {
-    height: 24px;
-    line-height: 24px;
-    font-size: 14px;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    min-height: 24px;
+    line-height: 16px;
+    font-size: 12px;
   }
 }
 </style>
