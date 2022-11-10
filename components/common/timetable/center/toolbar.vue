@@ -5,6 +5,19 @@
     <div class="toolbar--desktop">
       <div class="toolbar__top">
         <h2>Фильтр</h2>
+
+        <!-- Дополнительные кнопки -->
+        <v-menu offset-y>
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn class="ml-3" v-bind="attrs" v-on="on" icon>
+              <v-icon>mdi-dots-vertical</v-icon>
+            </v-btn>
+          </template>
+          <v-list>
+            <v-list-item two-line @click="downloadTeacherTables()"><v-icon class="mr-3">mdi-download</v-icon>Скачать расписание для каждого учителя (Несколько файлов)</v-list-item>
+            <v-list-item two-line @click="downloadFullTable()"><v-icon class="mr-3">mdi-download</v-icon>Скачать все расписание</v-list-item>
+          </v-list>
+        </v-menu>
       </div>
       <div class="toolbar__bottom relative-columns-4">
         <v-select
@@ -35,12 +48,30 @@
     <!-- MOBILE VIEW -->
     <div class="toolbar--mobile">
       <h2>Расписание</h2>
-      <v-badge color="green" :content="filterCount" overlap :value="!!filterCount">
-        <v-btn color="primary" small @click="showMobileFilterBar = !showMobileFilterBar">
-          <v-icon>mdi-filter</v-icon>
-          Фильтр
-        </v-btn>
-      </v-badge>
+      <div>
+
+        <!-- Дополнительные кнопки -->
+        <v-menu offset-y>
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn v-bind="attrs" v-on="on" icon>
+              <v-icon>mdi-dots-vertical</v-icon>
+            </v-btn>
+          </template>
+          <v-list>
+            <v-list-item two-line @click="downloadTeacherTables()"><v-icon class="mr-3">mdi-download</v-icon>Скачать расписание для каждого учителя (Несколько файлов)</v-list-item>
+            <v-list-item two-line @click="downloadFullTable()"><v-icon class="mr-3">mdi-download</v-icon>Скачать все расписание</v-list-item>
+          </v-list>
+        </v-menu>
+
+        <!-- Открыть фильтр -->
+        <v-badge color="green" :content="filterCount" overlap :value="!!filterCount">
+          <v-btn color="primary" small @click="openMobileFilter()">
+            <v-icon>mdi-filter</v-icon>
+            Фильтр
+          </v-btn>
+        </v-badge>
+
+      </div>
     </div>
 
     <!-- Боковой фильтр -->
@@ -55,30 +86,33 @@
             v-model="innerFilterParams.teacher_id"
             :items="teacherList"
             item-text="full_name" item-value="id"
-            multiple outlined dense hide-details persistent-placeholder
+            multiple outlined dense hide-details persistent-placeholder clearable
           />
           <v-select
             class="mb-3" label="Предметы" placeholder="Все предметы"
             v-model="innerFilterParams.center_subject_id"
             :items="centerSubjectList"
             item-text="ru.name" item-value="id"
-            multiple outlined dense hide-details persistent-placeholder
+            multiple outlined hide-details persistent-placeholder clearable
           />
           <v-select
             class="mb-3" label="Дни недели" placeholder="Все дни недели"
             v-model="innerFilterParams.days"
             :items="weekdays"
             item-text="name" item-value="code" height="40"
-            multiple outlined dense hide-details persistent-placeholder
+            multiple outlined dense hide-details persistent-placeholder clearable
           />
         </div>
       </div>
+
+      <!-- Нижняя часть -->
       <template v-slot:append>
         <div class="pa-3">
           <v-btn class="mb-2" color="primary" block @click="filterHandle()">Применить</v-btn>
           <v-btn block outlined @click="cancelHandle()">Отменить</v-btn>
         </div>
       </template>
+
     </v-navigation-drawer>
 
 
@@ -88,6 +122,7 @@
 <script>
 import {mapActions, mapGetters} from "vuex";
 import {weekdays} from "@/config/lists";
+import {weekdaysDictionary, weekdaysShortDictionary} from "../../../../config/lists";
 
 export default {
   name: "toolbar",
@@ -120,6 +155,7 @@ export default {
   }),
   computed: {
     ...mapGetters({
+      groupList: "center/timetable/getGroupList",
       teacherList: "center/teachers/getTeacherList",
       centerSubjectList: "center/subjects/getCenterSubjectList",
       branchList: "center/branches/getBranchList",
@@ -168,6 +204,12 @@ export default {
       this.isBranchesLoading = false;
     },
 
+    // Открыть боковой фильтр (Мобильный)
+    openMobileFilter() {
+      this.innerFilterParams = JSON.parse(JSON.stringify(this.filterParams));
+      this.showMobileFilterBar = true;
+    },
+
     // Очистить фильтр
     clear() {
       this.innerFilterParams = {};
@@ -188,6 +230,65 @@ export default {
     cancelHandle() {
       this.closeSelf();
     },
+
+    // Скачать расписание для каждого учителя
+    downloadTeacherTables() {
+
+    },
+
+    // Скачать все расписание
+    downloadFullTable() {
+      // const svgElement = document.createElement("svg");
+      //
+      // const container = document.createElement("foreigOobject")
+      // container.style.padding = "20px";
+      // svgElement.appendChild(container)
+      //
+      // const containerTitle = document.createElement("h1");
+      // containerTitle.innerText = "Расписание";
+      // container.appendChild(containerTitle);
+      //
+      //
+      // const groupTable = document.createElement("table");
+      // groupTable.border = "1";
+      // container.appendChild(groupTable);
+      //
+      // const headRow = document.createElement("tr");
+      // groupTable.appendChild(headRow);
+      //
+      // ["Дни", "Учитель", "Адрес"].forEach(headTitle => {
+      //   const td = document.createElement("td");
+      //   td.innerText = headTitle;
+      //   headRow.appendChild(td) ;
+      // })
+      //
+      // this.groupList.forEach(group => {
+      //   const bodyRow = document.createElement("tr");
+      //   groupTable.appendChild(bodyRow);
+      //
+      //   const tdDaysString = group.days.map(d => `${weekdaysShortDictionary[d.code]}:${d.start}-${d.end}`).join(", ");
+      //   const tdDays = document.createElement("td");
+      //   tdDays.innerText = tdDaysString;
+      //   bodyRow.appendChild(tdDays);
+      //
+      //   ["teacher_full_name", "branch_address"].forEach(key => {
+      //
+      //   })
+      //
+      // })
+      //
+      // let serializer = new XMLSerializer();
+      // let source = serializer.serializeToString(svgElement);
+      // source = '<?xml version="1.0" standalone="no"?>\r\n' + source;
+      // //convert svg source to URI data scheme.
+      // let url = "data:image/svg+xml;charset=utf-8,"+encodeURIComponent(source);
+      // //set url value to a element's href attribute.
+      // const forClick = document.createElement("a");
+      // forClick.href = url;
+      // forClick.download = "Расписание.svg";
+      // console.log(url);
+      // forClick.click();
+    }
   },
   mounted() {
     this.fetchTeachers();
@@ -212,12 +313,21 @@ export default {
     align-items: center;
   }
 
+  &__top {
+    display: flex;
+    flex-direction: row;
+  }
+
   &__aside {
     height: 100% !important;
   }
 
   &__aside-title {
     margin-bottom: 10px;
+  }
+
+  &__extra-button {
+
   }
 
 
