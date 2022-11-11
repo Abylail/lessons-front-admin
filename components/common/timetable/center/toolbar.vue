@@ -123,6 +123,10 @@
 import {mapActions, mapGetters} from "vuex";
 import {weekdays} from "@/config/lists";
 import {weekdaysDictionary, weekdaysShortDictionary} from "../../../../config/lists";
+import pdfMake from "pdfmake/build/pdfmake";
+import pdfFonts from "pdfmake/build/vfs_fonts";
+
+pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 export default {
   name: "toolbar",
@@ -231,63 +235,62 @@ export default {
       this.closeSelf();
     },
 
-    // Скачать расписание для каждого учителя
-    downloadTeacherTables() {
+    // Получить индекс группы (Выщитывается прибываляя время старта и конца)
+    getGroupIndex(group, weekDayCode) {
+      const {start, end} = group?.days?.find(d => d.code === this.weekDayCode) || {start: "0", end: "0"};
+      return +start.replace(":", "") + +end.replace(":", "");
+    },
 
+    // Скачать расписание для каждого учителя (в разных файлах)
+    downloadTeacherTables() {
+      [{id: 1, full_name: "Все влады"}].forEach(teacher => {
+        let content = [];
+
+        // Имя преподавателя
+        content.push({text: teacher.full_name, style: 'header', fontSize: 20, alignment: "center"});
+
+        // Группы в этого учителя
+        const groups = this.groupList.filter(g => g.teacher_id === teacher.id)
+
+        // Получить список групп по дню недели
+        const getGroupsByWeek = w => groups
+          .filter(g => !!g.days.find(d => d.code === w.code))
+          .sort((g1, g2) => this.getGroupIndex(g1, w.code) - this.getGroupIndex(g2, w.code))
+
+        // Группы по дням
+        const weekDays = weekdays.map(w => ({...w, groups: getGroupsByWeek(w)})).filter(w => w.groups.length)
+
+
+        weekDays.forEach(weekDay => {
+
+          // День недели
+          content.push({text: weekDay.name, marginTop: 20, marginBottom: 5, fontSize: 16, alignment: "center"});
+
+          // Получить row для таблицы по группу
+          const getContentRow = group => {
+            const {start, end} = group.days.find(d => d.code === weekDay.code);
+            return [{text: `${start}-${end}`,alignment: "center"}, group.branch_address]
+          }
+
+          // Таблица по этому дню
+          content.push({
+            table: {
+              widths: [80,'*'],
+              body: [
+                [{text: "Время",fontSize: 14, alignment: "center"}, {text: "Адрес",fontSize: 14}],
+                ...weekDay.groups.map(getContentRow)
+              ]
+            }
+          })
+        })
+
+        // Скачивание
+        pdfMake.createPdf({content}).download(`Расписание ${teacher.full_name}.pdf`)
+      })
     },
 
     // Скачать все расписание
     downloadFullTable() {
-      // const svgElement = document.createElement("svg");
-      //
-      // const container = document.createElement("foreigOobject")
-      // container.style.padding = "20px";
-      // svgElement.appendChild(container)
-      //
-      // const containerTitle = document.createElement("h1");
-      // containerTitle.innerText = "Расписание";
-      // container.appendChild(containerTitle);
-      //
-      //
-      // const groupTable = document.createElement("table");
-      // groupTable.border = "1";
-      // container.appendChild(groupTable);
-      //
-      // const headRow = document.createElement("tr");
-      // groupTable.appendChild(headRow);
-      //
-      // ["Дни", "Учитель", "Адрес"].forEach(headTitle => {
-      //   const td = document.createElement("td");
-      //   td.innerText = headTitle;
-      //   headRow.appendChild(td) ;
-      // })
-      //
-      // this.groupList.forEach(group => {
-      //   const bodyRow = document.createElement("tr");
-      //   groupTable.appendChild(bodyRow);
-      //
-      //   const tdDaysString = group.days.map(d => `${weekdaysShortDictionary[d.code]}:${d.start}-${d.end}`).join(", ");
-      //   const tdDays = document.createElement("td");
-      //   tdDays.innerText = tdDaysString;
-      //   bodyRow.appendChild(tdDays);
-      //
-      //   ["teacher_full_name", "branch_address"].forEach(key => {
-      //
-      //   })
-      //
-      // })
-      //
-      // let serializer = new XMLSerializer();
-      // let source = serializer.serializeToString(svgElement);
-      // source = '<?xml version="1.0" standalone="no"?>\r\n' + source;
-      // //convert svg source to URI data scheme.
-      // let url = "data:image/svg+xml;charset=utf-8,"+encodeURIComponent(source);
-      // //set url value to a element's href attribute.
-      // const forClick = document.createElement("a");
-      // forClick.href = url;
-      // forClick.download = "Расписание.svg";
-      // console.log(url);
-      // forClick.click();
     }
   },
   mounted() {
