@@ -16,6 +16,7 @@
           <v-list>
             <v-list-item two-line @click="downloadTeacherTables()"><v-icon class="mr-3">mdi-download</v-icon>Скачать расписание для каждого учителя (Несколько файлов)</v-list-item>
             <v-list-item two-line @click="downloadFullTable()"><v-icon class="mr-3">mdi-download</v-icon>Скачать все расписание</v-list-item>
+            <v-list-item two-line @click="downloadGroupList()"><v-icon class="mr-3">mdi-download</v-icon>Скачать список групп</v-list-item>
           </v-list>
         </v-menu>
       </div>
@@ -59,7 +60,8 @@
           </template>
           <v-list>
             <v-list-item two-line @click="downloadTeacherTables()"><v-icon class="mr-3">mdi-download</v-icon>Скачать расписание для каждого учителя (Несколько файлов)</v-list-item>
-            <v-list-item two-line @click="downloadFullTable()"><v-icon class="mr-3">mdi-download</v-icon>Скачать все расписание</v-list-item>
+            <v-list-item two-line @click="downloadFullTable()"><v-icon class="mr-3">mdi-download</v-icon>Скачать все расписание (По дням)</v-list-item>
+            <v-list-item two-line @click="downloadGroupList()"><v-icon class="mr-3">mdi-download</v-icon>Скачать список групп</v-list-item>
           </v-list>
         </v-menu>
 
@@ -243,7 +245,7 @@ export default {
 
     // Скачать расписание для каждого учителя (в разных файлах)
     downloadTeacherTables() {
-      [{id: 1, full_name: "Все влады"}].forEach(teacher => {
+      this.teacherList.forEach(teacher => {
         let content = [];
 
         // Имя преподавателя
@@ -260,7 +262,7 @@ export default {
         // Группы по дням
         const weekDays = weekdays.map(w => ({...w, groups: getGroupsByWeek(w)})).filter(w => w.groups.length)
 
-
+        // Бегаю по дня недели создаю таблицы
         weekDays.forEach(weekDay => {
 
           // День недели
@@ -284,13 +286,78 @@ export default {
           })
         })
 
-        // Скачивание
-        pdfMake.createPdf({content}).download(`Расписание ${teacher.full_name}.pdf`)
+        // Скачивание (Если группы есть)
+        if (groups.length) pdfMake.createPdf({content}).download(`Расписание ${teacher.full_name}.pdf`)
       })
     },
 
-    // Скачать все расписание
+    // Скачать все расписание (По дням недели)
     downloadFullTable() {
+      let content = [];
+
+      // Тайтл
+      content.push({text: "Расписание", style: 'header', fontSize: 20, alignment: "center"});
+
+      // Получить список групп по дню недели
+      const getGroupsByWeek = w => this.groupList
+        .filter(g => !!g.days.find(d => d.code === w.code))
+        .sort((g1, g2) => this.getGroupIndex(g1, w.code) - this.getGroupIndex(g2, w.code))
+
+      // Группы по дням
+      const weekDays = weekdays.map(w => ({...w, groups: getGroupsByWeek(w)})).filter(w => w.groups.length)
+
+      // Бегаю по дня недели создаю таблицы
+      weekDays.forEach(weekDay => {
+
+        // День недели
+        content.push({text: weekDay.name, marginTop: 20, marginBottom: 5, fontSize: 16, alignment: "center"});
+
+        // Получить row для таблицы по группу (Время, Учитель, Предмет, Адрес)
+        const getContentRow = group => {
+          const {start, end} = group.days.find(d => d.code === weekDay.code);
+          return [{text: `${start}-${end}`,alignment: "center"}, group.teacher_full_name, group.center_subject_name, group.branch_address]
+        }
+
+        // Таблица по этому дню
+        content.push({
+          table: {
+            widths: [80,100, '*', '*'],
+            body: [
+              [{text: "Время",fontSize: 14, alignment: "center"}, {text: "Учитель", fontSize: 14}, {text: "Предмет", fontSize: 14}, {text: "Адрес (Филиал)",fontSize: 14},],
+              ...weekDay.groups.map(getContentRow)
+            ]
+          }
+        })
+      })
+
+      pdfMake.createPdf({content}).download(`Расписание.pdf`)
+    },
+
+    // Скачать список групп
+    downloadGroupList() {
+      let content = [];
+
+      // Тайтл
+      content.push({text: "Список групп", style: 'header', fontSize: 20, alignment: "center"});
+
+      // Получить row для таблицы по группу (Время, Учитель, Предмет, Адрес)
+      const getContentRow = group => {
+        return [group.teacher_full_name, group.center_subject_name, group.days.map(d => `${weekdaysShortDictionary[d.code]}(${d.start}-${d.end})`).join(", "), group.branch_address]
+      }
+
+      // Таблица по этому дню
+      content.push({
+        marginTop: 20,
+        table: {
+          widths: [80,100, '*', '*'],
+          body: [
+            [{text: "Учитель", fontSize: 14}, {text: "Предмет", fontSize: 14}, {text: "Дни и время",fontSize: 14}, {text: "Адрес (Филиал)",fontSize: 14},],
+            ...this.groupList.map(getContentRow)
+          ]
+        }
+      })
+
+      pdfMake.createPdf({content}).download(`Список групп.pdf`)
     }
   },
   mounted() {
