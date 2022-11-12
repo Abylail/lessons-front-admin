@@ -51,7 +51,7 @@
       <h2>Расписание</h2>
       <div>
 
-        <!-- Дополнительные кнопки -->
+        <!-- Дополнительные кнопки (скачать) -->
         <v-menu offset-y>
           <template v-slot:activator="{ on, attrs }">
             <v-btn v-bind="attrs" v-on="on" icon>
@@ -60,7 +60,9 @@
           </template>
           <v-list>
             <v-list-item two-line @click="downloadTeacherTables()"><v-icon class="mr-3">mdi-download</v-icon>Скачать расписание для каждого учителя (Несколько файлов)</v-list-item>
+            <v-divider/>
             <v-list-item two-line @click="downloadFullTable()"><v-icon class="mr-3">mdi-download</v-icon>Скачать все расписание (По дням)</v-list-item>
+            <v-divider/>
             <v-list-item two-line @click="downloadGroupList()"><v-icon class="mr-3">mdi-download</v-icon>Скачать список групп</v-list-item>
           </v-list>
         </v-menu>
@@ -287,7 +289,13 @@ export default {
         })
 
         // Скачивание (Если группы есть)
-        if (groups.length) pdfMake.createPdf({content}).download(`Расписание ${teacher.full_name}.pdf`)
+        // if (groups.length) pdfMake.createPdf({content}).download(`Расписание ${teacher.full_name}.pdf`)
+        if (groups.length) pdfMake.createPdf({content}).getDataUrl(url => {
+          let link = document.createElement('a');
+          link.href = url;
+          link.download = `Расписание ${teacher.full_name}.pdf`;
+          link.dispatchEvent(new MouseEvent('click'));
+        })
       })
     },
 
