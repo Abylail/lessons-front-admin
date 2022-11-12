@@ -13,6 +13,12 @@
             <v-btn color="primary" x-small @click="$modal.show('create-appeal')">Создать +</v-btn>
           </v-subheader>
 
+          <v-progress-linear
+            v-show="isLoading"
+            indeterminate
+            color="primary"
+          ></v-progress-linear>
+
           <v-list-item-group v-model="selectedAppealIndex">
             <template v-for="appeal in appealList">
               <v-list-item :key="appeal.id">
@@ -43,6 +49,12 @@
           <span>Обращения</span>
           <v-btn color="primary" x-small @click="$modal.show('create-appeal')">Создать +</v-btn>
         </v-subheader>
+
+        <v-progress-linear
+          v-show="isLoading"
+          indeterminate
+          color="primary"
+        ></v-progress-linear>
 
         <v-list-item-group v-model="selectedAppealIndex">
           <template v-for="appeal in appealList">
