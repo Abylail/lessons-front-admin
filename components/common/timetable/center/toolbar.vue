@@ -289,13 +289,7 @@ export default {
         })
 
         // Скачивание (Если группы есть)
-        // if (groups.length) pdfMake.createPdf({content}).download(`Расписание ${teacher.full_name}.pdf`)
-        if (groups.length) pdfMake.createPdf({content}).getDataUrl(url => {
-          let link = document.createElement('a');
-          link.href = url;
-          link.download = `Расписание ${teacher.full_name}.pdf`;
-          link.dispatchEvent(new MouseEvent('click'));
-        })
+        if (groups.length) pdfMake.createPdf({content}).download(`Расписание ${teacher.full_name}.pdf`);
       })
     },
 

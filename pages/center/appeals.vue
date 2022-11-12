@@ -65,11 +65,22 @@
       <!-- Выбранное письмо -->
       <div class="appeals__view" v-else>
         <div><v-btn icon @click="selectedAppealIndex = null"><v-icon>mdi-arrow-left</v-icon></v-btn></div>
+        <div>
+          <div class="appeals__view-header">Тема:</div>
+          <h3>{{ selectedAppeal.title }}</h3>
+          <div class="appeals__view-header">Статус:</div>
+          <div>{{ getStatusText(selectedAppeal.status) }}<v-icon class="ml-1" :color="getStatusColor(selectedAppeal.status)" x-small>mdi-circle</v-icon></div>
+          <div class="appeals__view-header">Ваш вопрос:</div>
+          <div>{{ selectedAppeal.question }}</div>
+          <div class="appeals__view-header" v-if="selectedAppeal.answer">Ответ:</div>
+          <div>{{ selectedAppeal.answer }}</div>
+        </div>
       </div>
 
-      <create-appeal-modal/>
-
     </div>
+
+
+    <create-appeal-modal/>
 
   </div>
 </template>
@@ -148,8 +159,13 @@ export default {
     padding: 20px 20px 150px;
   }
 
-  &__subheader {
+  &__view-header {
+    color: $color--gray;
+    line-height: 14px;
+    margin-top: 16px;
+  }
 
+  &__subheader {
     justify-content: space-between;
   }
 
