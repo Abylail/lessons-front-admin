@@ -10,7 +10,7 @@
 
           <v-subheader class="appeals__subheader">
             <span>Обращения</span>
-            <v-btn color="primary" x-small>Создать +</v-btn>
+            <v-btn color="primary" x-small @click="$modal.show('create-appeal')">Создать +</v-btn>
           </v-subheader>
 
           <v-list-item-group v-model="selectedAppealIndex">
@@ -41,7 +41,7 @@
 
         <v-subheader class="appeals__subheader">
           <span>Обращения</span>
-          <v-btn color="primary" x-small>Создать +</v-btn>
+          <v-btn color="primary" x-small @click="$modal.show('create-appeal')">Создать +</v-btn>
         </v-subheader>
 
         <v-list-item-group v-model="selectedAppealIndex">
@@ -67,6 +67,8 @@
         <div><v-btn icon @click="selectedAppealIndex = null"><v-icon>mdi-arrow-left</v-icon></v-btn></div>
       </div>
 
+      <create-appeal-modal/>
+
     </div>
 
   </div>
@@ -74,9 +76,11 @@
 
 <script>
 import {mapActions, mapGetters} from "vuex";
+import CreateAppealModal from "@/components/common/modals/center/appeals/createAppealModal";
 
 export default {
   name: "appeals",
+  components: {CreateAppealModal},
   data: () => ({
 
     // Индекс выбранного обращения
