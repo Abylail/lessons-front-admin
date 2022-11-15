@@ -21,14 +21,14 @@
 
           <v-list-item-group v-model="selectedAppealIndex">
             <template v-for="appeal in appealList">
-              <v-list-item :key="appeal.id">
+              <v-list-item class="appeals__appeal" :class="{'appeals__appeal-new': !appeal.center_read}" :key="appeal.id">
                 <v-list-item-content>
                   <v-list-item-title>{{ appeal.title }}</v-list-item-title>
                   <v-list-item-subtitle>{{ appeal.question }}</v-list-item-subtitle>
                 </v-list-item-content>
                 <v-list-item-action>
                   <v-list-item-action-text>{{ getStatusText(appeal.status) }}<v-icon class="ml-1" :color="getStatusColor(appeal.status)" x-small>mdi-circle</v-icon></v-list-item-action-text>
-                  <v-list-item-action-text>22.02.2022</v-list-item-action-text>
+                  <v-list-item-action-text>{{ appeal.date | dateTimeFormat }}</v-list-item-action-text>
                 </v-list-item-action>
               </v-list-item>
               <v-divider/>
@@ -58,14 +58,14 @@
 
         <v-list-item-group v-model="selectedAppealIndex">
           <template v-for="appeal in appealList">
-            <v-list-item :key="appeal.id">
+            <v-list-item class="appeals__appeal" :class="{'appeals__appeal-new': !appeal.center_read}" :key="appeal.id">
               <v-list-item-content>
                 <v-list-item-title>{{ appeal.title }}</v-list-item-title>
                 <v-list-item-subtitle>{{ appeal.question }}</v-list-item-subtitle>
               </v-list-item-content>
               <v-list-item-action>
                 <v-list-item-action-text>{{ getStatusText(appeal.status) }}<v-icon class="ml-1" :color="getStatusColor(appeal.status)" x-small>mdi-circle</v-icon></v-list-item-action-text>
-                <v-list-item-action-text>22.02.2022</v-list-item-action-text>
+                <v-list-item-action-text>{{ appeal.date | dateTimeFormat }}</v-list-item-action-text>
               </v-list-item-action>
             </v-list-item>
             <v-divider/>
@@ -74,21 +74,21 @@
 
       </v-list>
 
-      <!-- Выбранное письмо -->
-      <div class="appeals__view" v-else>
-        <div><v-btn icon @click="selectedAppealIndex = null"><v-icon>mdi-arrow-left</v-icon></v-btn></div>
-        <div>
-          <div class="appeals__view-header">Тема:</div>
-          <h3>{{ selectedAppeal.title }}</h3>
-          <div class="appeals__view-header">Статус:</div>
-          <div>{{ getStatusText(selectedAppeal.status) }}<v-icon class="ml-1" :color="getStatusColor(selectedAppeal.status)" x-small>mdi-circle</v-icon></div>
-          <div class="appeals__view-header">Ваш вопрос:</div>
-          <div>{{ selectedAppeal.question }}</div>
-          <div class="appeals__view-header" v-if="selectedAppeal.answer">Ответ:</div>
-          <div>{{ selectedAppeal.answer }}</div>
-        </div>
-      </div>
+    </div>
 
+    <!-- Выбранное письмо -->
+    <div class="appeals__view" v-if="selectedAppeal">
+      <div class="appeals__view-back"><v-btn icon @click="selectedAppealIndex = null"><v-icon>mdi-arrow-left</v-icon></v-btn></div>
+      <div>
+        <div class="appeals__view-header">Тема:</div>
+        <h3>{{ selectedAppeal.title }}</h3>
+        <div class="appeals__view-header">Статус:</div>
+        <div>{{ getStatusText(selectedAppeal.status) }}<v-icon class="ml-1" :color="getStatusColor(selectedAppeal.status)" x-small>mdi-circle</v-icon></div>
+        <div class="appeals__view-header">Ваш вопрос:</div>
+        <div>{{ selectedAppeal.question }}</div>
+        <div class="appeals__view-header" v-if="selectedAppeal.answer">Ответ:</div>
+        <div>{{ selectedAppeal.answer }}</div>
+      </div>
     </div>
 
 
@@ -122,9 +122,18 @@ export default {
       return this.appealList[this.selectedAppealIndex];
     }
   },
+  watch: {
+    selectedAppeal(val) {
+      // Если выбрали обращение
+      if (val) {
+        this._readAppeal(val);
+      }
+    }
+  },
   methods: {
     ...mapActions({
       _fetchAppealList: "center/appeals/fetchAppealList",
+      _readAppeal: "center/appeals/readAppeal",
     }),
 
     // Запросить список обращений
@@ -165,6 +174,7 @@ export default {
 
   @media(min-width: $break-point) {
     &--mobile {display: none}
+    &__view-back {display: none}
   }
 
   &__view {
@@ -179,6 +189,14 @@ export default {
 
   &__subheader {
     justify-content: space-between;
+  }
+
+  &__appeal {
+    background: $color--light-gray;
+  }
+
+  &__appeal-new {
+    background: white;
   }
 
 }

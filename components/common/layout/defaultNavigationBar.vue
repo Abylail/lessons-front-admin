@@ -45,24 +45,11 @@ export default {
       type: Boolean
     }
   },
-  data: () => ({
-    links: [
-      { icon: "mdi-domain", name: "Моя компания", route: "/center/settings", roles: ["center_director"]},
-      { icon: "mdi-timetable", name: "Расписание", route: "/center/timetable", roles: ["center_director"]},
-      { icon: "mdi-human", name: "Учителя", route: "/center/teachers", roles: ["center_director"]},
-      { icon: "mdi-map-marker", name: "Адреса и филиалы", route: "/center/branches", roles: ["center_director"]},
-      { icon: "mdi-bookshelf", name: "Мои предметы", route: "/center/subjects", roles: ["center_director"]},
-      { icon: "mdi-email-outline", name: "Мои обращения", route: "/center/appeals", roles: ["center_director"]},
-
-      { icon: "mdi-cog", name: "Основные настройки", route: "/admin/settings", roles: ["admin"]},
-      { icon: "mdi-format-list-bulleted", name: "Категории", route: "/admin/categories", roles: ["admin"]},
-      { icon: "mdi-book-multiple", name: "Предметы", route: "/admin/subjects", roles: ["admin"]},
-    ]
-  }),
   computed: {
     ...mapGetters({
       role: "auth/getRole",
       userFullName: "auth/getUserFullName",
+      newCenterAppealsCount: "center/appeals/getNewAnsweredCount",
     }),
 
     // Роль на русском
@@ -72,6 +59,22 @@ export default {
         center_director: "Директор центра",
       }[this.role] || "";
     },
+
+    links() {
+      return [
+        { icon: "mdi-domain", name: "Моя компания", route: "/center/settings", roles: ["center_director"]},
+        { icon: "mdi-timetable", name: "Расписание", route: "/center/timetable", roles: ["center_director"]},
+        { icon: "mdi-human", name: "Учителя", route: "/center/teachers", roles: ["center_director"]},
+        { icon: "mdi-map-marker", name: "Адреса и филиалы", route: "/center/branches", roles: ["center_director"]},
+        { icon: "mdi-bookshelf", name: "Мои предметы", route: "/center/subjects", roles: ["center_director"]},
+        { icon: "mdi-email-outline", name: `Мои обращения ${this.newCenterAppealsCount ? `(${this.newCenterAppealsCount})` : ""}`, route: "/center/appeals", roles: ["center_director"]},
+
+        { icon: "mdi-cog", name: "Основные настройки", route: "/admin/settings", roles: ["admin"]},
+        { icon: "mdi-format-list-bulleted", name: "Категории", route: "/admin/categories", roles: ["admin"]},
+        { icon: "mdi-book-multiple", name: "Предметы", route: "/admin/subjects", roles: ["admin"]},
+        { icon: "mdi-email-outline", name: "Обращения", route: "/admin/appeals", roles: ["admin"]},
+      ]
+    }
   },
   methods: {
     roleAccess(linkRoles) {

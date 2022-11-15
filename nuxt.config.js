@@ -32,6 +32,7 @@ export default {
   plugins: [
     "~/plugins/external",
     "~/plugins/apiLayer",
+    "~/plugins/filters",
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components

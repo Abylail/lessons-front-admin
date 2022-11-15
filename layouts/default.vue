@@ -22,7 +22,7 @@ import DefaultNavigationBar from "@/components/common/layout/defaultNavigationBa
 export default {
   name: 'DefaultLayout',
   components: {DefaultNavigationBar, DefaultHeader},
-  middleware: "auth",
+  middleware: ["auth", "servicesMiddleware"],
   data: () => ({
 
     // Не работает на компе

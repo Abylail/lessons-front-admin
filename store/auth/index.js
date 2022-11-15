@@ -36,7 +36,10 @@ export const getters = {
     if (state.userInfo && (state.userInfo.last_name || state.userInfo.first_name))
       return `${state.userInfo?.last_name || ''} ${state.userInfo?.first_name || ''}`
     return "Неизвестный"
-  }
+  },
+
+  // Директор центра ?
+  isCenterDirector: state => state.userInfo?.role_code === "center_director",
 }
 
 export const mutations = {
