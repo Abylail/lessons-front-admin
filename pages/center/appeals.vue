@@ -27,7 +27,10 @@
                   <v-list-item-subtitle>{{ appeal.question }}</v-list-item-subtitle>
                 </v-list-item-content>
                 <v-list-item-action>
-                  <v-list-item-action-text>{{ getStatusText(appeal.status) }}<v-icon class="ml-1" :color="getStatusColor(appeal.status)" x-small>mdi-circle</v-icon></v-list-item-action-text>
+                  <v-list-item-action-text>
+                    <v-chip class="mr-1" v-if="!appeal.center_read && appeal.answer" color="red" outlined x-small>new</v-chip>
+                    {{ getStatusText(appeal.status) }}<v-icon class="ml-1" :color="getStatusColor(appeal.status)" x-small>mdi-circle</v-icon>
+                  </v-list-item-action-text>
                   <v-list-item-action-text>{{ appeal.date | dateTimeFormat }}</v-list-item-action-text>
                 </v-list-item-action>
               </v-list-item>
@@ -64,7 +67,10 @@
                 <v-list-item-subtitle>{{ appeal.question }}</v-list-item-subtitle>
               </v-list-item-content>
               <v-list-item-action>
-                <v-list-item-action-text>{{ getStatusText(appeal.status) }}<v-icon class="ml-1" :color="getStatusColor(appeal.status)" x-small>mdi-circle</v-icon></v-list-item-action-text>
+                <v-list-item-action-text>
+                  <v-chip class="mr-1" v-if="!appeal.center_read && appeal.answer" color="red" outlined x-small>new</v-chip>
+                  {{ getStatusText(appeal.status) }}<v-icon class="ml-1" :color="getStatusColor(appeal.status)" x-small>mdi-circle</v-icon>
+                </v-list-item-action-text>
                 <v-list-item-action-text>{{ appeal.date | dateTimeFormat }}</v-list-item-action-text>
               </v-list-item-action>
             </v-list-item>
