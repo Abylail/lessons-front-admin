@@ -1,3 +1,5 @@
+import {uniqList} from "@/helpers/methods";
+
 export const state = () => ({
   // Список групп
   groupList: null,
@@ -41,7 +43,7 @@ export const actions = {
     await this.$api.$get(`/api/v1/center/schedule/group/get/${centerId}`)
       .then(({err, body}) => {
         if (!err) {
-          commit("set", ["groupList", body]);
+          commit("set", ["groupList", uniqList(body)]);
         }
       })
   },
