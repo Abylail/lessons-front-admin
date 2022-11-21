@@ -16,16 +16,14 @@
       v-model="userInfo.password"
       type="password"
       ref="password"
-      outlined
-      dense
+      outlined dense clearable
     />
 
     <v-text-field
       label="Повторите пароль"
       v-model="userInfo.repeatPassword"
       type="password"
-      outlined
-      dense
+      outlined dense clearable
     />
 
     <v-btn
@@ -58,6 +56,10 @@ export default {
       _setPassword: "registration/setPassword",
     }),
     async validate() {
+      if (this.userInfo.password !== this.userInfo.repeatPassword) {
+        this.$toast.error("Пароли не совпадают");
+        return false;
+      }
       return true;
     },
     async submitHandle() {

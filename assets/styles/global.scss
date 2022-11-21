@@ -17,6 +17,16 @@
     }
   }
 }
+// Колонки  (columns-3 три колонки)
+.columns {
+  @for $columnCount from 2 through 5 {
+    &-#{$columnCount} {
+      display: grid;
+      grid-template-columns: repeat($columnCount, 1fr);
+      grid-column-gap: 15px;
+    }
+  }
+}
 
 
 // Переписываю стили vuetify

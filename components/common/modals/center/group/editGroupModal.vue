@@ -19,6 +19,7 @@
             label="Предмет"
             v-model="group.center_subject_id"
             :items="[...centerSubjectList, {ru: {name: '+ новый предмет'}, id: 'new'}]"
+            :disabled="!isNewGroup"
             item-text="ru.name" item-value="id"
             outlined dense
             @change="$event === 'new' ? createNewCenterSubject() : null"
@@ -27,6 +28,7 @@
             label="Филиал"
             v-model="group.branch_id"
             :items="[...branchList, {address: '+ новый филиал', id: 'new'}]"
+            :disabled="!isNewGroup"
             item-text="address" item-value="id"
             outlined dense
             @change="$event === 'new' ? createNewBranch() : null"
@@ -179,9 +181,12 @@ export default {
     async saveGroup() {
       this.isLoading = true;
       if (await this.validate()) {
-        if (this.isNewGroup) await this._createGroup(this.group);
-        else await this._updateGroup({newGroupInfo: this.group,  oldGroupInfo: JSON.parse(JSON.stringify(this.$modal.$payload.group))});
-        this.closeSelf();
+        let isSuccessFullUpdate = false;
+
+        if (this.isNewGroup)isSuccessFullUpdate = await this._createGroup(this.group);
+        else isSuccessFullUpdate = await this._updateGroup({newGroupInfo: this.group,  oldGroupInfo: JSON.parse(JSON.stringify(this.$modal.$payload.group))});
+
+        if (isSuccessFullUpdate) this.closeSelf();
       }
       this.isLoading = false;
     },

@@ -49,54 +49,64 @@ export const actions = {
   },
 
   // Создать группу
-  async createGroup({ rootGetters, commit }, groupInfo) {
-    const centerId = rootGetters["auth/getCenterId"];
-
-    await this.$api.$post(`/api/v1/center/schedule/group/add`, {
-      center_id: centerId,
-      ...groupInfo,
-    })
-      .then(({err, body}) => {
-        if (!err) {
-          this.$toast.success("Группа создана");
-          commit("updateGroup", body);
-        }
+  createGroup({ rootGetters, commit }, groupInfo) {
+    return new Promise(resolve => {
+      const centerId = rootGetters["auth/getCenterId"];
+      this.$api.$post(`/api/v1/center/schedule/group/add`, {
+        center_id: centerId,
+        ...groupInfo,
       })
+        .then(({err, body}) => {
+          if (!err) {
+            this.$toast.success("Группа создана");
+            commit("updateGroup", body);
+          }
+          resolve(!err);
+        })
+    })
   },
 
   // Обновить группу
-  async updateGroup({ rootGetters, commit }, {newGroupInfo, oldGroupInfo}) {
-    const centerId = rootGetters["auth/getCenterId"];
+  updateGroup({ rootGetters, commit }, {newGroupInfo, oldGroupInfo}) {
+    return new Promise(resolve => {
+      const centerId = rootGetters["auth/getCenterId"];
 
-    // Подготваливаю дни в отправке
-    let days = [];
-    const oldDays = oldGroupInfo.days || [];
-    const newDays = newGroupInfo.days || [];
+      // Подготваливаю дни в отправке
+      let days = [];
+      const oldDays = oldGroupInfo.days || [];
+      const newDays = newGroupInfo.days || [];
 
-    // Пробегаю по новым дням, если день новый добавляю is_new, если день не новый и отличается то добавляю is_update
-    newDays.forEach(newDay => {
-      const sameInOld = oldDays.find(od => od.code === newDay.code);
-      if (!sameInOld) days.push({...newDay, is_new: true});
-      else if (sameInOld.start !== newDay.start || sameInOld.end !== newDay.end) days.push({...newDay, is_update: true});
-    });
+      // Пробегаю по новым дням, если день новый добавляю is_new, если день не новый и отличается то добавляю is_update
+      newDays.forEach(newDay => {
+        const sameInOld = oldDays.find(od => od.code === newDay.code);
+        if (!sameInOld) days.push({...newDay, is_new: true});
+        else if (sameInOld.start !== newDay.start || sameInOld.end !== newDay.end) days.push({
+          ...newDay,
+          is_update: true
+        });
+      });
 
-    // Пробегаю по старым дням, если день удален то добавляю is_delete
-    newDays.forEach(oldDay => {
-      const sameInNew = newDays.find(nd => nd.code === oldDay.code);
-      if (!sameInNew) days.push({...oldDay, is_delete: true})
-    });
+      // Пробегаю по старым дням, если день удален то добавляю is_delete
+      oldDays.forEach(oldDay => {
+        const sameInNew = newDays.find(nd => nd.code === oldDay.code);
+        if (!sameInNew) days.push({...oldDay, is_delete: true})
+      });
 
-    await this.$api.$put(`/api/v1/center/schedule/group/update/${oldGroupInfo.id}`, {
-      center_id: centerId,
-      ...newGroupInfo,
-      days,
-    })
-      .then(({err, body}) => {
-        if (!err) {
-          this.$toast.success("Группа обновленна");
-          commit("updateGroup", body);
-        }
+      console.log("days", days);
+
+      this.$api.$put(`/api/v1/center/schedule/group/update/${oldGroupInfo.id}`, {
+        center_id: centerId,
+        ...newGroupInfo,
+        days,
       })
+        .then(({err, body}) => {
+          if (!err) {
+            this.$toast.success("Группа обновленна");
+            commit("updateGroup", body);
+          }
+          resolve(!err);
+        })
+    })
   },
 
   // Удалить группу

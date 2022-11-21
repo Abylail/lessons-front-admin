@@ -1,5 +1,5 @@
 <template>
-  <div class="page timetable">
+  <div class="page timetable" :class="{'timetable--mobile': $device.isMobile}">
 
     <!-- Настройки поиска -->
     <toolbar class="timetable__toolbar" :filter-params.sync="filterParams"/>
@@ -112,9 +112,7 @@ export default {
   padding: 20px;
   padding-bottom: 0;
 
-  @media(max-width: $break-point) {
-    grid-template-rows: 50px 1fr;
-  }
+  &--mobile {grid-template-rows: 50px 1fr;}
 
   &__toolbar {
 

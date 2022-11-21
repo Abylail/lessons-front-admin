@@ -2,7 +2,7 @@
   <div class="toolbar">
 
     <!-- DESKTOP VIEW -->
-    <div class="toolbar--desktop">
+    <div class="toolbar--desktop" v-if="$device.isDesktop">
       <div class="toolbar__top">
         <h2>Фильтр</h2>
 
@@ -20,7 +20,7 @@
           </v-list>
         </v-menu>
       </div>
-      <div class="toolbar__bottom relative-columns-4">
+      <div class="toolbar__bottom columns-4">
         <v-select
           label="Учителя" placeholder="Все учителя"
           v-model="innerFilterParams.teacher_id"
@@ -47,7 +47,7 @@
     </div>
 
     <!-- MOBILE VIEW -->
-    <div class="toolbar--mobile">
+    <div class="toolbar--mobile" v-if="$device.isMobileOrTablet">
       <h2>Расписание</h2>
       <div>
 
@@ -79,7 +79,7 @@
     </div>
 
     <!-- Боковой фильтр -->
-    <v-navigation-drawer class="toolbar__aside" v-model="showMobileFilterBar" width="300" right fixed app>
+    <v-navigation-drawer class="toolbar__aside" v-model="showMobileFilterBar" v-if="$device.isMobileOrTablet" width="300" right fixed app>
       <div class="toolbar__aside pa-3">
         <div class="toolbar__aside-title">
           <h2>Фильтр</h2>
@@ -400,15 +400,6 @@ export default {
 
   &__extra-button {
 
-  }
-
-
-  @media (max-width: $break-point) {
-    &--desktop {display: none}
-  }
-
-  @media (min-width: $break-point) {
-    &--mobile {display: none}
   }
 
 }
