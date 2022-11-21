@@ -8,7 +8,7 @@
         <v-switch label="Есть whatsapp" color="green" v-model="branch.whatsapp" dense/>
         <v-text-field label="Ссылка 2гис" v-model="branch.two_gis" outlined dense clearable/>
         <v-text-field label="Ссылка яндекс карты" v-model="branch.yandex" outlined dense clearable/>
-        <v-select label="Город" v-model="branch.city_id" :items="cities" :disabled="branch.city_name" item-value="id" item-text="ru.name" outlined dense/>
+        <v-select label="Город" v-model="branch.city_id" :items="cities" :disabled="!!branch.city_name" item-value="id" item-text="ru.name" outlined dense/>
       </div>
       <div class="edit-branch__actions">
         <v-btn @click="closeSelf()">Отменить</v-btn>

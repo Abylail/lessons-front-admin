@@ -107,8 +107,8 @@
         @click="addContact()"
       >+ добавить контакт</v-btn>
       <v-btn
-        class="mt-5"
-        color="primary"
+        class="mt-5" color="primary"
+        v-if="canSaveContacts"
         :loading="contactInfoLoading"
         block
         @click="saveContactInfo()"
@@ -144,14 +144,19 @@ export default {
     centerInfoLoading: false,
 
     // Контакты
-    contactInfo: [{"phone": "", "whatsapp": true, "center_id": 1, "ru": {"name": "манагер"}, "kz": {"name": "манагер"}}],
+    contactInfo: [], //{"phone": "", "whatsapp": true, "center_id": 1, "ru": {"name": "манагер"}, "kz": {"name": "манагер"}}
     contactInfoLoading: false,
   }),
   computed: {
     ...mapGetters({
       _centerInfo: "center/getCenterInfo",
       _contactInfo: "center/getContactInfo",
-    })
+    }),
+
+    // Можно сохранить?
+    canSaveContacts() {
+      return this.contactInfo?.length;
+    }
   },
   watch: {
     _centerInfo: {

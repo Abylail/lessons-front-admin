@@ -45,6 +45,11 @@ export const getters = {
 export const mutations = {
   set(state, [namespace, value]) {
     state[namespace] = value;
+  },
+  setProperty(state, [namespace, propertyNamespace, value]) {
+    let newObject = state[namespace] || {};
+    newObject[propertyNamespace] = value;
+    state[namespace] = newObject;
   }
 }
 
@@ -100,6 +105,8 @@ export const actions = {
       .then(({err, body}) => {
         if (!err) {
           this.$toast.success("Данные пользователя обновленны");
+          commit("setProperty", ["userInfo", "last_name", last_name]);
+          commit("setProperty", ["userInfo", "first_name", first_name]);
         }
       })
   },

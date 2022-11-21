@@ -136,6 +136,7 @@ export default {
       teacherList: "center/teachers/getTeacherList",
       centerSubjectList: "center/subjects/getCenterSubjectList",
       branchList: "center/branches/getBranchList",
+      allGroups: "center/timetable/getGroupList",
     }),
     // Новая ли группа (создание или апдейт)
     isNewGroup() {
@@ -155,6 +156,17 @@ export default {
 
       // Начальный день
       if (this.$modal.$payload?.dayCode) this.createDefaultDay(this.$modal.$payload.dayCode)
+
+      // Дописать предположительную информацию
+      if (this.isNewGroup) this.initSupposeInfo();
+    },
+
+    // Вставить предположительную информацию (Только для создания)
+    initSupposeInfo() {
+      if (!this.isNewGroup || !this.allGroups.length) return;
+      // Просто беру последнюю группу и вставляю некоторые поля
+      const {max_age, min_age, max_children_count, price_trial} = this.allGroups[this.allGroups.length - 1];
+      this.group = {...this.group, max_age, min_age, max_children_count, price_trial}
     },
 
     // Создать начальный день недели

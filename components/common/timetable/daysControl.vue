@@ -43,7 +43,7 @@ export default {
   props: {
     value: {
       type: Array,
-      default: () => ([{code: "monday", start: "09:00", end: "10:00"}])
+      default: () => ([]) //{code: "monday", start: "09:00", end: "10:00"}
     },
   },
   data: () => ({
@@ -70,11 +70,18 @@ export default {
       return this.value.some(w => w.code === weekDayCode);
     },
 
+    // Получить предположительное время -> {start, end}
+    getSupposeTime() {
+      if (!this.value.length) return {};
+      // Беру последнее время в списке
+      const {start, end} = this.value[this.value.length - 1];
+      return {start, end};
+    },
+
     // Добавить урок в этот день
     addDay(weekDayCode) {
       let newWeekdays = this.value.slice();
-      newWeekdays.push({code: weekDayCode});
-      console.log(newWeekdays);
+      newWeekdays.push({...this.getSupposeTime(), code: weekDayCode});
       this.$emit("input", newWeekdays);
     },
 
