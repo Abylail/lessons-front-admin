@@ -8,7 +8,7 @@
         <h3 class="mb-3">Основное</h3>
         <div class="relative-columns-3">
           <v-select
-            label="Учитель"
+            label="Учитель (обязательно)"
             v-model="group.teacher_id"
             :items="[...teacherList, {full_name: '+ новый учитель', id: 'new'}]"
             item-text="full_name" item-value="id"
@@ -16,7 +16,7 @@
             @change="$event === 'new' ? createNewTeacher() : null"
           />
           <v-select
-            label="Предмет"
+            label="Предмет (обязательно)"
             v-model="group.center_subject_id"
             :items="[...centerSubjectList, {ru: {name: '+ новый предмет'}, id: 'new'}]"
             :disabled="!isNewGroup"
@@ -25,7 +25,7 @@
             @change="$event === 'new' ? createNewCenterSubject() : null"
           />
           <v-select
-            label="Филиал"
+            label="Филиал (обязательно)"
             v-model="group.branch_id"
             :items="[...branchList, {address: '+ новый филиал', id: 'new'}]"
             :disabled="!isNewGroup"
@@ -52,7 +52,7 @@
         <h3 class="mb-3">Цена</h3>
         <div class="relative-columns-3">
           <v-text-field
-            label="Цена (тг/мес)"
+            label="Цена (тг/мес) (обязательно)"
             v-model.number="group.price"
             outlined dense
             type="price"
@@ -95,7 +95,7 @@
         <h3 class="mb-3">Детей в группе</h3>
         <div class="relative-columns-3">
           <v-text-field
-            label="Макс детей в группе" type="number"
+            label="Макс детей в группе (обязательно)" type="number"
             v-model.number="group.max_children_count"
             outlined dense
           />

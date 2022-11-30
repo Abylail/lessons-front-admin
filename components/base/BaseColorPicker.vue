@@ -7,7 +7,7 @@
         </template>
         <v-card>
           <v-card-text class="pa-0">
-            <v-color-picker :value="value" flat @input="setColor($event)"/>
+            <v-color-picker v-model="myColor" flat />
           </v-card-text>
         </v-card>
       </v-menu>
@@ -29,8 +29,13 @@ export default {
   },
   data: () => ({
     showPicker: false,
+
+    // Цвет (объект то vuetify)
+    myColor: null,
   }),
   computed: {
+
+    // Стиль квадратика с цветом
     swatchStyle() {
       return {
         backgroundColor: this.value || null,
@@ -41,6 +46,12 @@ export default {
         transition: 'border-radius 200ms ease-in-out',
         border: "1px solid gray"
       }
+    }
+  },
+  watch: {
+    // При изменении цвета передаю его hex в родителя
+    myColor(color) {
+      this.setColor(color?.hex || null);
     }
   },
   methods: {

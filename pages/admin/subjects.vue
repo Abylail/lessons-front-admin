@@ -37,6 +37,9 @@
         <template v-slot:item.is_sport="{ item }">
           {{ item.is_sport ? "Да" : "Нет" }}
         </template>
+        <template v-slot:item.color="{ item }">
+          <div class="subjects__table-subject-color" :style="{backgroundColor: item.color}"/>
+        </template>
         <template v-slot:item.categories="{ item }">
           <v-chip
             v-for="(category, index) in item.categories" :key="index"
@@ -73,6 +76,7 @@ export default {
       { text: 'Название на казахском', value: 'kz.name', sortable: false},
       { text: 'Категории', value: 'categories', sortable: false },
       { text: 'Спорт', value: 'is_sport', sortable: false },
+      { text: 'Цвет', value: 'color', sortable: false },
       { text: '', value: 'actions', sortable: false, width: 150},
     ],
 
@@ -146,6 +150,12 @@ export default {
 
   &__search-title {
     margin-top: 20px;
+  }
+
+  &__table-subject-color {
+    height: 20px;
+    width: 20px;
+    border-radius: 3px;
   }
 
 }

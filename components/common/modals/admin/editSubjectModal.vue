@@ -59,7 +59,7 @@ export default {
     // Создание объекта для изменений (categories переводит в список id категорий)
     createEditableSubject(subject) {
       return {
-        ...subject,
+        ...JSON.parse(JSON.stringify(subject)),
         categories: (subject.categories || []).map(s => s.id),
       }
     },
