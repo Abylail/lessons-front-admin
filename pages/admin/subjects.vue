@@ -16,10 +16,10 @@
       />
       <v-select
         label="Поиск по категории"
-        v-model="searchParams.categoryId"
+        v-model="searchParams.categoryCode"
         :items="categories"
-        item-text="ru.name"
-        item-value="id"
+        item-text="name"
+        item-value="code"
         outlined dense hide-details clearable
       />
       <v-btn color="primary" block @click="searchHandle()">Поиск</v-btn>
@@ -44,7 +44,7 @@
           <v-chip
             v-for="(category, index) in item.categories" :key="index"
             class="mr-1 mb-1 mt-1" outlined small
-          >{{ category.ru.name }}</v-chip>
+          >{{ category.name }}</v-chip>
         </template>
         <template v-slot:item.actions="{ item }">
           <v-btn icon @click="editHandle(item)"><v-icon>mdi-pencil</v-icon></v-btn>
@@ -72,8 +72,7 @@ export default {
 
     // Заголовки таблицы
     tableHeaders: [
-      { text: 'Название на русском', value: 'ru.name', sortable: false},
-      { text: 'Название на казахском', value: 'kz.name', sortable: false},
+      { text: 'Название на русском', value: 'name', sortable: false},
       { text: 'Категории', value: 'categories', sortable: false },
       { text: 'Спорт', value: 'is_sport', sortable: false },
       { text: 'Цвет', value: 'color', sortable: false },

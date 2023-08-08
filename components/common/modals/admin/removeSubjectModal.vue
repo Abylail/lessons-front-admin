@@ -1,7 +1,7 @@
 <template>
   <modal name="remove-subject" size="small" close-button @onShow="getPayload()" @onHide="clear()">
     <div class="remove-subject">
-      <div class="remove-subject__text">Вы уверены что хотите удалить <strong>{{ subject.ru.name }}</strong>?</div>
+      <div class="remove-subject__text">Вы уверены что хотите удалить <strong>{{ subject.name }}</strong>?</div>
       <div class="remove-subject__actions">
         <v-btn @click="closeSelf()">Отменить</v-btn>
         <v-btn class="ml-3" color="red" dark :loading="isLoading" @click="deleteHandle()">Удалить</v-btn>

@@ -72,7 +72,9 @@ export default {
         { icon: "mdi-cog", name: "Основные настройки", route: "/admin/settings", roles: ["admin"]},
         { icon: "mdi-format-list-bulleted", name: "Категории", route: "/admin/categories", roles: ["admin"]},
         { icon: "mdi-book-multiple", name: "Предметы", route: "/admin/subjects", roles: ["admin"]},
-        { icon: "mdi-email-outline", name: "Обращения", route: "/admin/appeals", roles: ["admin"]},
+        { icon: "mdi-account-group", name: "Пользователи", route: "/admin/users", roles: ["admin"]},
+        { icon: "mdi-school-outline", name: "Учреждения", route: "/admin/institutions", roles: ["admin"]},
+        { icon: "mdi-email-outline", name: "Обращения", route: "/admin/appeals", roles: []},
       ]
     }
   },

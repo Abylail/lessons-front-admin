@@ -4,10 +4,9 @@
       <h2>Предмет</h2>
 
       <div class="edit-subject__form">
-        <v-text-field label="Название на русском" v-model="subject.ru.name" outlined dense/>
-        <v-text-field label="Название на казахском" v-model="subject.kz.name" outlined dense hide-details/>
+        <v-text-field label="Название на русском" v-model="subject.name" outlined dense/>
         <v-switch label="Спорт" v-model="subject.is_sport" dense/>
-        <v-select label="Категории" item-text="ru.name" item-value="id" v-model="subject.categories" :items="categories" outlined dense multiple/>
+        <v-select label="Категории" item-text="name" item-value="code" v-model="subject.categories" :items="categories" outlined dense multiple/>
         <base-color-picker label="Цвет предмета" v-model="subject.color"/>
       </div>
 
@@ -28,10 +27,10 @@ export default {
   components: {BaseColorPicker},
   data: () => ({
     // Информация категории
-    subject: {ru: {name: null}, kz: {name: null}},
+    subject: {},
 
     // Старая информация предмета (для сравнения категорий)
-    oldSubject: {ru: {name: null}, kz: {name: null}},
+    oldSubject: {},
 
     isLoading: false,
   }),
@@ -60,13 +59,13 @@ export default {
     createEditableSubject(subject) {
       return {
         ...JSON.parse(JSON.stringify(subject)),
-        categories: (subject.categories || []).map(s => s.id),
+        categories: (subject.categories || []).map(s => s.code),
       }
     },
     // Очистить
     clear() {
-      this.subject = {ru: {name: null}, kz: {name: null}};
-      this.oldSubject = {ru: {name: null}, kz: {name: null}};
+      this.subject = {};
+      this.oldSubject = {};
     },
     // Закрыть себя (Модалку)
     closeSelf() {
@@ -74,10 +73,7 @@ export default {
     },
     // Валидация информации категории
     async validate() {
-      if (!this.subject.ru.name) {
-        return false;
-      }
-      if (!this.subject.kz.name) {
+      if (!this.subject.name) {
         return false;
       }
       return true;
@@ -87,7 +83,7 @@ export default {
       this.isLoading = true;
       if (await this.validate()) {
         if (this.isNewSubject) await this._createSubject(this.subject);
-        else await this._updateSubject({newSubject: this.subject, oldSubject: this.oldSubject});
+        else await this._updateSubject(this.subject);
         this.closeSelf();
       }
       this.isLoading = false;

@@ -8,3 +8,6 @@ export const uniqList = (list = [], uniqProperty = "id") => {
     return true;
   })
 }
+
+/** Удаление из номера лишний символов */
+export const phonePreparing = phone => phone.replaceAll(/\D+/g, "")

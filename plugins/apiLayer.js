@@ -7,7 +7,7 @@ const createCatcher = toast => err => {
 
 /** Создание options */
 const createOptions = (options, store) => {
-  return options;
+  return options
 }
 
 /** GET */

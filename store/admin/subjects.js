@@ -20,21 +20,21 @@ export const mutations = {
 export const actions = {
 
   // Получить список предметов
-  async fetchSubjectList({ commit }, {query = null, categoryId = null}) {
-    await this.$api.$get(`/api/v1/subject/get/${categoryId || ""}`, {
+  async fetchSubjectList({ commit }, {query = null, categoryCode = null}) {
+    await this.$api.$get(`/api/v1/admin/subject/get/${categoryCode || ""}`, {
       params: { query }
     })
       .then(({err, body}) => {
         if (!err) {
           commit("set", ["subjectList", body]);
-          commit("set", ["lastSearchParams", {query, categoryId}]);
+          commit("set", ["lastSearchParams", {query, categoryCode}]);
         }
       })
   },
 
   // Создать предмет
   async createSubject({ dispatch, state }, subjectInfo) {
-    await this.$api.$post(`/api/v1/subject/add`, subjectInfo)
+    await this.$api.$post(`/api/v1/admin/subject/create`, subjectInfo)
       .then(({err, body}) => {
         if (!err) {
           this.$toast.success("Предмет создан");
@@ -44,15 +44,8 @@ export const actions = {
   },
 
   // Обновить предмет
-  async updateSubject({ dispatch, state }, {newSubject, oldSubject}) {
-
-    // Новая связка
-    const bind_categories = newSubject.categories.filter(categoryId => oldSubject.categories.indexOf(categoryId) === -1);
-    // Удаленная свзяка
-    const unbind_categories = oldSubject.categories.filter(categoryId => newSubject.categories.indexOf(categoryId) === -1);
-
-    const subjectInfo = {...newSubject, bind_categories, unbind_categories};
-    await this.$api.$put(`/api/v1/subject/update/${subjectInfo.id}`, subjectInfo)
+  async updateSubject({ dispatch, state }, subjectInfo) {
+    await this.$api.$put(`/api/v1/admin/subject/update/${subjectInfo.code}`, subjectInfo)
       .then(({err, body}) => {
         if (!err) {
           this.$toast.success("Предмет обновлен");
@@ -65,7 +58,7 @@ export const actions = {
 
   // Удалить предмет
   async deleteSubject({ dispatch, state }, subjectInfo) {
-    await this.$api.$delete(`/api/v1/subject/delete/${subjectInfo.id}`)
+    await this.$api.$delete(`/api/v1/admin/subject/delete/${subjectInfo.code}`)
       .then(({err, body}) => {
         if (!err) {
           this.$toast("Предмет удален");

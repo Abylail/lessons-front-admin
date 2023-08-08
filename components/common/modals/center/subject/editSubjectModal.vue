@@ -4,8 +4,7 @@
       <h2>Предмет</h2>
       <div class="edit-subject__form">
         <v-autocomplete label="Предмет" v-model="subject.subject_id" item-value="id" item-text="ru.name" :items="subjectList" outlined dense :disabled="!isNewSubject" @change="subjectChanged($event)"/>
-        <v-text-field label="Имя предмета на русском" v-model="subject.ru.name" maxlength="50" counter outlined dense/>
-        <v-text-field label="Имя предмета на казахском" v-model="subject.kz.name" maxlength="50" counter outlined dense/>
+        <v-text-field label="Имя предмета на русском" v-model="subject.name" maxlength="50" counter outlined dense/>
       </div>
       <div class="edit-subject__actions">
         <v-btn @click="closeSelf()">Отменить</v-btn>
@@ -77,25 +76,19 @@ export default {
     subjectChanged(subjectId) {
       if (!subjectId) {
         // Выбор предмета убран
-        this.subject.ru.name = null;
-        this.subject.kz.name = null;
+        this.subject.name = null;
       }
       else {
         // Предмет выбран
         const selectedSubject = this.subjectList.find(s => +s.id === +subjectId);
-        this.subject.ru.name = selectedSubject.ru.name;
-        this.subject.kz.name = selectedSubject.kz.name;
+        this.subject.name = selectedSubject.name;
       }
     },
 
     // Валидация информации предмета
     async validate() {
-      if (!this.subject.ru.name) {
+      if (!this.subject.name) {
         this.$toast.error("Введите название предмета на русском");
-        return false;
-      }
-      if (!this.subject.kz.name) {
-        this.$toast.error("Введите название предмета на казахском");
         return false;
       }
       if (!this.subject.subject_id) {
@@ -108,7 +101,7 @@ export default {
     // Вызов успешного колбэка (Вызывается после закрытия модалки)
     callSuccessCallback() {
       if (this.successCallback) {
-        const newCenterSubject = this.centerSubjectList.find(s => s.ru.name === this.subject.ru.name && s.kz.name === this.subject.kz.name && s.subject_id === this.subject.subject_id) || {};
+        const newCenterSubject = this.centerSubjectList.find(s => s.ru.name === this.subject.name && s.subject_id === this.subject.subject_id) || {};
         const successCallback = this.successCallback;
         setTimeout(() => {
           successCallback(newCenterSubject);

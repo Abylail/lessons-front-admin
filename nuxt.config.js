@@ -61,6 +61,14 @@ export default {
   // Axios
   axios: {
     baseURL: process.env.BACKEND_URL,
+    credentials: true,
+    proxy: true
+  },
+
+  proxy: {
+    "/api": {
+      target: process.env.BACKEND_URL,
+    }
   },
 
   // Toastification

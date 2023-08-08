@@ -35,9 +35,7 @@ export const actions = {
 
   // Сохранить информацию центра
   async saveCenterInfo({ commit, rootGetters }, centerInfo) {
-    const token = rootGetters["auth/getUserToken"];
     await this.$api.$post(`/api/v1/center/update`, {
-      session_token: token,
       ...centerInfo,
     })
       .then(({err, body}) => {

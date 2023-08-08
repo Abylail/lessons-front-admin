@@ -18,7 +18,7 @@ export const actions = {
   // Получить список категорий
   async fetchCategoryList({ commit, state }, optimize = false) {
     if (optimize && state.categoryList.length) return;
-    await this.$api.$get(`/api/v1/subject/category/get`)
+    await this.$api.$get(`/api/v1/admin/category/get`)
       .then(({err, body}) => {
         if (!err) {
           commit("set", ["categoryList", body]);
@@ -28,7 +28,7 @@ export const actions = {
 
   // Создать категорию
   async createCategory({ rootGetters, dispatch  }, categoryInfo) {
-    await this.$api.$post(`/api/v1/subject/category/add`, categoryInfo)
+    await this.$api.$post(`/api/v1/admin/category/create`, categoryInfo)
       .then(({err, body}) => {
         if (!err) {
           this.$toast.success("Категория создан");
@@ -37,20 +37,9 @@ export const actions = {
       })
   },
 
-  // Обновить информацию категории
-  async updateCategory({ rootGetters, dispatch  }, categoryInfo) {
-    await this.$api.$put(`/api/v1/subject/category/update/${categoryInfo.id}`, categoryInfo)
-      .then(({err, body}) => {
-        if (!err) {
-          this.$toast.success("Категория обновлена");
-          dispatch("fetchCategoryList");
-        }
-      })
-  },
-
   // Удалить категорию
   async deleteCategory({ dispatch }, categoryInfo) {
-    await this.$api.$delete(`/api/v1/subject/category/delete/${categoryInfo.id}`)
+    await this.$api.$delete(`/api/v1/admin/category/delete/${categoryInfo.code}`)
       .then(({err, body}) => {
         if (!err) {
           this.$toast("Категория удалена");

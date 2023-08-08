@@ -1,7 +1,7 @@
 <template>
   <modal name="remove-category" size="small" close-button @onShow="getPayload()" @onHide="clear()">
     <div class="remove-category">
-      <div class="remove-category__text">Вы уверены что хотите удалить <strong>{{ category.ru.name }}</strong>?</div>
+      <div class="remove-category__text">Вы уверены что хотите удалить <strong>{{ category.name }}</strong>?</div>
       <div class="remove-category__actions">
         <v-btn @click="closeSelf()">Отменить</v-btn>
         <v-btn class="ml-3" color="red" dark :loading="isLoading" @click="deleteHandle()">Удалить</v-btn>

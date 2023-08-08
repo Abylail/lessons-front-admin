@@ -1,10 +1,4 @@
-export const state = () => ({
-  token: null,
-})
 
-export const getters = {
-
-}
 
 export const mutations = {
   set(state, [namespace, value]) {
