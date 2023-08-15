@@ -23,9 +23,9 @@ export const actions = {
 
   // Получить информацию центра
   async fetchCenterInfo({ commit, rootGetters }) {
-    const { center_id } = rootGetters["auth/getUserInfo"];
-    if (!center_id) return;
-    await this.$api.$get(`/api/v1/center/get/${center_id}`)
+    const { institution_id } = rootGetters["auth/getUserInfo"];
+    if (!institution_id) return;
+    await this.$api.$get(`/api/v1/admin/institution/get/${institution_id}`)
       .then(({err, body}) => {
         if (!err) {
           commit("set", ["centerInfo", body]);
@@ -35,11 +35,13 @@ export const actions = {
 
   // Сохранить информацию центра
   async saveCenterInfo({ commit, rootGetters }, centerInfo) {
-    await this.$api.$post(`/api/v1/center/update`, {
+    const { institution_id } = rootGetters["auth/getUserInfo"];
+    await this.$api.$put(`/api/v1/admin/institution/update/${institution_id}`, {
       ...centerInfo,
     })
       .then(({err, body}) => {
         if (!err) {
+          console.log(body);
           this.$toast.success("Информация центра сохранена");
         }
       })
@@ -53,29 +55,6 @@ export const actions = {
       .then(({err, body}) => {
         if (!err) {
           commit("set", ["contactInfo", body]);
-        }
-      })
-  },
-
-  // Сохранить контакты
-  async saveContactInfo({ commit, rootGetters }, contacts = []) {
-    const { center_id } = rootGetters["auth/getUserInfo"];
-    if (!center_id) return;
-    await this.$api.$post(`/api/v1/center/contact/update/${center_id}`, contacts)
-      .then(({err, body}) => {
-        if (!err) {
-          this.$toast.success("Контакты центра сохранены");
-        }
-      })
-
-  },
-
-  // Удалить контакт
-  async deleteContact({ commit }, contact) {
-    await this.$api.$delete(`/api/v1/center/contact/remove/${contact.id}`)
-      .then(({err, body}) => {
-        if (!err) {
-          this.$toast("Контакт удален");
         }
       })
   },

@@ -39,8 +39,7 @@ export default {
   data: () => ({
     tableHeaders: [
       { text: 'Адрес', value: 'address', sortable: false},
-      { text: 'Телефон', value: 'phone', sortable: false},
-      { text: 'Город', value: 'city_name', sortable: false},
+      { text: 'Телефон', value: 'call_phone', sortable: false},
       { text: '', value: 'actions', sortable: false, width: 150},
     ],
 

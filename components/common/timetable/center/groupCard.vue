@@ -13,13 +13,13 @@
       <!-- Предмет -->
       <div class="group-card__info">
         <v-icon class="mr-1" small>mdi-book-open-blank-variant</v-icon>
-        {{ value.center_subject_name }}
+        {{ value.institutionSubject?.name }}
       </div>
 
       <!-- Адрес -->
       <div class="group-card__info">
         <v-icon class="mr-1" small>mdi-map-marker</v-icon>
-        {{ value.branch_address }}
+        {{ value.institutionBranch?.address }}
       </div>
 
       <!-- Дни недели -->
@@ -57,13 +57,12 @@ export default {
   computed: {
     // Время от какого до какого
     myTime() {
-      const day = this.value.days.find(d => d.code === this.weekDayCode);
-      return `${day.start} - ${day.end}`;
+      return this.value[`${this.weekDayCode}_start`] + " - " + this.value[`${this.weekDayCode}_end`];
     },
 
     // Цвет круга индикатора
     indicatorCircleColor() {
-      return uniqueColors[this.value.teacher_id % uniqueColors.length];
+      return uniqueColors[this.value.id % uniqueColors.length];
     },
 
     // Цвет линии индикатора

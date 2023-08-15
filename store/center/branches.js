@@ -19,7 +19,7 @@ export const actions = {
   async fetchBranchList({ commit, rootGetters }) {
     const centerId = rootGetters["auth/getCenterId"];
     if (!centerId) return;
-    await this.$api.$get(`/api/v1/center/branch/get/${centerId}`)
+    await this.$api.$get(`/api/v1/admin/institution/${centerId}/branch/get`)
       .then(({err, body}) => {
         if (!err) {
           commit("set", ["branchList", body]);
@@ -30,10 +30,8 @@ export const actions = {
   // Создать филиал
   async createBranch({ commit, rootGetters, dispatch  }, branchInfo) {
     const centerId = rootGetters["auth/getCenterId"];
-    await this.$api.$post(`/api/v1/center/branch/add`, {
-      center_id: centerId,
-      ...branchInfo,
-    })
+    if (!centerId) return;
+    await this.$api.$post(`/api/v1/admin/institution/${centerId}/branch/create`, branchInfo)
       .then(async ({err, body}) => {
         if (!err) {
           this.$toast.success("Филиал создан");
@@ -45,10 +43,8 @@ export const actions = {
   // Создать филиал
   async updateBranch({ commit, rootGetters, dispatch  }, branchInfo) {
     const centerId = rootGetters["auth/getCenterId"];
-    await this.$api.$put(`/api/v1/center/branch/update/${branchInfo.id}`, {
-      center_id: centerId,
-      ...branchInfo,
-    })
+    if (!centerId) return;
+    await this.$api.$put(`/api/v1/admin/institution/${centerId}/branch/update/${branchInfo.id}`, branchInfo)
       .then(async ({err, body}) => {
         if (!err) {
           this.$toast.success("Филиал создан");
@@ -58,8 +54,10 @@ export const actions = {
   },
 
   // Удалить филиал
-  async deleteBranch({ dispatch }, branchInfo) {
-    await this.$api.$delete(`/api/v1/center/branch/delete/${branchInfo.id}`)
+  async deleteBranch({ dispatch, rootGetters }, branchInfo) {
+    const centerId = rootGetters["auth/getCenterId"];
+    if (!centerId) return;
+    await this.$api.$delete(`/api/v1/admin/institution/${centerId}/branch/delete/${branchInfo.id}`)
       .then(({err, body}) => {
         if (!err) {
           this.$toast("Филиал удален");

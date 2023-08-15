@@ -17,7 +17,7 @@ export default {
   name: "removeCategoryModal",
   data: () => ({
     // Информация категории
-    category: {ru: {name: null}, kz: {name: null}},
+    category: {},
 
     isLoading:false,
   }),
@@ -35,7 +35,7 @@ export default {
 
     // Очистка информации
     clear() {
-      this.category = {ru: {name: null}, kz: {name: null}};
+      this.category = {};
     },
 
     // Закрыть себя (модалку)

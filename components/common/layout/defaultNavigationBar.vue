@@ -37,6 +37,7 @@
 
 <script>
 import { mapGetters } from "vuex";
+import {rolesDict} from "@/config/roles";
 
 export default {
   name: "defaultNavigationBar",
@@ -62,19 +63,19 @@ export default {
 
     links() {
       return [
-        { icon: "mdi-domain", name: "Моя компания", route: "/center/settings", roles: ["center_director"]},
-        { icon: "mdi-timetable", name: "Расписание", route: "/center/timetable", roles: ["center_director"]},
-        { icon: "mdi-human", name: "Учителя", route: "/center/teachers", roles: ["center_director"]},
-        { icon: "mdi-map-marker", name: "Адреса и филиалы", route: "/center/branches", roles: ["center_director"]},
-        { icon: "mdi-bookshelf", name: "Мои предметы", route: "/center/subjects", roles: ["center_director"]},
-        { icon: "mdi-email-outline", name: `Мои обращения ${this.newCenterAppealsCount ? `(${this.newCenterAppealsCount})` : ""}`, route: "/center/appeals", roles: ["center_director"]},
+        { icon: "mdi-domain", name: "Моя компания", route: "/center/settings", roles: [rolesDict.center_director.code]},
+        { icon: "mdi-timetable", name: "Расписание", route: "/center/timetable", roles: [rolesDict.center_director.code]},
+        // { icon: "mdi-human", name: "Учителя", route: "/center/teachers", roles: ["center_director"]},
+        { icon: "mdi-map-marker", name: "Адреса и филиалы", route: "/center/branches", roles: [rolesDict.center_director.code]},
+        { icon: "mdi-bookshelf", name: "Мои предметы", route: "/center/subjects", roles: [rolesDict.center_director.code]},
+        // { icon: "mdi-email-outline", name: `Мои обращения ${this.newCenterAppealsCount ? `(${this.newCenterAppealsCount})` : ""}`, route: "/center/appeals", roles: [rolesDict.center_director.code]},
 
-        { icon: "mdi-cog", name: "Основные настройки", route: "/admin/settings", roles: ["admin"]},
-        { icon: "mdi-format-list-bulleted", name: "Категории", route: "/admin/categories", roles: ["admin"]},
-        { icon: "mdi-book-multiple", name: "Предметы", route: "/admin/subjects", roles: ["admin"]},
-        { icon: "mdi-account-group", name: "Пользователи", route: "/admin/users", roles: ["admin"]},
-        { icon: "mdi-school-outline", name: "Учреждения", route: "/admin/institutions", roles: ["admin"]},
-        { icon: "mdi-email-outline", name: "Обращения", route: "/admin/appeals", roles: []},
+        { icon: "mdi-cog", name: "Основные настройки", route: "/admin/settings", roles: [rolesDict.admin.code]},
+        { icon: "mdi-format-list-bulleted", name: "Категории", route: "/admin/categories", roles: [rolesDict.admin.code]},
+        { icon: "mdi-book-multiple", name: "Предметы", route: "/admin/subjects", roles: [rolesDict.admin.code]},
+        { icon: "mdi-account-group", name: "Пользователи", route: "/admin/users", roles: [rolesDict.admin.code]},
+        { icon: "mdi-school-outline", name: "Учреждения", route: "/admin/institutions", roles: [rolesDict.admin.code]},
+        // { icon: "mdi-email-outline", name: "Обращения", route: "/admin/appeals", roles: []},
       ]
     }
   },

@@ -45,7 +45,6 @@ export default {
 
     tableHeaders: [
       { text: "Название", value: "name", sortable: false },
-      { text: "Адрес", value: "address", sortable: false },
       { text: "Директор", value: "director", sortable: false },
       { text: "Тип", value: "type", sortable: false },
       { text: "Код", value: "code", sortable: false },

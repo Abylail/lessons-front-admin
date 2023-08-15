@@ -28,6 +28,7 @@ export const actions = {
 
   // Получить список обращений
   async fetchAppealList({ rootGetters, commit }) {
+    return;
     const centerId = rootGetters["auth/getCenterId"];
     if (!centerId) return;
     await this.$api.$get(`/api/v1/appeal/center/get`, {params: {center_id: centerId}})

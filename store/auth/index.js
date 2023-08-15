@@ -15,7 +15,7 @@ export const state = () => ({
 export const getters = {
 
   // Id центра
-  getCenterId: state => state.userInfo?.center_id,
+  getCenterId: state => state.userInfo?.institution_id,
 
   // Авторизован ли пользователь
   isAuth: state => !!state.userInfo,

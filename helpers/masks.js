@@ -25,3 +25,11 @@ export function timeRangeMask(value) {
   }
   return [...timeMask(numbers)];
 }
+
+/**
+ * Убрать маску с телефона
+ * @param {string} phone
+ */
+export function removePhoneMask(phone) {
+  return phone?.replaceAll(/\D+/g, "")
+}

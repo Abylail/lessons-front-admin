@@ -1,3 +1,5 @@
+import login from "@/pages/login";
+
 export const state = () => ({
   // Список предметов (общий)
   subjectList: [],
@@ -24,7 +26,7 @@ export const actions = {
   // Получить список предметов (общий)
   async fetchSubjectList({ commit, state }) {
     if (state.subjectList.length) return;
-    await this.$api.$get(`/api/v1/subject/get/`)
+    await this.$api.$get(`/api/v1/admin/subject/get`)
       .then(({err, body}) => {
         if (!err) {
           commit("set", ["subjectList", body]);
@@ -36,7 +38,7 @@ export const actions = {
   async fetchSubjectCenterList({ rootGetters, commit }) {
     const centerId = rootGetters["auth/getCenterId"];
     if (!centerId) return;
-    await this.$api.$get(`/api/v1/center/subject/get/${centerId}`)
+    await this.$api.$get(`/api/v1/admin/institution/${centerId}/subject/get`)
       .then(({err, body}) => {
         if (!err) {
           commit("set", ["subjectCenterList", body]);
@@ -47,8 +49,8 @@ export const actions = {
   // Создать предмет
   async createSubject({commit, rootGetters, dispatch}, subjectInfo) {
     const centerId = rootGetters["auth/getCenterId"];
-
-    await this.$api.$post(`/api/v1/center/subject/add`, {
+    if (!centerId) return;
+    await this.$api.$post(`/api/v1/admin/institution/${centerId}/subject/create`, {
       center_id: centerId,
       ...subjectInfo,
     })
@@ -63,11 +65,8 @@ export const actions = {
   // Обновить предмет
   async updateSubject({ commit, rootGetters, dispatch  }, subjectInfo) {
     const centerId = rootGetters["auth/getCenterId"];
-
-    await this.$api.$put(`/api/v1/center/subject/update/${subjectInfo.id}`, {
-      center_id: centerId,
-      ...subjectInfo,
-    })
+    if (!centerId) return;
+    await this.$api.$put(`/api/v1/admin/institution/${centerId}/subject/update/${subjectInfo.id}`, subjectInfo)
       .then(async ({err, body}) => {
         if (!err) {
           this.$toast.success("Предмет обновлен");
@@ -77,8 +76,10 @@ export const actions = {
   },
 
   // Удалить учителя
-  async deleteSubject({ dispatch }, teacherInfo) {
-    await this.$api.$delete(`/api/v1/center/subject/delete/${teacherInfo.id}`)
+  async deleteSubject({ dispatch, rootGetters }, subjectInfo) {
+    const centerId = rootGetters["auth/getCenterId"];
+    if (!centerId) return;
+    await this.$api.$delete(`/api/v1/admin/institution/${centerId}/subject/delete/${subjectInfo.id}`)
       .then(({err, body}) => {
         if (!err) {
           this.$toast("Предмет удален");

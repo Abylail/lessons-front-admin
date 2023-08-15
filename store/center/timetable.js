@@ -40,7 +40,7 @@ export const actions = {
   async fetchTimetable({ rootGetters, commit }) {
     const centerId = rootGetters["auth/getCenterId"];
     if (!centerId) return;
-    await this.$api.$get(`/api/v1/center/schedule/group/get/${centerId}`)
+    await this.$api.$get(`/api/v1/admin/institution/${centerId}/group/get`)
       .then(({err, body}) => {
         if (!err) {
           commit("set", ["groupList", uniqList(body)]);
@@ -52,7 +52,7 @@ export const actions = {
   createGroup({ rootGetters, commit }, groupInfo) {
     return new Promise(resolve => {
       const centerId = rootGetters["auth/getCenterId"];
-      this.$api.$post(`/api/v1/center/schedule/group/add`, {
+      this.$api.$post(`/api/v1/admin/institution/${centerId}/group/create`, {
         center_id: centerId,
         ...groupInfo,
       })
@@ -67,38 +67,11 @@ export const actions = {
   },
 
   // Обновить группу
-  updateGroup({ rootGetters, commit }, {newGroupInfo, oldGroupInfo}) {
+  updateGroup({ rootGetters, commit }, groupInfo) {
     return new Promise(resolve => {
       const centerId = rootGetters["auth/getCenterId"];
-
-      // Подготваливаю дни в отправке
-      let days = [];
-      const oldDays = oldGroupInfo.days || [];
-      const newDays = newGroupInfo.days || [];
-
-      // Пробегаю по новым дням, если день новый добавляю is_new, если день не новый и отличается то добавляю is_update
-      newDays.forEach(newDay => {
-        const sameInOld = oldDays.find(od => od.code === newDay.code);
-        if (!sameInOld) days.push({...newDay, is_new: true});
-        else if (sameInOld.start !== newDay.start || sameInOld.end !== newDay.end) days.push({
-          ...newDay,
-          is_update: true
-        });
-      });
-
-      // Пробегаю по старым дням, если день удален то добавляю is_delete
-      oldDays.forEach(oldDay => {
-        const sameInNew = newDays.find(nd => nd.code === oldDay.code);
-        if (!sameInNew) days.push({...oldDay, is_delete: true})
-      });
-
-      console.log("days", days);
-
-      this.$api.$put(`/api/v1/center/schedule/group/update/${oldGroupInfo.id}`, {
-        center_id: centerId,
-        ...newGroupInfo,
-        days,
-      })
+      if (!centerId) return;
+      this.$api.$put(`/api/v1/admin/institution/${centerId}/group/update/${groupInfo.id}`, groupInfo)
         .then(({err, body}) => {
           if (!err) {
             this.$toast.success("Группа обновленна");

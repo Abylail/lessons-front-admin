@@ -1,14 +1,22 @@
 <template>
-  <modal name="edit-branch" size="small" :close-on-out-click="false" close-button @onShow="getPayload()" @onHide="clear()">
+  <modal name="edit-branch" :close-on-out-click="false" close-button @onShow="getPayload()" @onHide="clear()">
     <div class="edit-branch">
       <h2>Филиал</h2>
       <div class="edit-branch__form">
         <v-text-field label="Адрес" v-model="branch.address" outlined dense/>
-        <v-text-field label="Телефон" v-model="branch.phone" v-mask="'+7 (###) ###-##-##'" outlined hide-details dense/>
-        <v-switch label="Есть whatsapp" color="green" v-model="branch.whatsapp" dense/>
-        <v-text-field label="Ссылка 2гис" v-model="branch.two_gis" outlined dense clearable/>
-        <v-text-field label="Ссылка яндекс карты" v-model="branch.yandex" outlined dense clearable/>
-        <v-select label="Город" v-model="branch.city_id" :items="cities" :disabled="!!branch.city_name" item-value="id" item-text="ru.name" outlined dense/>
+        <v-textarea label="Описание как пройти" v-model="branch.address_description" no-resize outlined dense/>
+        <div class="relative-columns-2">
+          <v-text-field label="Телефон (для звонков)" v-model="branch.call_phone" outlined dense/>
+          <v-text-field label="Телефон (whatsapp)" v-model="branch.whatsapp_phone" outlined dense/>
+        </div>
+        <div class="relative-columns-2">
+          <v-text-field label="Ссылка 2гис" v-model="branch.two_gis_url" outlined dense clearable/>
+          <v-text-field label="Ссылка яндекс карты" v-model="branch.yandex_url" outlined dense clearable/>
+        </div>
+        <div class="relative-columns-2">
+          <v-text-field label="Email" v-model="branch.email" outlined dense clearable/>
+          <v-text-field label="Ссылка инстаграм" v-model="branch.instagram_url" outlined dense clearable/>
+        </div>
       </div>
       <div class="edit-branch__actions">
         <v-btn @click="closeSelf()">Отменить</v-btn>
@@ -46,7 +54,7 @@ export default {
     ...mapActions({
       _createBranch: "center/branches/createBranch",
       _updateBranch: "center/branches/updateBranch",
-      fetchCities: "fetchCities",
+      // fetchCities: "fetchCities",
     }),
 
     // Получить вложения
@@ -96,9 +104,6 @@ export default {
       this.isLoading = false;
     }
   },
-  mounted() {
-    this.fetchCities();
-  }
 }
 </script>
 

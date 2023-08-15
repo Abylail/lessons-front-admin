@@ -14,25 +14,17 @@
             </v-btn>
           </template>
           <v-list>
-            <v-list-item v-show="$device.isDesktop" two-line @click="downloadTeacherTables()"><v-icon class="mr-3">mdi-download</v-icon>Скачать расписание для каждого учителя (Несколько файлов)</v-list-item>
             <v-list-item two-line @click="downloadFullTable()"><v-icon class="mr-3">mdi-download</v-icon>Скачать все расписание</v-list-item>
             <v-list-item two-line @click="downloadGroupList()"><v-icon class="mr-3">mdi-download</v-icon>Скачать список групп</v-list-item>
           </v-list>
         </v-menu>
       </div>
-      <div class="toolbar__bottom columns-4">
-        <v-select
-          label="Учителя" placeholder="Все учителя"
-          v-model="innerFilterParams.teacher_id"
-          :items="teacherList"
-          item-text="full_name" item-value="id"
-          multiple outlined dense hide-details persistent-placeholder
-        />
+      <div class="toolbar__bottom columns-3">
         <v-select
           label="Предметы" placeholder="Все предметы"
-          v-model="innerFilterParams.center_subject_id"
+          v-model="innerFilterParams.institution_subject_id"
           :items="centerSubjectList"
-          item-text="ru.name" item-value="id"
+          item-text="name" item-value="id"
           multiple outlined dense hide-details persistent-placeholder
         />
         <v-select
@@ -86,17 +78,10 @@
         </div>
         <div class="toolbar__aside-filters">
           <v-select
-            class="mb-3" label="Учителя" placeholder="Все учителя"
-            v-model="innerFilterParams.teacher_id"
-            :items="teacherList"
-            item-text="full_name" item-value="id"
-            multiple outlined dense hide-details persistent-placeholder clearable
-          />
-          <v-select
             class="mb-3" label="Предметы" placeholder="Все предметы"
-            v-model="innerFilterParams.center_subject_id"
+            v-model="innerFilterParams.institution_subject_id"
             :items="centerSubjectList"
-            item-text="ru.name" item-value="id"
+            item-text="name" item-value="id"
             multiple outlined hide-details persistent-placeholder clearable
           />
           <v-select
@@ -186,17 +171,17 @@ export default {
   },
   methods: {
     ...mapActions({
-      _fetchTeachers: "center/teachers/fetchTeacherList",
+      // _fetchTeachers: "center/teachers/fetchTeacherList",
       _fetchCenterSubjects: "center/subjects/fetchSubjectCenterList",
       _fetchBranches: "center/branches/fetchBranchList",
     }),
 
     // Запросить учителей
-    async fetchTeachers() {
-      this.isTeacherLoading = true;
-      await this._fetchTeachers();
-      this.isTeacherLoading = false;
-    },
+    // async fetchTeachers() {
+    //   this.isTeacherLoading = true;
+    //   await this._fetchTeachers();
+    //   this.isTeacherLoading = false;
+    // },
 
     // Запросить предметы центра
     async fetchCenterSubjects() {
@@ -241,56 +226,9 @@ export default {
 
     // Получить индекс группы (Выщитывается прибываляя время старта и конца)
     getGroupIndex(group, weekDayCode) {
-      const {start, end} = group?.days?.find(d => d.code === this.weekDayCode) || {start: "0", end: "0"};
+      const start = group[`${weekDayCode}_start`] || "0";
+      const end = group[`${weekDayCode}_end`] || "0";
       return +start.replace(":", "") + +end.replace(":", "");
-    },
-
-    // Скачать расписание для каждого учителя (в разных файлах)
-    downloadTeacherTables() {
-      this.teacherList.forEach(teacher => {
-        let content = [];
-
-        // Имя преподавателя
-        content.push({text: teacher.full_name, style: 'header', fontSize: 20, alignment: "center"});
-
-        // Группы в этого учителя
-        const groups = this.groupList.filter(g => g.teacher_id === teacher.id)
-
-        // Получить список групп по дню недели
-        const getGroupsByWeek = w => groups
-          .filter(g => !!g.days.find(d => d.code === w.code))
-          .sort((g1, g2) => this.getGroupIndex(g1, w.code) - this.getGroupIndex(g2, w.code))
-
-        // Группы по дням
-        const weekDays = weekdays.map(w => ({...w, groups: getGroupsByWeek(w)})).filter(w => w.groups.length)
-
-        // Бегаю по дня недели создаю таблицы
-        weekDays.forEach(weekDay => {
-
-          // День недели
-          content.push({text: weekDay.name, marginTop: 20, marginBottom: 5, fontSize: 16, alignment: "center"});
-
-          // Получить row для таблицы по группу
-          const getContentRow = group => {
-            const {start, end} = group.days.find(d => d.code === weekDay.code);
-            return [{text: `${start}-${end}`,alignment: "center"}, group.branch_address]
-          }
-
-          // Таблица по этому дню
-          content.push({
-            table: {
-              widths: [80,'*'],
-              body: [
-                [{text: "Время",fontSize: 14, alignment: "center"}, {text: "Адрес",fontSize: 14}],
-                ...weekDay.groups.map(getContentRow)
-              ]
-            }
-          })
-        })
-
-        // Скачивание (Если группы есть)
-        if (groups.length) pdfMake.createPdf({content}).download(`Расписание ${teacher.full_name}.pdf`);
-      })
     },
 
     // Скачать все расписание (По дням недели)
@@ -302,7 +240,7 @@ export default {
 
       // Получить список групп по дню недели
       const getGroupsByWeek = w => this.groupList
-        .filter(g => !!g.days.find(d => d.code === w.code))
+        .filter(group => !!group[`${w.code}_start`] && !!group[`${w.code}_end`])
         .sort((g1, g2) => this.getGroupIndex(g1, w.code) - this.getGroupIndex(g2, w.code))
 
       // Группы по дням
@@ -314,18 +252,19 @@ export default {
         // День недели
         content.push({text: weekDay.name, marginTop: 20, marginBottom: 5, fontSize: 16, alignment: "center"});
 
-        // Получить row для таблицы по группу (Время, Учитель, Предмет, Адрес)
+        // Получить row для таблицы по группу (Время, Предмет, Адрес)
         const getContentRow = group => {
-          const {start, end} = group.days.find(d => d.code === weekDay.code);
-          return [{text: `${start}-${end}`,alignment: "center"}, group.teacher_full_name, group.center_subject_name, group.branch_address]
+          const start = group[`${weekDay.code}_start`];
+          const end = group[`${weekDay.code}_end`];
+          return [{text: `${start}-${end}`,alignment: "center"}, group.institutionSubject.name, group.institutionBranch.address]
         }
 
         // Таблица по этому дню
         content.push({
           table: {
-            widths: [80,100, '*', '*'],
+            widths: [80,'*', '*'],
             body: [
-              [{text: "Время",fontSize: 14, alignment: "center"}, {text: "Учитель", fontSize: 14}, {text: "Предмет", fontSize: 14}, {text: "Адрес (Филиал)",fontSize: 14},],
+              [{text: "Время",fontSize: 14, alignment: "center"}, {text: "Предмет", fontSize: 14}, {text: "Адрес (Филиал)",fontSize: 14},],
               ...weekDay.groups.map(getContentRow)
             ]
           }
@@ -344,16 +283,16 @@ export default {
 
       // Получить row для таблицы по группу (Время, Учитель, Предмет, Адрес)
       const getContentRow = group => {
-        return [group.teacher_full_name, group.center_subject_name, group.days.map(d => `${weekdaysShortDictionary[d.code]}(${d.start}-${d.end})`).join(", "), group.branch_address]
+        return [group.institutionSubject?.name, weekdays.filter(weekday => group[`${weekday.code}_start`] && group[`${weekday.code}_end`]).map(weekDay => `${weekdaysShortDictionary[weekDay.code]}(${group[`${weekDay.code}_start`]}-${group[`${weekDay.code}_end`]})`).join(", "), group.institutionBranch?.address]
       }
 
       // Таблица по этому дню
       content.push({
         marginTop: 20,
         table: {
-          widths: [80,100, '*', '*'],
+          widths: [120, '*', '*'],
           body: [
-            [{text: "Учитель", fontSize: 14}, {text: "Предмет", fontSize: 14}, {text: "Дни и время",fontSize: 14}, {text: "Адрес (Филиал)",fontSize: 14},],
+            [{text: "Предмет", fontSize: 14}, {text: "Дни и время",fontSize: 14}, {text: "Адрес (Филиал)",fontSize: 14},],
             ...this.groupList.map(getContentRow)
           ]
         }
@@ -363,7 +302,7 @@ export default {
     }
   },
   mounted() {
-    this.fetchTeachers();
+    // this.fetchTeachers();
     this.fetchCenterSubjects();
     this.fetchBranches();
   }

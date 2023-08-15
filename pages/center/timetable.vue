@@ -50,11 +50,9 @@ export default {
     // Фильтрованный список
     filteredGroupList() {
       return this.groupList.filter(group => {
+
         // По предметам
         if (!this.filterBySubject(group)) return false;
-
-        // По Учителю
-        if (!this.filterByTeacher(group)) return false;
 
         return true;
       });
@@ -88,8 +86,8 @@ export default {
 
     // Фильтр по предметам
     filterBySubject(group) {
-      if (!this.filterParams.center_subject_id?.length) return true;
-      return this.filterParams.center_subject_id.includes(group.center_subject_id);
+      if (!this.filterParams.institution_subject_id?.length) return true;
+      return this.filterParams.institution_subject_id.includes(group.institution_subject_id);
     },
 
     // Фильтр по учителям

@@ -42,10 +42,15 @@ export default {
 
       // Пробегаюсь по группам
       this.list.forEach(group => {
+
         // Пробегаюсь по дням группы что бы везде записать
-        group.days.forEach(({code}) => {
-          if (!result[code]) result[code] = [];
-          result[code].push(group);
+        weekdays.forEach(({code}) => {
+          const startCode = `${code}_start`;
+          const endCode = `${code}_end`;
+          if (group[startCode] && group[endCode]) {
+            if (!result[code]) result[code] = [];
+            result[code].push(group);
+          }
         });
       })
 

@@ -38,7 +38,7 @@ export default {
   components: {removeSubjectModal, editSubjectModal},
   data: () => ({
     tableHeaders: [
-      { text: 'Название предмета', value: 'ru.name', sortable: false },
+      { text: 'Название предмета', value: 'name', sortable: false },
       { text: '', value: 'actions', sortable: false, width: 150},
     ],
     subjectCenterList: [],

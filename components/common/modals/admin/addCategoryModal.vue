@@ -36,7 +36,7 @@ export default {
     },
     // Очистить
     clear() {
-      this.category = {ru: {name: null}, kz: {name: null}};
+      this.category = {};
     },
     // Закрыть себя (Модалку)
     closeSelf() {

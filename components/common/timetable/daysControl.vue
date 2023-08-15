@@ -42,8 +42,8 @@ export default {
   name: "daysControl",
   props: {
     value: {
-      type: Array,
-      default: () => ([]) //{code: "monday", start: "09:00", end: "10:00"}
+      type: Object,
+      default: () => ({}) //{monday_start,monday_end,... }
     },
   },
   data: () => ({
@@ -52,45 +52,45 @@ export default {
   }),
   methods: {
 
-    // Получить значение из дня
+    // Получить значение из дня (property = "start"|"end")
     getDayValue(weekDayCode, property) {
-      return this.value.find(w => w.code === weekDayCode)?.[property];
+      return this.value[`${weekDayCode}_${property}`];
     },
 
     // Обновить данные дня
     setDayValue(weekDayCode, property, value) {
-      let newWeekdays = this.value.slice();
-      const index = newWeekdays.findIndex(w => w.code === weekDayCode);
-      newWeekdays[index][property] = value;
-      this.$emit("input", newWeekdays);
+      let newValue = {...this.value};
+      newValue[`${weekDayCode}_${property}`] = value;
+      this.$emit("input", newValue);
     },
 
     // День создан
     isDayCreated(weekDayCode) {
-      return this.value.some(w => w.code === weekDayCode);
+      return typeof this.value[`${weekDayCode}_start`] === "string" && typeof this.value[`${weekDayCode}_end`] === "string";
     },
 
     // Получить предположительное время -> {start, end}
-    getSupposeTime() {
-      if (!this.value.length) return {};
-      // Беру последнее время в списке
-      const {start, end} = this.value[this.value.length - 1];
-      return {start, end};
-    },
+    // getSupposeTime() {
+    //   if (!this.value.length) return {};
+    //   // Беру последнее время в списке
+    //   const {start, end} = this.value[this.value.length - 1];
+    //   return {start, end};
+    // },
 
     // Добавить урок в этот день
     addDay(weekDayCode) {
-      let newWeekdays = this.value.slice();
-      newWeekdays.push({...this.getSupposeTime(), code: weekDayCode});
-      this.$emit("input", newWeekdays);
+      let newValue = {...this.value};
+      newValue[`${weekDayCode}_start`] = "";
+      newValue[`${weekDayCode}_end`] = "";
+      this.$emit("input", newValue);
     },
 
     // Удалить день
     deleteDay(weekDayCode) {
-      let newWeekdays = this.value.slice();
-      const index = newWeekdays.findIndex(w => w.code === weekDayCode);
-      newWeekdays.splice(index, 1);
-      this.$emit("input", newWeekdays);
+      let newValue = {...this.value};
+      newValue[`${weekDayCode}_start`] = null;
+      newValue[`${weekDayCode}_end`] = null;
+      this.$emit("input", newValue);
     }
   }
 }

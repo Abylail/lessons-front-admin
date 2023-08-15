@@ -3,8 +3,9 @@
     <div class="edit-subject">
       <h2>Предмет</h2>
       <div class="edit-subject__form">
-        <v-autocomplete label="Предмет" v-model="subject.subject_id" item-value="id" item-text="ru.name" :items="subjectList" outlined dense :disabled="!isNewSubject" @change="subjectChanged($event)"/>
+        <v-autocomplete label="Предмет" v-model="subject.subject_id" item-value="id" item-text="name" :items="subjectList" outlined dense :disabled="!isNewSubject" @change="subjectChanged($event)"/>
         <v-text-field label="Имя предмета на русском" v-model="subject.name" maxlength="50" counter outlined dense/>
+        <v-textarea label="Описание предмета" v-model="subject.description" outlined dense/>
       </div>
       <div class="edit-subject__actions">
         <v-btn @click="closeSelf()">Отменить</v-btn>
@@ -21,7 +22,7 @@ export default {
   name: "editSubjectModal",
   data: () => ({
     // Информация учителя
-    subject: {ru: {}, kz: {}},
+    subject: {},
 
     // После успешного действия колбэк
     successCallback: null,
@@ -63,7 +64,7 @@ export default {
 
     // Очистка информации
     clear() {
-      this.subject = {ru: {}, kz: {}};
+      this.subject = {};
       this.successCallback = null;
     },
 
@@ -101,7 +102,7 @@ export default {
     // Вызов успешного колбэка (Вызывается после закрытия модалки)
     callSuccessCallback() {
       if (this.successCallback) {
-        const newCenterSubject = this.centerSubjectList.find(s => s.ru.name === this.subject.name && s.subject_id === this.subject.subject_id) || {};
+        const newCenterSubject = this.centerSubjectList.find(s => s.name === this.subject.name && s.subject_id === this.subject.subject_id) || {};
         const successCallback = this.successCallback;
         setTimeout(() => {
           successCallback(newCenterSubject);

@@ -9,117 +9,44 @@
     <!-- Информация центра -->
     <div class="settings__center">
       <h2 class="settings__title">Информация центра</h2>
-      <div class="relative-columns-2">
-        <div>
-          <h2 class="settings__sub-title">Информация на русском</h2>
-          <v-text-field label="Название центра (Рус)" v-model="centerInfo.ru.name" outlined dense/>
-          <v-textarea label="Описание центра (Рус)" v-model="centerInfo.ru.description" outlined dense/>
-        </div>
-        <div>
-          <h2 class="settings__sub-title">Информация на казахском</h2>
-          <v-text-field label="Название центра (Каз)" v-model="centerInfo.kz.name" outlined dense/>
-          <v-textarea label="Описание центра (Каз)" v-model="centerInfo.kz.description" outlined dense/>
-        </div>
+      <div>
+        <h2 class="settings__sub-title">Информация на русском</h2>
+        <v-text-field label="Название центра (Рус)" v-model="centerInfo.name" outlined dense/>
+        <v-textarea label="Описание центра (Рус)" v-model="centerInfo.description" outlined dense/>
       </div>
-      <v-text-field label="Ссылка на инстаграм" v-model="centerInfo.instagram" outlined dense/>
-      <v-btn
-        color="primary"
-        :loading="centerInfoLoading"
-        block
-        @click="saveCenterInfo()"
-      >Сохранить информацию центра</v-btn>
     </div>
 
-    <v-divider class="mt-3 mb-3"/>
+<!--    <v-divider class="mt-3 mb-3"/>-->
 
     <!-- Контактная информация -->
     <div class="settings__center">
-      <h2 class="settings__title">Контактная информация</h2>
-      <v-card class="settings__contact-card" v-for="(contact, index) in contactInfo" :key="index">
-        <div class="settings__contact-card-head">
-          <h3 class="mb-2">Контакт {{ index+1 }}</h3>
-          <v-btn title="Удалить контакт" icon @click="deleteContact(contact)"><v-icon color="red" small>mdi-delete</v-icon></v-btn>
-        </div>
-
-        <div class="relative-columns-2">
-          <v-text-field
-            label="Название на русском"
-            v-model="contact.ru.name"
-            hint="Пример: Номер менеджера"
-            persistent-hint outlined dense
-          />
-          <v-text-field
-            label="Название на казахском"
-            v-model="contact.kz.name"
-            hint="Пример: Номер менеджера"
-            persistent-hint outlined dense
-          />
-        </div>
-
-        <div class="relative-columns-2">
-          <v-text-field
-            label="Номер"
-            v-model="contact.phone"
-            v-mask="'+7 (###) ###-##-##'"
-            type="tel"
-            outlined dense hide-details
-          />
-          <v-switch
-            class="mt-1"
-            v-model="contact.can_call"
-            label="Можно звонить"
-            hide-details
-          />
-        </div>
-
-        <div class="relative-columns-2">
-          <v-switch
-            class="mt-1"
-            v-model="contact.whatsapp"
-            label="Это номер Whatsapp"
-            color="green"
-            hide-details
-          />
-        </div>
-
-        <slide>
-        <div class="relative-columns-2 mt-2" v-if="contact.whatsapp">
-          <v-text-field
-            label="Сообщение при переходе на whatsapp (русское)"
-            v-model="contact.ru.whatsapp_message"
-            hint="Здавствуйте пишу по поводу..."
-            persistent-hint outlined dense
-          />
-          <v-text-field
-            label="Сообщение при переходе на whatsapp (казахское)"
-            v-model="contact.kz.whatsapp_message"
-            hint="Здавствуйте пишу по поводу..."
-            persistent-hint outlined dense
-          />
-        </div>
-        </slide>
-      </v-card>
+      <h2 class="settings__sub-title">Контакты</h2>
       <div class="relative-columns-2">
-      <v-btn
-        class="mt-5"
-        color="primary"
-        block outlined
-        @click="addContact()"
-      >+ добавить контакт</v-btn>
-      <v-btn
-        class="mt-5" color="primary"
-        v-if="canSaveContacts"
-        :loading="contactInfoLoading"
-        block
-        @click="saveContactInfo()"
-      >Сохранить контакты центра</v-btn>
+        <v-text-field label="Ссылка на инстаграм" v-model="centerInfo.instagram_url" outlined dense/>
+        <v-text-field label="Email" v-model="centerInfo.email" outlined dense/>
+      </div>
+
+      <div class="relative-columns-2">
+        <v-text-field label="Телефон (для звонков)" v-model="centerInfo.call_phone" outlined dense/>
+        <v-text-field label="Телефон whatsapp" v-model="centerInfo.whatsapp_phone" outlined dense/>
+      </div>
+
+    </div>
+
+    <div class="settings__center">
+      <h2 class="settings__sub-title">Режим работы</h2>
+      <div class="relative-columns-2">
+        <v-text-field label="Начало" v-model="centerInfo.start_time" outlined dense/>
+        <v-text-field label="Конец" v-model="centerInfo.end_time" outlined dense/>
       </div>
     </div>
 
-
-    <!-- MODAL -->
-    <remove-contact-modal/>
-
+          <v-btn
+            color="primary"
+            :loading="centerInfoLoading"
+            block
+            @click="saveCenterInfo()"
+          >Сохранить информацию центра</v-btn>
   </div>
 </template>
 
@@ -128,11 +55,10 @@ import { activeCities } from "@/config/lists";
 import {mapActions, mapGetters} from "vuex";
 import Slide from "../../components/transitions/slide";
 import UserInfo from "../../components/common/user/userInfo";
-import RemoveContactModal from "@/components/common/modals/center/contact/removeContactModal";
 
 export default {
   name: "settings",
-  components: {RemoveContactModal, UserInfo, Slide},
+  components: {UserInfo, Slide},
   data: () => ({
     isLoading: false,
 
@@ -140,23 +66,13 @@ export default {
     activeCities,
 
     // Центр
-    centerInfo: { kz: {name: null, description: null}, ru: {} }, // { instagram, ru: { name, description } }
+    centerInfo: {}, //
     centerInfoLoading: false,
-
-    // Контакты
-    contactInfo: [], //{"phone": "", "whatsapp": true, "center_id": 1, "ru": {"name": "манагер"}, "kz": {"name": "манагер"}}
-    contactInfoLoading: false,
   }),
   computed: {
     ...mapGetters({
       _centerInfo: "center/getCenterInfo",
-      _contactInfo: "center/getContactInfo",
     }),
-
-    // Можно сохранить?
-    canSaveContacts() {
-      return this.contactInfo?.length;
-    }
   },
   watch: {
     _centerInfo: {
@@ -166,21 +82,11 @@ export default {
       },
       immediate: true
     },
-    _contactInfo: {
-      handler(val) {
-        if (!val) return;
-        this.contactInfo = JSON.parse(JSON.stringify(val));
-      },
-      immediate: true
-    }
   },
   methods: {
     ...mapActions({
       _saveCenterInfo: "center/saveCenterInfo",
       _fetchCenterInfo: "center/fetchCenterInfo",
-      _fetchContactInfo: "center/fetchContactInfo",
-      _saveContactInfo: "center/saveContactInfo",
-      _deleteContact: "center/deleteContact",
     }),
 
     // Валидация информации центра
@@ -202,39 +108,9 @@ export default {
       this.centerInfoLoading = false;
     },
 
-    // Добавить контакт
-    addContact() {
-      this.contactInfo.push({
-        "phone": null,
-        "whatsapp": false,
-        "can_call": false,
-        "ru": {"name": null}, "kz": {"name": null}
-      })
-    },
-
-    // Сохранить контакты
-    async saveContactInfo() {
-      this.contactInfoLoading = true;
-      await this._saveContactInfo(this.contactInfo);
-      await this._fetchContactInfo();
-      this.contactInfoLoading = false;
-    },
-
-    // Получить контакты
-    async fetchContactInfo() {
-      this.contactInfoLoading = true;
-      await this._fetchContactInfo();
-      this.contactInfoLoading = false;
-    },
-
-    async deleteContact(contact) {
-      this.$modal.show("remove-contact", {contact})
-    },
-
   },
   mounted() {
     this.fetchCenterInfo();
-    this.fetchContactInfo();
   }
 }
 </script>

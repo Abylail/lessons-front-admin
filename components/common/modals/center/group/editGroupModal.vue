@@ -6,27 +6,19 @@
       <div class="edit-group__form">
 
         <h3 class="mb-3">Основное</h3>
-        <div class="relative-columns-3">
-          <v-select
-            label="Учитель (обязательно)"
-            v-model="group.teacher_id"
-            :items="[...teacherList, {full_name: '+ новый учитель', id: 'new'}]"
-            item-text="full_name" item-value="id"
-            outlined dense
-            @change="$event === 'new' ? createNewTeacher() : null"
-          />
+        <div class="relative-columns-2">
           <v-select
             label="Предмет (обязательно)"
-            v-model="group.center_subject_id"
-            :items="[...centerSubjectList, {ru: {name: '+ новый предмет'}, id: 'new'}]"
+            v-model="group.institution_subject_id"
+            :items="[...centerSubjectList, {name: '+ новый предмет', id: 'new'}]"
             :disabled="!isNewGroup"
-            item-text="ru.name" item-value="id"
+            item-text="name" item-value="id"
             outlined dense
             @change="$event === 'new' ? createNewCenterSubject() : null"
           />
           <v-select
             label="Филиал (обязательно)"
-            v-model="group.branch_id"
+            v-model="group.institution_branch_id"
             :items="[...branchList, {address: '+ новый филиал', id: 'new'}]"
             :disabled="!isNewGroup"
             item-text="address" item-value="id"
@@ -35,19 +27,12 @@
           />
         </div>
 
-        <h3 class="mb-3">Описание группы</h3>
-        <div class="relative-columns-2">
-          <v-textarea
-            label="Описание группы на русском" rows="2"
-            v-model="group.ru.description"
-            outlined dense auto-grow
-          />
-          <v-textarea
-            label="Описание группы на казахском" rows="2"
-            v-model="group.kz.description"
-            outlined dense auto-grow
-          />
-        </div>
+<!--        <h3 class="mb-3">Описание группы</h3>-->
+<!--        <v-textarea-->
+<!--          label="Описание группы на русском" rows="2"-->
+<!--          v-model="group.description"-->
+<!--          outlined dense auto-grow-->
+<!--        />-->
 
         <h3 class="mb-3">Цена</h3>
         <div class="relative-columns-3">
@@ -101,7 +86,7 @@
           />
         </div>
 
-        <days-control v-model="group.days"/>
+        <days-control v-model="group"/>
 
         <div class="relative-columns-4">
           <v-btn class="mb-2" color="primary" :loading="isLoading" block @click="saveGroup()">Сохранить</v-btn>
@@ -120,7 +105,7 @@
 <script>
 import {mapActions, mapGetters} from "vuex";
 import DaysControl from "@/components/common/timetable/daysControl";
-const defaultGroupInfo = {ru: {description: null}, kz: {description: null}, days: [], price_trial: 0, language_ru: true, language_kz: false};
+const defaultGroupInfo = {price_trial: 0, language_ru: true, language_kz: false};
 
 export default {
   name: "editGroupModal",
@@ -171,7 +156,9 @@ export default {
 
     // Создать начальный день недели
     createDefaultDay(weekDayCode) {
-      this.group.days.push({ code: weekDayCode })
+      const startCode = `${weekDayCode}_start`;
+      const endCode = `${weekDayCode}_end`;
+      this.group = {[startCode]: "", [endCode]: "", ...this.group}
     },
 
     // Очистка информации
@@ -195,8 +182,8 @@ export default {
       if (await this.validate()) {
         let isSuccessFullUpdate = false;
 
-        if (this.isNewGroup)isSuccessFullUpdate = await this._createGroup(this.group);
-        else isSuccessFullUpdate = await this._updateGroup({newGroupInfo: this.group,  oldGroupInfo: JSON.parse(JSON.stringify(this.$modal.$payload.group))});
+        if (this.isNewGroup) isSuccessFullUpdate = await this._createGroup(this.group);
+        else isSuccessFullUpdate = await this._updateGroup(this.group);
 
         if (isSuccessFullUpdate) this.closeSelf();
       }
@@ -230,13 +217,13 @@ export default {
 
     // Создание нового учителя (открывается модалка по созданию, затем обратно в эту модалку)
     createNewBranch() {
-      this.group.branch_id = null;
+      this.group.institution_branch_id = null;
       let groupInfo = JSON.parse(JSON.stringify(this.group));
 
       setTimeout(() => {
         this.$modal.show("edit-branch", {
           successCallback: ({ id }) => {
-            groupInfo.branch_id = id;
+            groupInfo.institution_branch_id = id;
             this.$modal.show("edit-group", {group: groupInfo});
           }});
       }, 300);
@@ -246,13 +233,13 @@ export default {
 
     // Создание нового учителя (открывается модалка по созданию, затем обратно в эту модалку)
     createNewCenterSubject() {
-      this.group.center_subject_id = null;
+      this.group.institution_subject_id = null;
       let groupInfo = JSON.parse(JSON.stringify(this.group));
 
       setTimeout(() => {
         this.$modal.show("edit-subject", {
           successCallback: ({ id }) => {
-            groupInfo.center_subject_id = id;
+            groupInfo.institution_subject_id = id;
             this.$modal.show("edit-group", {group: groupInfo});
           }});
       }, 300);
@@ -269,6 +256,7 @@ export default {
   &__form {
     margin-top: 10px;
     padding-top: 10px;
+    padding-right: 15px;
     max-height: calc(80vh - 100px);
     overflow-y: auto;
     overflow-x: hidden;

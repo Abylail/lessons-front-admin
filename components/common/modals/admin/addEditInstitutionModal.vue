@@ -1,21 +1,23 @@
 <template>
-  <modal name="add-edit-institution" size="small" :close-on-out-click="false" close-button @onShow="getPayload()" @onHide="clear()">
+  <modal name="add-edit-institution" :close-on-out-click="false" close-button @onShow="getPayload()" @onHide="clear()">
     <div class="add-edit-institution">
       <h2 class="add-edit-institution__title">Создание и редактирование учреждения</h2>
 
       <div class="add-edit-institution__form">
+
         <v-text-field
           label="Название на русском"
           v-model="institution.name"
           outlined dense
         />
-        <v-text-field
-          label="Текстовый адрес"
-          v-model="institution.address"
+
+        <v-textarea
+          label="Описание"
+          v-model="institution.description"
           outlined dense
         />
 
-        <div class="add-edit-institution__form-column">
+        <div class="relative-columns-3">
           <v-text-field
             label="Начало работы"
             v-model="institution.start_time"
@@ -37,25 +39,51 @@
           outlined dense readonly
         />
 
-        <v-autocomplete
-          v-else
+        <div v-else>
+        <v-text-field
           label="Директор"
-          :value="institution.director_id"
+          v-mask="'+7 (###) ###-##-##'"
           placeholder="Введите номер"
           :items="directorOptions"
           item-value="id"
           item-text="phone"
           outlined dense return-object
-          @update:search-input="searchDirector($event)"
-          @input="setDirector($event)"
-        >
-          <template v-slot:selection="{ item }">
-            {{ item.last_name }} {{ item.first_name }}
-          </template>
-          <template v-slot:item="{ item }">
-            {{ item.last_name }} {{ item.first_name }} ({{ item.phone }})
-          </template>
-        </v-autocomplete>
+          @input="searchDirector($event)"
+        />
+        <v-btn
+          class="mb-8"
+          v-for="directorOption in directorOptions" :key="directorOption.id"
+          outlined color="primary"
+          @click="setDirector(directorOption)"
+        >Выбрать: {{ directorOption.last_name }} {{ directorOption.first_name }} ({{ directorOption.phone }})</v-btn>
+        </div>
+        <div class="relative-columns-2">
+          <v-text-field
+            label="Контактный номер (для звонков)"
+            v-mask="'+7 (###) ###-##-##'"
+            v-model="institution.call_phone"
+            outlined dense
+          />
+          <v-text-field
+            label="Номер whatsapp"
+            v-mask="'+7 (###) ###-##-##'"
+            v-model="institution.whatsapp_phone"
+            outlined dense
+          />
+        </div>
+
+        <div class="relative-columns-2">
+          <v-text-field
+            label="Email"
+            v-model="institution.email"
+            outlined dense
+          />
+          <v-text-field
+            label="Ссылка на инстаграм"
+            v-model="institution.instagram_url"
+            outlined dense
+          />
+        </div>
       </div>
 
       <div class="add-edit-institution__actions">
@@ -68,6 +96,7 @@
 
 <script>
 import {mapActions} from "vuex";
+import {removePhoneMask} from "@/helpers/masks";
 
 export default {
   name: "addEditInstitutionModal",
@@ -90,6 +119,8 @@ export default {
       _createInstitutions: "admin/institutions/createInstitutions",
       _searchDirector: "admin/institutions/searchDirector",
     }),
+
+    removePhoneMask,
 
     getPayload() {
       if (this.$modal.$payload && this.$modal.$payload.institution) {
@@ -120,7 +151,8 @@ export default {
     },
 
     async searchDirector(searchText) {
-      if (searchText?.length === 11 && !isNaN(+searchText)) this.directorOptions = await this._searchDirector(searchText);
+      const phone = removePhoneMask(searchText);
+      if (phone?.length === 11 && !isNaN(+phone)) this.directorOptions = await this._searchDirector(phone);
       else this.directorOptions = [];
     },
 
@@ -128,8 +160,11 @@ export default {
       this.isLoading = true;
       if (this.validate()) {
         let success = false;
-        if (this.isNew) success = await this._createInstitutions(this.institution);
-        else success = await this._updateInstitutions(this.institution);
+        let sendData = {...this.institution};
+        sendData.call_phone = removePhoneMask(sendData.call_phone);
+        sendData.whatsapp_phone = removePhoneMask(sendData.whatsapp_phone);
+        if (this.isNew) success = await this._createInstitutions(sendData);
+        else success = await this._updateInstitutions(sendData);
         if (success) this.closeSelf();
       }
       this.isLoading = false;
@@ -147,6 +182,8 @@ export default {
 
   &__form {
     margin-top: 20px;
+    padding-top: 5px;
+    overflow-y: auto;
   }
 
   &__form-column {

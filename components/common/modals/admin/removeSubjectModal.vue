@@ -17,7 +17,7 @@ export default {
   name: "removeSubjectModal",
   data: () => ({
     // Информация категории
-    subject: {ru: {name: null}, kz: {name: null}},
+    subject: {},
 
     isLoading:false,
   }),
@@ -35,7 +35,7 @@ export default {
 
     // Очистка информации
     clear() {
-      this.subject = {ru: {name: null}, kz: {name: null}};
+      this.subject = {};
     },
 
     // Закрыть себя (модалку)
