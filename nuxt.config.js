@@ -33,6 +33,7 @@ export default {
     "~/plugins/external",
     "~/plugins/apiLayer",
     "~/plugins/filters",
+    "~/plugins/yandex",
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components

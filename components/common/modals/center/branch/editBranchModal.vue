@@ -17,6 +17,7 @@
           <v-text-field label="Email" v-model="branch.email" outlined dense clearable/>
           <v-text-field label="Ссылка инстаграм" v-model="branch.instagram_url" outlined dense clearable/>
         </div>
+        <base-yandex-map title="Укажите расложение филиала" v-model="branch.coordinates"/>
       </div>
       <div class="edit-branch__actions">
         <v-btn @click="closeSelf()">Отменить</v-btn>
@@ -29,10 +30,11 @@
 <script>
 import {mapActions, mapGetters} from "vuex";
 import BasePhoneInput from "@/components/base/BasePhoneInput";
+import BaseYandexMap from "@/components/base/BaseYandexMap";
 
 export default {
   name: "editBranchModal",
-  components: {BasePhoneInput},
+  components: {BaseYandexMap, BasePhoneInput},
   data: () => ({
     // Информация филиала
     branch: {},
