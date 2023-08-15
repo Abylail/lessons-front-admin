@@ -37,6 +37,9 @@
             @input="bindRole($event, item)"
           />
         </template>
+        <template v-slot:item.phone="{ item }">
+          {{ item.phone | vmask('+7 (###) ###-##-##') }}
+        </template>
         <template v-slot:item.delete="{ item }">
           <v-btn icon @click="userDeleteHandle(item)"><v-icon color="red">mdi-delete</v-icon></v-btn>
         </template>

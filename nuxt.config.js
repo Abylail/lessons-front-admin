@@ -56,6 +56,7 @@ export default {
     "@nuxtjs/device",
     "@nuxtjs/axios",
     "vue2-editor/nuxt",
+    "@nuxtjs/dotenv",
   ],
 
   // Axios

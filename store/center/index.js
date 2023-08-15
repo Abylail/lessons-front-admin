@@ -36,26 +36,51 @@ export const actions = {
   // Сохранить информацию центра
   async saveCenterInfo({ commit, rootGetters }, centerInfo) {
     const { institution_id } = rootGetters["auth/getUserInfo"];
-    await this.$api.$put(`/api/v1/admin/institution/update/${institution_id}`, {
-      ...centerInfo,
-    })
+    if (!institution_id) return;
+    await this.$api.$put(`/api/v1/admin/institution/update/${institution_id}`, centerInfo)
       .then(({err, body}) => {
         if (!err) {
-          console.log(body);
           this.$toast.success("Информация центра сохранена");
         }
       })
   },
 
-  // Получить контакты
-  async fetchContactInfo({ commit, rootGetters }) {
-    const { center_id } = rootGetters["auth/getUserInfo"];
-    if (!center_id) return;
-    await this.$api.$get(`/api/v1/center/contact/get/${center_id}`)
-      .then(({err, body}) => {
+  // Загрузка фото
+  async uploadLogo({ commit, rootGetters, dispatch }, base64) {
+    const { institution_id } = rootGetters["auth/getUserInfo"];
+    if (!institution_id) return;
+    await this.$api.$post(`/api/v1/admin/institution/update/${institution_id}/upload/logo`, {buffer: base64})
+      .then(({err}) => {
         if (!err) {
-          commit("set", ["contactInfo", body]);
+          this.$toast.success("Фото загруженно");
         }
       })
+    await dispatch("fetchCenterInfo");
+  },
+
+  // Загрузка фото
+  async addPhoto({ commit, rootGetters, dispatch }, base64) {
+    const { institution_id } = rootGetters["auth/getUserInfo"];
+    if (!institution_id) return;
+    await this.$api.$post(`/api/v1/admin/institution/update/${institution_id}/upload/photo`, {buffer: base64})
+      .then(({err}) => {
+        if (!err) {
+          this.$toast.success("Фото загруженно");
+        }
+      })
+    await dispatch("fetchCenterInfo");
+  },
+
+  // Удаление фото
+  async removePhoto({ commit, rootGetters, dispatch }, imagePath) {
+    const { institution_id } = rootGetters["auth/getUserInfo"];
+    if (!institution_id) return;
+    await this.$api.$post(`/api/v1/admin/institution/update/${institution_id}/remove/photo`, {imagePath})
+      .then(({err}) => {
+        if (!err) {
+          this.$toast("Фото удаленно");
+        }
+      })
+    await dispatch("fetchCenterInfo");
   },
 }

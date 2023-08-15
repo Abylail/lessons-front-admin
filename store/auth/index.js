@@ -52,8 +52,7 @@ export const actions = {
   // Логин через username ang password
   async login({ commit }, {phone, password}) {
     if (!phone || !password) return;
-    const phonePreparing = phone.replaceAll(/\D+/g, "")
-    await this.$api.$post("/api/v1/admin/user/login", {phone: phonePreparing, password})
+    await this.$api.$post("/api/v1/admin/user/login", {phone, password})
       .then(({err, body}) => {
         if (!err) {
           commit("set", ["userInfo", body]);

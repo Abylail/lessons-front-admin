@@ -40,14 +40,10 @@
         />
 
         <div v-else>
-        <v-text-field
+        <base-phone-input
           label="Директор"
-          v-mask="'+7 (###) ###-##-##'"
           placeholder="Введите номер"
-          :items="directorOptions"
-          item-value="id"
-          item-text="phone"
-          outlined dense return-object
+          outlined dense
           @input="searchDirector($event)"
         />
         <v-btn
@@ -58,15 +54,13 @@
         >Выбрать: {{ directorOption.last_name }} {{ directorOption.first_name }} ({{ directorOption.phone }})</v-btn>
         </div>
         <div class="relative-columns-2">
-          <v-text-field
+          <base-phone-input
             label="Контактный номер (для звонков)"
-            v-mask="'+7 (###) ###-##-##'"
             v-model="institution.call_phone"
             outlined dense
           />
-          <v-text-field
+          <base-phone-input
             label="Номер whatsapp"
-            v-mask="'+7 (###) ###-##-##'"
             v-model="institution.whatsapp_phone"
             outlined dense
           />
@@ -97,9 +91,11 @@
 <script>
 import {mapActions} from "vuex";
 import {removePhoneMask} from "@/helpers/masks";
+import BasePhoneInput from "@/components/base/BasePhoneInput";
 
 export default {
   name: "addEditInstitutionModal",
+  components: {BasePhoneInput},
   data: () => ({
     institution: {},
 
@@ -160,11 +156,8 @@ export default {
       this.isLoading = true;
       if (this.validate()) {
         let success = false;
-        let sendData = {...this.institution};
-        sendData.call_phone = removePhoneMask(sendData.call_phone);
-        sendData.whatsapp_phone = removePhoneMask(sendData.whatsapp_phone);
-        if (this.isNew) success = await this._createInstitutions(sendData);
-        else success = await this._updateInstitutions(sendData);
+        if (this.isNew) success = await this._createInstitutions(this.institution);
+        else success = await this._updateInstitutions(this.institution);
         if (success) this.closeSelf();
       }
       this.isLoading = false;

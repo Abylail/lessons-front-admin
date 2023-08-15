@@ -6,9 +6,8 @@
       <div class="login-page__main">
 
         <!-- phone -->
-        <v-text-field
+        <base-phone-input
           label="Телефон"
-          v-mask="'+7 (###) ###-##-##'"
           v-model="authData.phone"
           ref="phoneInput"
           outlined
@@ -38,8 +37,10 @@
 
 <script>
 import {mapActions} from "vuex";
+import BasePhoneInput from "@/components/base/BasePhoneInput";
 export default {
   name: "index",
+  components: {BasePhoneInput},
   layout: "empty",
   data: () => ({
     phone: "",
@@ -76,10 +77,6 @@ export default {
       this.$router.push("/");
     }
   },
-  mounted() {
-    // Что бы клава была для телефона
-    this.$refs.phoneInput.$refs.input.setAttribute("inputmode", "tel");
-  }
 }
 </script>
 

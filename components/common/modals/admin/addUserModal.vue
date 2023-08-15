@@ -13,11 +13,10 @@
           v-model="user.first_name"
           outlined dense
         />
-        <v-text-field
+        <base-phone-input
           label="Телефон"
           ref="phoneInput"
           v-model="user.phone"
-          v-mask="'+7 (###) ###-##-##'"
           outlined dense
         />
         <v-text-field
@@ -36,9 +35,11 @@
 
 <script>
 import {mapActions} from "vuex";
+import BasePhoneInput from "@/components/base/BasePhoneInput";
 
 export default {
   name: "addUserModal",
+  components: {BasePhoneInput},
   data: () => ({
     user: {},
 
@@ -59,9 +60,7 @@ export default {
     },
 
     onShow() {
-      this.$nextTick(() => {
-        this.$refs.phoneInput.$refs.input.setAttribute("inputmode", "tel");
-      })
+
     },
 
     // Очистить

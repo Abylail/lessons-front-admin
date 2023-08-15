@@ -27,8 +27,8 @@
       </div>
 
       <div class="relative-columns-2">
-        <v-text-field label="Телефон (для звонков)" v-model="centerInfo.call_phone" outlined dense/>
-        <v-text-field label="Телефон whatsapp" v-model="centerInfo.whatsapp_phone" outlined dense/>
+        <base-phone-input label="Телефон (для звонков)" v-model="centerInfo.call_phone" outlined dense/>
+        <base-phone-input label="Телефон whatsapp" v-model="centerInfo.whatsapp_phone" outlined dense/>
       </div>
 
     </div>
@@ -41,12 +41,35 @@
       </div>
     </div>
 
-          <v-btn
-            color="primary"
-            :loading="centerInfoLoading"
-            block
-            @click="saveCenterInfo()"
-          >Сохранить информацию центра</v-btn>
+    <v-btn
+      color="primary"
+      :loading="centerInfoLoading"
+      block
+      @click="saveCenterInfo()"
+    >Сохранить информацию центра</v-btn>
+
+    <v-divider class="mt-3 mb-3"/>
+
+    <h2 class="settings__title">Медиа центра</h2>
+
+    <div class="settings__center" v-if="isExist">
+      <h2 class="settings__sub-title">Логотип центра</h2>
+      <base-photo-input
+        :value="centerInfo.logo"
+        @upload="inputLogoHandle($event)"
+      />
+    </div>
+
+    <div class="settings__center mt-3">
+      <h2 class="settings__sub-title">Фотки центра</h2>
+      <base-photo-input
+        :value="centerInfo.photos"
+        multiple
+        @upload="inputPhotoHandle($event)"
+        @remove="removePhotoHandle($event)"
+      />
+    </div>
+
   </div>
 </template>
 
@@ -55,10 +78,12 @@ import { activeCities } from "@/config/lists";
 import {mapActions, mapGetters} from "vuex";
 import Slide from "../../components/transitions/slide";
 import UserInfo from "../../components/common/user/userInfo";
+import BasePhotoInput from "@/components/base/BasePhotoInput";
+import BasePhoneInput from "@/components/base/BasePhoneInput";
 
 export default {
   name: "settings",
-  components: {UserInfo, Slide},
+  components: {BasePhoneInput, BasePhotoInput, UserInfo, Slide},
   data: () => ({
     isLoading: false,
 
@@ -73,6 +98,11 @@ export default {
     ...mapGetters({
       _centerInfo: "center/getCenterInfo",
     }),
+
+    // Существующий центр
+    isExist() {
+      return !!this.centerInfo.id
+    }
   },
   watch: {
     _centerInfo: {
@@ -87,6 +117,9 @@ export default {
     ...mapActions({
       _saveCenterInfo: "center/saveCenterInfo",
       _fetchCenterInfo: "center/fetchCenterInfo",
+      _uploadLogo: "center/uploadLogo",
+      _addPhoto: "center/addPhoto",
+      _removePhoto: "center/removePhoto",
     }),
 
     // Валидация информации центра
@@ -108,6 +141,24 @@ export default {
       this.centerInfoLoading = false;
     },
 
+    // Загрузка лого
+    async inputLogoHandle(base64Image) {
+      if (!base64Image) return;
+      if (this.centerInfo.logo && !confirm("Вы точно хотите сменить лого?")) return;
+      await this._uploadLogo(base64Image);
+    },
+
+    // Загрузка лого
+    async inputPhotoHandle(base64Image) {
+      if (!base64Image) return;
+      await this._addPhoto(base64Image);
+    },
+
+    // Загрузка лого
+    async removePhotoHandle(imagePath) {
+      if (!imagePath) return;
+      await this._removePhoto(imagePath);
+    },
   },
   mounted() {
     this.fetchCenterInfo();

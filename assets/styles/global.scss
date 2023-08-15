@@ -44,3 +44,8 @@
 .modal__content {
   overflow: auto;
 }
+
+.disabled {
+  opacity: .7;
+  pointer-events: none;
+}

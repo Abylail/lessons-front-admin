@@ -14,6 +14,9 @@
       item-key="id"
       hide-default-footer
     >
+      <template v-slot:item.call_phone="{ item }">
+        {{ item.call_phone | vmask('+7 (###) ###-##-##') }}
+      </template>
       <template v-slot:item.actions="{ item }">
         <v-btn icon><v-icon>mdi-timetable</v-icon></v-btn>
         <v-btn icon @click="editHandle(item)"><v-icon>mdi-pencil</v-icon></v-btn>

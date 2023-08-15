@@ -6,8 +6,8 @@
         <v-text-field label="Адрес" v-model="branch.address" outlined dense/>
         <v-textarea label="Описание как пройти" v-model="branch.address_description" no-resize outlined dense/>
         <div class="relative-columns-2">
-          <v-text-field label="Телефон (для звонков)" v-model="branch.call_phone" outlined dense/>
-          <v-text-field label="Телефон (whatsapp)" v-model="branch.whatsapp_phone" outlined dense/>
+          <base-phone-input label="Телефон (для звонков)" v-model="branch.call_phone" outlined dense/>
+          <base-phone-input label="Телефон (whatsapp)" v-model="branch.whatsapp_phone" outlined dense/>
         </div>
         <div class="relative-columns-2">
           <v-text-field label="Ссылка 2гис" v-model="branch.two_gis_url" outlined dense clearable/>
@@ -28,9 +28,11 @@
 
 <script>
 import {mapActions, mapGetters} from "vuex";
+import BasePhoneInput from "@/components/base/BasePhoneInput";
 
 export default {
   name: "editBranchModal",
+  components: {BasePhoneInput},
   data: () => ({
     // Информация филиала
     branch: {},
