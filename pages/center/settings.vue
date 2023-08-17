@@ -56,6 +56,7 @@
       <h2 class="settings__sub-title">Логотип центра</h2>
       <base-photo-input
         :value="centerInfo.logo"
+        :loading="isLogoLoading"
         @upload="inputLogoHandle($event)"
       />
     </div>
@@ -64,6 +65,7 @@
       <h2 class="settings__sub-title">Фотки центра</h2>
       <base-photo-input
         :value="centerInfo.photos"
+        :loading="isPhotoLoading"
         multiple
         @upload="inputPhotoHandle($event)"
         @remove="removePhotoHandle($event)"
@@ -85,7 +87,8 @@ export default {
   name: "settings",
   components: {BasePhoneInput, BasePhotoInput, UserInfo, Slide},
   data: () => ({
-    isLoading: false,
+    isPhotoLoading: false,
+    isLogoLoading: false,
 
     // Список городов
     activeCities,
@@ -145,13 +148,17 @@ export default {
     async inputLogoHandle(base64Image) {
       if (!base64Image) return;
       if (this.centerInfo.logo && !confirm("Вы точно хотите сменить лого?")) return;
+      this.isLogoLoading = true;
       await this._uploadLogo(base64Image);
+      this.isLogoLoading = false;
     },
 
     // Загрузка лого
     async inputPhotoHandle(base64Image) {
       if (!base64Image) return;
+      this.isPhotoLoading = true;
       await this._addPhoto(base64Image);
+      this.isPhotoLoading = false;
     },
 
     // Загрузка лого

@@ -88,6 +88,7 @@ export default {
 
   &__list {
     display: flex;
+    flex-wrap: wrap;
   }
 
   &__item {

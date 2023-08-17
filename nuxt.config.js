@@ -67,9 +67,14 @@ export default {
     proxy: true
   },
 
+  router: {
+    base: process.env.BASE_URL
+  },
+
   proxy: {
-    "/api": {
+    [process.env.BASE_URL + "/api"]: {
       target: process.env.BACKEND_URL,
+      pathRewrite: {[process.env.BASE_URL]: ''}
     }
   },
 
