@@ -22,6 +22,10 @@ export default {
     ]
   },
 
+  server: {
+    port: 3001
+  },
+
   // Global CSS: https://go.nuxtjs.dev/config-css
   css: [
     "~/assets/styles/global.scss",
