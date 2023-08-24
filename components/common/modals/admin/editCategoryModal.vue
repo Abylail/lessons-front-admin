@@ -1,9 +1,10 @@
 <template>
-  <modal name="add-category" size="small" :close-on-out-click="false" close-button @onShow="getPayload()" @onHide="clear()">
+  <modal name="edit-category" size="small" :close-on-out-click="false" close-button @onShow="getPayload()" @onHide="clear()">
     <div class="edit-category">
       <h2>Категория</h2>
       <div class="edit-category__form">
         <v-text-field label="Название на русском" v-model="category.name" outlined dense/>
+        <v-text-field label="Иконка mdi" v-model="category.icon_mdi" hint="Пример: mdi-pencil" outlined dense/>
       </div>
       <div class="edit-teacher__actions">
         <v-btn @click="closeSelf()">Отменить</v-btn>
@@ -24,9 +25,15 @@ export default {
 
     isLoading: false,
   }),
+  computed: {
+    isNew() {
+      return !this.category.id;
+    }
+  },
   methods: {
     ...mapActions({
       _createCategory: "admin/categories/createCategory",
+      _updateCategory: "admin/categories/updateCategory",
     }),
     // Получить вложения
     getPayload() {
@@ -40,7 +47,7 @@ export default {
     },
     // Закрыть себя (Модалку)
     closeSelf() {
-      this.$modal.hide("add-category");
+      this.$modal.hide("edit-category");
     },
     // Валидация информации категории
     async validate() {
@@ -53,7 +60,8 @@ export default {
     async saveCategory() {
       this.isLoading = true;
       if (await this.validate()) {
-        await this._createCategory(this.category);
+        if (this.isNew) await this._createCategory(this.category);
+        else await this._updateCategory(this.category);
         this.closeSelf();
       }
       this.isLoading = false;

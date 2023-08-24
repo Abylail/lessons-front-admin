@@ -37,6 +37,17 @@ export const actions = {
       })
   },
 
+  // Создать категорию
+  async updateCategory({ rootGetters, dispatch  }, categoryInfo) {
+    await this.$api.$put(`/api/v1/admin/category/update/${categoryInfo.code}`, categoryInfo)
+      .then(({err, body}) => {
+        if (!err) {
+          this.$toast.success("Категория обновленна");
+          dispatch("fetchCategoryList");
+        }
+      })
+  },
+
   // Удалить категорию
   async deleteCategory({ dispatch }, categoryInfo) {
     await this.$api.$delete(`/api/v1/admin/category/delete/${categoryInfo.code}`)

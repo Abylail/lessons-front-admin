@@ -14,14 +14,18 @@
       item-key="id"
       hide-default-footer
     >
+      <template v-slot:item.icon_mdi="{ item }">
+        <v-icon>{{ item.icon_mdi }}</v-icon>
+      </template>
       <template v-slot:item.actions="{ item }">
+        <v-btn icon @click="updateHandle(item)"><v-icon>mdi-pencil</v-icon></v-btn>
         <v-btn icon @click="deleteHandle(item)"><v-icon color="red">mdi-delete</v-icon></v-btn>
       </template>
     </v-data-table>
 
 
     <!-- MODALS -->
-    <add-category-modal/>
+    <edit-category-modal/>
     <remove-category-modal/>
 
   </div>
@@ -30,15 +34,16 @@
 <script>
 import {mapActions, mapGetters} from "vuex";
 import RemoveCategoryModal from "../../components/common/modals/admin/removeCategoryModal";
-import AddCategoryModal from "../../components/common/modals/admin/addCategoryModal";
+import EditCategoryModal from "../../components/common/modals/admin/editCategoryModal";
 
 export default {
   name: "categories",
-  components: {RemoveCategoryModal, AddCategoryModal},
+  components: {RemoveCategoryModal, EditCategoryModal},
   data: () => ({
     // Заголовки для таблицы
     tableHeaders: [
       { text: 'Название на русском', value: 'name', sortable: false},
+      { text: 'Иконка', value: 'icon_mdi', sortable: false},
       { text: '', value: 'actions', sortable: false, width: 150},
     ],
 
@@ -74,7 +79,11 @@ export default {
 
     // Создать категорию
     createHandle() {
-      this.$modal.show("add-category");
+      this.$modal.show("edit-category");
+    },
+
+    updateHandle(category) {
+      this.$modal.show("edit-category", {category});
     },
 
     // Удалить категорию
