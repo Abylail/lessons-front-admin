@@ -86,5 +86,31 @@ export const actions = {
           dispatch("fetchSubjectCenterList");
         }
       })
-  }
+  },
+
+  // Загрузка фото
+  async addPhoto({ commit, rootGetters, dispatch }, {buffer, subject}) {
+    const { institution_id } = rootGetters["auth/getUserInfo"];
+    if (!institution_id) return;
+    await this.$api.$post(`/api/v1/admin/institution/${institution_id}/subject/uploadPhoto/${subject.id}`, {buffer})
+      .then(async ({err}) => {
+        if (!err) {
+          this.$toast.success("Фото загруженно");
+          await dispatch("fetchSubjectCenterList");
+        }
+      })
+  },
+
+  // Удаление фото
+  async removePhoto({ commit, rootGetters, dispatch }, {imagePath, subject}) {
+    const { institution_id } = rootGetters["auth/getUserInfo"];
+    if (!institution_id) return;
+    await this.$api.$post(`/api/v1/admin/institution/${institution_id}/subject/removePhoto/${subject.id}`, {imagePath})
+      .then(async ({err}) => {
+        if (!err) {
+          this.$toast("Фото удаленно");
+          await dispatch("fetchSubjectCenterList");
+        }
+      })
+  },
 }

@@ -15,6 +15,15 @@
       hide-default-footer
       mobile-breakpoint="0"
     >
+      <template v-slot:item.photos="{ item }">
+        <base-photo-input
+          :value="item.photos"
+          size="small"
+          multiple
+          @upload="inputPhotoHandle($event, item)"
+          @remove="removePhotoHandle($event, item)"
+        />
+      </template>
       <template v-slot:item.actions="{ item }">
         <v-btn icon><v-icon>mdi-timetable</v-icon></v-btn>
         <v-btn icon @click="editHandle(item)"><v-icon>mdi-pencil</v-icon></v-btn>
@@ -33,12 +42,14 @@
 import editSubjectModal from "@/components/common/modals/center/subject/editSubjectModal";
 import {mapActions, mapGetters} from "vuex";
 import removeSubjectModal from "@/components/common/modals/center/subject/removeSubjectModal";
+import BasePhotoInput from "~/components/base/BasePhotoInput";
 export default {
   name: "subjects",
-  components: {removeSubjectModal, editSubjectModal},
+  components: {BasePhotoInput, removeSubjectModal, editSubjectModal},
   data: () => ({
     tableHeaders: [
       { text: 'Название предмета', value: 'name', sortable: false },
+      { text: 'Фото', value: 'photos', sortable: false },
       { text: '', value: 'actions', sortable: false, width: 150},
     ],
     subjectCenterList: [],
@@ -62,6 +73,8 @@ export default {
     ...mapActions({
       _fetchCenterSubjectList: "center/subjects/fetchSubjectCenterList",
       _fetchSubjectList: "center/subjects/fetchSubjectList",
+      _addPhoto: "center/subjects/addPhoto",
+      _removePhoto: "center/subjects/removePhoto"
     }),
 
     async fetchList() {
@@ -87,6 +100,22 @@ export default {
     deleteHandle(subject) {
       this.$modal.show("remove-subject", { subject });
     },
+
+    // Загрузить фото
+    async inputPhotoHandle(base64Image, subject) {
+      if (!base64Image) return;
+      this.isLoading = true;
+      await this._addPhoto({buffer: base64Image, subject});
+      this.isLoading = false;
+    },
+
+    // Загрузить фото
+    async removePhotoHandle(imagePath, subject) {
+      if (!imagePath) return;
+      this.isLoading = true;
+      await this._removePhoto({imagePath, subject});
+      this.isLoading = false;
+    }
   },
   mounted() {
     this.fetchList();

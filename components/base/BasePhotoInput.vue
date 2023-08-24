@@ -2,12 +2,12 @@
   <div class="base-photo-input">
 
     <div class="base-photo-input__list" :class="{disabled: isLoading}">
-      <div class="base-photo-input__item" v-for="(imageUrl, index) in selfValue" :key="index">
+      <div class="base-photo-input__item" :style="{height: imageSize, width: imageSize}" v-for="(imageUrl, index) in selfValue" :key="index">
         <img class="base-photo-input__image" :src="getImageUrl(imageUrl)"/>
         <div class="base-photo-input__edit" v-if="!multiple" @click.stop="triggerInput()"><v-icon>mdi-pencil</v-icon></div>
         <div class="base-photo-input__remove" v-else @click.stop="removeHandle(imageUrl)"><v-icon>mdi-close</v-icon></div>
       </div>
-      <div class="base-photo-input__add" v-if="showPlus" @click.stop="triggerInput()">
+      <div class="base-photo-input__add" :style="{height: imageSize, width: imageSize}" v-if="showPlus" @click.stop="triggerInput()">
         <v-icon color="primary">mdi-plus</v-icon>
       </div>
     </div>
@@ -33,6 +33,11 @@ export default {
     loading: {
       type: Boolean,
       default: false
+    },
+    size: {
+      type: String,
+      default: "default",
+      validator: val => ["default", "small"].includes(val)
     }
   },
   data: () => ({
@@ -51,6 +56,11 @@ export default {
     showPlus() {
       if (this.multiple) return true;
       return !this.value;
+    },
+
+    imageSize() {
+      if (this.size === "small") return "50px";
+      return "120px"
     }
   },
   methods: {
@@ -93,8 +103,6 @@ export default {
 
   &__item {
     position: relative;
-    height: 120px;
-    width: 120px;
     margin-right: 10px;
     margin-bottom: 10px;
   }
@@ -139,8 +147,6 @@ export default {
     align-items: center;
     justify-content: center;
     position: relative;
-    height: 120px;
-    width: 120px;
     border: 2px solid #1976d2;
     border-radius: 5px;
     cursor: pointer;
