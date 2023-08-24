@@ -3,7 +3,7 @@
     <div class="edit-category">
       <h2>Категория</h2>
       <div class="edit-category__form">
-        <v-text-field label="Название на русском" v-model="category.name" outlined dense/>
+        <v-text-field label="Название на русском" v-model="category.name" :readonly="!isNew" outlined dense/>
         <v-text-field label="Иконка mdi" v-model="category.icon_mdi" hint="Пример: mdi-pencil" outlined dense/>
       </div>
       <div class="edit-teacher__actions">
