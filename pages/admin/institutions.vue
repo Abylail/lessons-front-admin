@@ -14,6 +14,7 @@
         :loading="isLoading"
         item-key="id"
         hide-default-footer
+        disable-pagination
       >
         <template v-slot:item.type="{ item }">
           <span v-if="item.type === 'center'">Центр</span>

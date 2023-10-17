@@ -13,6 +13,7 @@
       :loading="isLoading"
       item-key="id"
       hide-default-footer
+      disable-pagination
     >
       <template v-slot:item.call_phone="{ item }">
         {{ item.call_phone | vmask('+7 (###) ###-##-##') }}

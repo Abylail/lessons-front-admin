@@ -6,7 +6,7 @@
       <div class="add-edit-institution__form">
 
         <v-text-field
-          label="Название на русском"
+          label="Название"
           v-model="institution.name"
           outlined dense
         />

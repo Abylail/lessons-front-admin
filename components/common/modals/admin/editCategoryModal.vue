@@ -3,8 +3,9 @@
     <div class="edit-category">
       <h2>Категория</h2>
       <div class="edit-category__form">
-        <v-text-field label="Название на русском" v-model="category.name" :readonly="!isNew" outlined dense/>
-        <v-text-field label="Иконка mdi" v-model="category.icon_mdi" hint="Пример: mdi-pencil" outlined dense/>
+        <v-text-field label="Название" v-model="category.name" :readonly="!isNew" outlined dense/>
+        <v-text-field label="Иконка mdi" v-model="category.icon_mdi" hint="Пример: mdi-pencil" :prepend-icon="category.icon_mdi" outlined dense hide-details/>
+        <a class="d-block mb-5 mt-2" href="https://pictogrammers.com/library/mdi/" target="_blank">Ссылка на иконки</a>
       </div>
       <div class="edit-teacher__actions">
         <v-btn @click="closeSelf()">Отменить</v-btn>

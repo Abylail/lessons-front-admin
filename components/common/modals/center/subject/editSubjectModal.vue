@@ -4,7 +4,7 @@
       <h2>Предмет</h2>
       <div class="edit-subject__form">
         <v-autocomplete label="Предмет" v-model="subject.subject_id" item-value="id" item-text="name" :items="subjectList" outlined dense :disabled="!isNewSubject" @change="subjectChanged($event)"/>
-        <v-text-field label="Имя предмета на русском" v-model="subject.name" maxlength="50" counter outlined dense/>
+        <v-text-field label="Имя предмета" v-model="subject.name" maxlength="50" counter outlined dense/>
         <v-textarea label="Описание предмета" v-model="subject.description" outlined dense/>
       </div>
       <div class="edit-subject__actions">
@@ -89,7 +89,7 @@ export default {
     // Валидация информации предмета
     async validate() {
       if (!this.subject.name) {
-        this.$toast.error("Введите название предмета на русском");
+        this.$toast.error("Введите название предмета");
         return false;
       }
       if (!this.subject.subject_id) {

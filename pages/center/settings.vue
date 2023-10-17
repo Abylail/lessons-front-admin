@@ -6,17 +6,21 @@
 
     <v-divider class="mt-3 mb-3"/>
 
+    <div v-if="!isExist">
+      К вам не привязан центр, обратитесь к администратору
+    </div>
+
     <!-- Информация центра -->
+    <div v-if="isExist">
+
     <div class="settings__center">
       <h2 class="settings__title">Информация центра</h2>
       <div>
-        <h2 class="settings__sub-title">Информация на русском</h2>
-        <v-text-field label="Название центра (Рус)" v-model="centerInfo.name" outlined dense/>
-        <v-textarea label="Описание центра (Рус)" v-model="centerInfo.description" outlined dense/>
+        <h2 class="settings__sub-title">Информация</h2>
+        <v-text-field label="Название центра" v-model="centerInfo.name" outlined dense/>
+        <v-textarea label="Описание центра" v-model="centerInfo.description" outlined dense/>
       </div>
     </div>
-
-<!--    <v-divider class="mt-3 mb-3"/>-->
 
     <!-- Контактная информация -->
     <div class="settings__center">
@@ -52,7 +56,7 @@
 
     <h2 class="settings__title">Медиа центра</h2>
 
-    <div class="settings__center" v-if="isExist">
+    <div class="settings__center">
       <h2 class="settings__sub-title">Логотип центра</h2>
       <base-photo-input
         :value="centerInfo.logo"
@@ -72,6 +76,7 @@
       />
     </div>
 
+    </div>
   </div>
 </template>
 

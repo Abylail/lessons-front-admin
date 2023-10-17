@@ -13,6 +13,7 @@
       :loading="isLoading"
       item-key="id"
       hide-default-footer
+      disable-pagination
     >
       <template v-slot:item.icon_mdi="{ item }">
         <v-icon>{{ item.icon_mdi }}</v-icon>
@@ -42,7 +43,7 @@ export default {
   data: () => ({
     // Заголовки для таблицы
     tableHeaders: [
-      { text: 'Название на русском', value: 'name', sortable: false},
+      { text: 'Название', value: 'name', sortable: false},
       { text: 'Иконка', value: 'icon_mdi', sortable: false},
       { text: '', value: 'actions', sortable: false, width: 150},
     ],

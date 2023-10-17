@@ -26,6 +26,7 @@
         :loading="isLoading"
         item-key="id"
         hide-default-footer
+        disable-pagination
       >
         <template v-slot:item.role_id="{ item }">
           <v-select

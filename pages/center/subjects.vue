@@ -14,6 +14,7 @@
       item-key="id"
       hide-default-footer
       mobile-breakpoint="0"
+      disable-pagination
     >
       <template v-slot:item.photos="{ item }">
         <base-photo-input

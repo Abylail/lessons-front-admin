@@ -4,7 +4,7 @@
       <h2>Предмет</h2>
 
       <div class="edit-subject__form">
-        <v-text-field label="Название на русском" v-model="subject.name" outlined dense/>
+        <v-text-field label="Название" v-model="subject.name" outlined dense/>
         <v-switch label="Спорт" v-model="subject.is_sport" dense/>
         <v-select label="Категории" item-text="name" item-value="code" v-model="subject.categories" :items="categories" outlined dense multiple/>
         <base-color-picker label="Цвет предмета" v-model="subject.color"/>

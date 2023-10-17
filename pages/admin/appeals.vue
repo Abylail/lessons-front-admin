@@ -9,6 +9,7 @@
       :loading="isLoading"
       item-key="id"
       hide-default-footer
+      disable-pagination
       @click:row="rowClickHandle($event)"
     >
       <template v-slot:item.date="{ item }">

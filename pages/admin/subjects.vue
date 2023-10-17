@@ -33,6 +33,7 @@
         :loading="isLoading"
         item-key="id"
         hide-default-footer
+        disable-pagination
       >
         <template v-slot:item.is_sport="{ item }">
           {{ item.is_sport ? "Да" : "Нет" }}
@@ -72,7 +73,7 @@ export default {
 
     // Заголовки таблицы
     tableHeaders: [
-      { text: 'Название на русском', value: 'name', sortable: false},
+      { text: 'Название', value: 'name', sortable: false},
       { text: 'Категории', value: 'categories', sortable: false },
       { text: 'Спорт', value: 'is_sport', sortable: false },
       { text: 'Цвет', value: 'color', sortable: false },

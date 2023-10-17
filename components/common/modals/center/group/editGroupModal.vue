@@ -66,7 +66,7 @@
         <h3 class="mb-3">Язык</h3>
         <div class="relative-columns-3">
           <v-switch
-            class="mt-0" label="Урок на русском"
+            class="mt-0" label="Урок"
             v-model="group.language_ru"
             dense
           />

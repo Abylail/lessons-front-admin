@@ -14,6 +14,7 @@
       item-key="id"
       hide-default-footer
       mobile-breakpoint="0"
+      disable-pagination
     >
       <template v-slot:item.actions="{ item }">
         <v-btn icon><v-icon>mdi-timetable</v-icon></v-btn>
