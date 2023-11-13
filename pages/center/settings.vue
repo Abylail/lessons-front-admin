@@ -61,7 +61,7 @@
       <base-photo-input
         :value="centerInfo.logo"
         :loading="isLogoLoading"
-        :max-width="200"
+        :max-width="500"
         @upload="inputLogoHandle($event)"
       />
     </div>

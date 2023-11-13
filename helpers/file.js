@@ -5,7 +5,7 @@ export const fileToBase64 = (file) => new Promise(resolve => {
     reader.onerror = error => resolve(null);
 });
 
-export function resizeImage(base64Str, maxWidth = 700) {
+export function resizeImage(base64Str, maxSize = 700) {
   return new Promise((resolve) => {
     let img = new Image()
     img.src = base64Str
@@ -14,8 +14,8 @@ export function resizeImage(base64Str, maxWidth = 700) {
       let width = img.width
       let height = img.height
 
-      const MAX_WIDTH = maxWidth
-      const MAX_HEIGHT = MAX_WIDTH*(width/height);
+      const MAX_WIDTH = maxSize
+      const MAX_HEIGHT = maxSize;
 
       if (width > height) {
         if (width > MAX_WIDTH) {
