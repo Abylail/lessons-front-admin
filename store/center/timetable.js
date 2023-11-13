@@ -83,8 +83,9 @@ export const actions = {
   },
 
   // Удалить группу
-  async deleteGroup({ commit }, groupId) {
-    await this.$api.$delete(`/api/v1/center/schedule/group/delete/${groupId}`)
+  async deleteGroup({ commit, rootGetters }, groupId) {
+    const centerId = rootGetters["auth/getCenterId"];
+    await this.$api.$delete(`/api/v1/admin/institution/${centerId}/group/delete/${groupId}`)
       .then(({err, body}) => {
         if (!err) {
           this.$toast("Группа удалена");

@@ -17,7 +17,7 @@
 </template>
 
 <script>
-import {fileToBase64} from "@/helpers/file";
+import {fileToBase64, resizeImage} from "@/helpers/file";
 
 export default {
   name: "BasePhotoInput",
@@ -38,7 +38,11 @@ export default {
       type: String,
       default: "default",
       validator: val => ["default", "small"].includes(val)
-    }
+    },
+    maxWidth: {
+      type: Number,
+      default: 700
+    },
   },
   data: () => ({
     selfLoading: false,
@@ -72,8 +76,10 @@ export default {
         this.selfLoading = false;
         return this.$toast.error("Поврежденный файл");
       }
+      const optimizedImage = await resizeImage(base64File, this.maxWidth)
       this.selfLoading = false;
-      this.$emit("upload", base64File);
+
+      this.$emit("upload", optimizedImage);
     },
 
     getImageUrl(url) {
