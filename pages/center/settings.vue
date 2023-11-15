@@ -71,7 +71,7 @@
     </div>
 
     <div class="settings__center mt-3">
-      <h2 class="settings__sub-title">Фотки центра</h2>
+      <h2 class="settings__sub-title">Фотографии центра</h2>
       <base-photo-input
         :value="centerInfo.photos"
         :loading="isPhotoLoading"

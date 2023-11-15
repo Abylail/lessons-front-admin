@@ -9,7 +9,7 @@ export const weekdays = [
   {code: "thursday", name: "Четверг", shortName: "Чт"},
   {code: "friday", name: "Пятница", shortName: "Пт"},
   {code: "saturday", name: "Суббота", shortName: "Сб"},
-  {code: "sunday", name: "Воскресение", shortName: "Вс"},
+  {code: "sunday", name: "Воскресенье", shortName: "Вс"},
 ]
 
 export const weekdaysDictionary = {
@@ -19,7 +19,7 @@ export const weekdaysDictionary = {
   thursday: "Четверг",
   friday: "Пятница",
   saturday: "Суббота",
-  sunday: "Воскресение",
+  sunday: "Воскресенье",
 }
 
 export const weekdaysShortDictionary = {

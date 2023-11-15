@@ -1,6 +1,6 @@
 <template>
   <div class="registrations page">
-    <h2 class="branches__title">Мои записи</h2>
+    <h2 class="branches__title">Записи на пробный</h2>
     <v-data-table
       class="branches__table elevation-1"
       :headers="tableHeaders"
@@ -36,7 +36,7 @@ export default {
     isLoading: false,
 
     tableHeaders: [
-      { text: 'Номер родитель', value: 'parent_phone', sortable: false},
+      { text: 'Номер родителя', value: 'parent_phone', sortable: false},
       { text: 'Ребенок', value: 'child', sortable: false},
       { text: 'Урок', value: 'lesson', sortable: false},
       { text: 'Дата записи', value: 'time', sortable: false},

@@ -17,7 +17,7 @@
           <v-text-field label="Email" v-model="branch.email" outlined dense clearable/>
           <v-text-field label="Ссылка инстаграм" v-model="branch.instagram_url" outlined dense clearable/>
         </div>
-        <base-yandex-map title="Укажите расложение филиала" v-model="branch.coordinates"/>
+        <base-yandex-map title="Укажите местоположение" v-model="branch.coordinates"/>
       </div>
       <div class="edit-branch__actions">
         <v-btn @click="closeSelf()">Отменить</v-btn>
