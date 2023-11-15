@@ -5,6 +5,11 @@
 
       <div class="edit-group__form">
 
+        <div v-if="!isNewGroup" class="mb-3">
+          <h3 class="mb-0">Ссылка на урок</h3>
+          <a target="_blank" :href="lessonUrl">{{lessonUrl}}</a>
+        </div>
+
         <h3 class="mb-3">Основное</h3>
         <div class="relative-columns-2">
           <v-select
@@ -66,13 +71,22 @@
         <h3 class="mb-3">Язык</h3>
         <div class="relative-columns-3">
           <v-switch
-            class="mt-0" label="Урок"
+            class="mt-0" label="Урок на русском"
             v-model="group.language_ru"
             dense
           />
           <v-switch
             class="mt-0" color="green" label="Урок на казахском"
             v-model="group.language_kz"
+            dense
+          />
+        </div>
+
+        <h3 class="mb-3">Набор в группу</h3>
+        <div class="relative-columns-3">
+          <v-switch
+            class="mt-0" label="Ведется набор"
+            v-model="group.open_enrollment"
             dense
           />
         </div>
@@ -105,7 +119,7 @@
 <script>
 import {mapActions, mapGetters} from "vuex";
 import DaysControl from "@/components/common/timetable/daysControl";
-const defaultGroupInfo = {price_trial: 0, language_ru: true, language_kz: false};
+const defaultGroupInfo = {price_trial: 0, language_ru: true, language_kz: false, open_enrollment: true};
 
 export default {
   name: "editGroupModal",
@@ -123,9 +137,14 @@ export default {
       branchList: "center/branches/getBranchList",
       allGroups: "center/timetable/getGroupList",
     }),
+
     // Новая ли группа (создание или апдейт)
     isNewGroup() {
       return !this.group.id;
+    },
+
+    lessonUrl() {
+      return `https://kidup.kz/catalog/details/lesson-${this.group.institution_subject_id}`;
     }
   },
   methods: {
@@ -138,6 +157,9 @@ export default {
     getPayload() {
       // Инфо группы
       if (this.$modal.$payload?.group) {this.group = JSON.parse(JSON.stringify(this.$modal.$payload.group))}
+
+      // Если набор в группу null (open_enrollment)
+      if (this.group.open_enrollment === null) this.group.open_enrollment = true;
 
       // Начальный день
       if (this.$modal.$payload?.dayCode) this.createDefaultDay(this.$modal.$payload.dayCode)

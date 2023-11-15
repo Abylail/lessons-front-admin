@@ -15,6 +15,10 @@
 
     <div class="settings__center">
       <h2 class="settings__title">Информация центра</h2>
+      <div class="mb-4" v-if="isExist">
+        <h2 class="settings__sub-title mb-0">Ссылка на ваш центр</h2>
+        <a target="_blank" :href="centerUrl">{{centerUrl}}</a>
+      </div>
       <div>
         <h2 class="settings__sub-title">Информация</h2>
         <v-text-field label="Название центра" v-model="centerInfo.name" outlined dense/>
@@ -111,6 +115,10 @@ export default {
     // Существующий центр
     isExist() {
       return !!this.centerInfo.id
+    },
+
+    centerUrl() {
+      return `https://kidup.kz/catalog/details/center-${this.centerInfo.id}`;
     }
   },
   watch: {
