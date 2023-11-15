@@ -51,6 +51,7 @@ export default {
       role: "auth/getRole",
       userFullName: "auth/getUserFullName",
       newCenterAppealsCount: "center/appeals/getNewAnsweredCount",
+      registrationsCount: "center/registrations/getRegistrationsCount",
     }),
 
     // Роль на русском
@@ -68,7 +69,7 @@ export default {
         // { icon: "mdi-human", name: "Учителя", route: "/center/teachers", roles: ["center_director"]},
         { icon: "mdi-map-marker", name: "Адреса и филиалы", route: "/center/branches", roles: [rolesDict.center_director.code]},
         { icon: "mdi-bookshelf", name: "Мои предметы", route: "/center/subjects", roles: [rolesDict.center_director.code]},
-        { icon: "mdi-account-group", name: "Мои записи", route: "/center/registrations", roles: [rolesDict.center_director.code]},
+        { icon: "mdi-account-group", name: `Мои записи ${this.registrationsCount ? `(${this.registrationsCount})`: ""}`, route: "/center/registrations", roles: [rolesDict.center_director.code]},
         // { icon: "mdi-email-outline", name: `Мои обращения ${this.newCenterAppealsCount ? `(${this.newCenterAppealsCount})` : ""}`, route: "/center/appeals", roles: [rolesDict.center_director.code]},
 
         { icon: "mdi-cog", name: "Основные настройки", route: "/admin/settings", roles: [rolesDict.admin.code]},
@@ -76,6 +77,7 @@ export default {
         { icon: "mdi-book-multiple", name: "Предметы", route: "/admin/subjects", roles: [rolesDict.admin.code]},
         { icon: "mdi-account-group", name: "Пользователи", route: "/admin/users", roles: [rolesDict.admin.code]},
         { icon: "mdi-school-outline", name: "Учреждения", route: "/admin/institutions", roles: [rolesDict.admin.code]},
+        { icon: "mdi-account-group", name: "Записи от клиентов", route: "/admin/trialRegistrations", roles: [rolesDict.admin.code]},
         // { icon: "mdi-email-outline", name: "Обращения", route: "/admin/appeals", roles: []},
       ]
     }
