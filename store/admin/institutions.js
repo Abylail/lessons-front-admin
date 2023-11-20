@@ -37,6 +37,18 @@ export const actions = {
       })
   },
 
+
+  // Получить token для входа в админку центра
+  enterInstitutions({ commit }, institutionId) {
+    return new Promise(resolve => {
+      this.$axios.$get(`/api/v1/admin/institution/enter/${institutionId}`)
+        .then(({err, body}) => {
+          if (!err) resolve(body);
+          resolve(null);
+        })
+    })
+  },
+
   createInstitutions({ commit }, institutionInfo) {
     return new Promise(resolve => {
       this.$axios.$post(`/api/v1/admin/institution/create`, institutionInfo)

@@ -24,6 +24,7 @@
           <span>{{ item.director?.first_name }} {{ item.director?.last_name }}</span>
         </template>
         <template v-slot:item.actions="{ item }">
+          <v-btn icon @click="enterAsInstitution(item)"><v-icon>mdi-location-enter</v-icon></v-btn>
           <v-btn icon @click="editHandle(item)"><v-icon>mdi-pencil</v-icon></v-btn>
           <v-btn icon @click="deleteHandle(item)"><v-icon color="red">mdi-delete</v-icon></v-btn>
         </template>
@@ -60,7 +61,8 @@ export default {
   methods: {
     ...mapActions({
       _fetchInstitutions: "admin/institutions/fetchInstitutions",
-      _deleteInstitutions: "admin/institutions/deleteInstitutions"
+      _deleteInstitutions: "admin/institutions/deleteInstitutions",
+      _enterInstitutions: "admin/institutions/enterInstitutions"
     }),
 
     async fetchInstitutions() {
@@ -75,6 +77,15 @@ export default {
 
     editHandle(institution) {
       this.$modal.show("add-edit-institution", {institution});
+    },
+
+    // Войти под это учреждение
+    async enterAsInstitution(institution) {
+      if (confirm("Вы уверены что хотите зайти в админку этого центра? Вы покидаете вашу админку")) {
+        const token = await this._enterInstitutions(institution.id);
+        await this.$cookies.set("userToken", token);
+        setTimeout(() => {window.location.href="/adminpanel"})
+      }
     },
 
     async deleteHandle(institution) {
