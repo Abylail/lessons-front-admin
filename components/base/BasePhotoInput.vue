@@ -79,6 +79,7 @@ export default {
       const optimizedImage = await resizeImage(base64File, this.maxWidth)
       this.selfLoading = false;
 
+      this.$refs.input.value = "";
       this.$emit("upload", optimizedImage);
     },
 
