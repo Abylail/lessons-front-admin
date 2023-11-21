@@ -46,4 +46,14 @@ export const actions = {
         }
       })
   },
+
+  // Запросить список регисьтраций
+  async deleteRegistration({ commit }, registrationId) {
+    await this.$api.$delete(`/api/v1/admin/trialregistrations/delete/${registrationId}`)
+      .then(({err, body}) => {
+        if (!err) {
+          this.$toast.success("Запись удалена");
+        }
+      })
+  },
 }

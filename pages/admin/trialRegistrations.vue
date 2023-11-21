@@ -42,6 +42,9 @@
           @input="statusChange($event, item.id)"
         />
       </template>
+      <template v-slot:item.delete="{ item }">
+        <v-btn icon @click="deleteRegistration(item.id)"><v-icon>mdi-delete</v-icon></v-btn>
+      </template>
     </v-data-table>
   </div>
 </template>
@@ -62,10 +65,11 @@ export default {
       { text: 'Номер родителя', value: 'parent_phone', sortable: false},
       { text: 'Ребенок', value: 'child', sortable: false},
       { text: 'Группа', value: 'group', sortable: false},
-      { text: 'Дата записи', value: 'time', sortable: false},
+      { text: 'Дата записи', value: 'time'},
       { text: 'Контакт филиала', value: 'contact', sortable: false},
       { text: 'Директор', value: 'director', sortable: false},
       { text: 'Статус', value: 'status', sortable: false},
+      { text: '', value: 'delete', sortable: false }
     ],
   }),
   computed: {
@@ -77,6 +81,7 @@ export default {
     ...mapActions({
       _fetchRegistrations: "admin/trialRegistrations/fetchRegistrations",
       _setStatus: "admin/trialRegistrations/setRegistrationStatus",
+      _deleteRegistration: "admin/trialRegistrations/deleteRegistration",
     }),
 
     // Получить перевод дня недели
@@ -103,7 +108,16 @@ export default {
 
     getColorClass({status}) {
       return `registrations__row--${status || "start"}`
-    }
+    },
+
+    // Удалить запись
+    async deleteRegistration(regId) {
+      if (!confirm("Вы точно хотите удалить запись?")) return;
+      this.isLoading = true;
+      await this._deleteRegistration(regId);
+      await this._fetchRegistrations();
+      this.isLoading = false;
+    },
   },
   mounted() {
     this.fetchRegistrations();
