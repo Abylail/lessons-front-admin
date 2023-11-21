@@ -16,7 +16,6 @@
             label="Предмет (обязательно)"
             v-model="group.institution_subject_id"
             :items="[...centerSubjectList, {name: '+ новый предмет', id: 'new'}]"
-            :disabled="!isNewGroup"
             item-text="name" item-value="id"
             outlined dense
             @change="$event === 'new' ? createNewCenterSubject() : null"
