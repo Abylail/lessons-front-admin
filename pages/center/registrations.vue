@@ -36,6 +36,7 @@ export default {
     isLoading: false,
 
     tableHeaders: [
+      { text: 'Тип', value: 'title', sortable: false},
       { text: 'Номер родителя', value: 'parent_phone', sortable: false},
       { text: 'Ребенок', value: 'child', sortable: false},
       { text: 'Урок', value: 'lesson', sortable: false},

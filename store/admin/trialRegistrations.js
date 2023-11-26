@@ -36,7 +36,21 @@ export const actions = {
       })
   },
 
-  // Запросить список регисьтраций
+  // Обновить данные регситрации
+  updateRegistration({ commit }, {title, date, weekday, time, id}) {
+    return new Promise(resolve => {
+      this.$api.$put(`/api/v1/admin/trialregistrations/update/${id}`, {title, date, weekday, time})
+        .then(({err, body}) => {
+          if (!err) {
+            commit("setRegistration", body);
+            this.$toast.success("Регистрация изменена");
+          }
+          resolve(!err);
+        })
+    })
+  },
+
+  // Обновить статус регситрации
   async setRegistrationStatus({ commit }, {status, id}) {
     await this.$api.$put(`/api/v1/admin/trialregistrations/setStatus`, {status, registration_id: id})
       .then(({err, body}) => {

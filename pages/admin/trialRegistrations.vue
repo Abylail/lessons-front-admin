@@ -15,14 +15,14 @@
         {{ item.parent_phone | vmask('+7 (###) ###-##-##') }}
       </template>
       <template v-slot:item.child="{ item }">
-        {{ item.child_name }} ({{ item.child_age }}лет)
+        <span v-if="item.child_name">{{ item.child_name }} ({{ item.child_age }}лет)</span>
       </template>
       <template v-slot:item.group="{ item }">
         <strong>{{ item.institution?.name }}</strong> <br/>
         {{ item.institutionGroup?.institutionSubject?.name }}
       </template>
       <template v-slot:item.time="{ item }">
-        {{ getWeekday(item.weekday) }} {{ item.time }} <br/> {{ getDate(item.date) }}
+        <span v-if="item.date">{{ getWeekday(item.weekday) }} {{ item.time }} <br/> {{ getDate(item.date) }}</span>
       </template>
       <template v-slot:item.contact="{ item }">
         {{ item.institutionGroup?.institutionBranch?.call_phone }}
@@ -43,9 +43,12 @@
         />
       </template>
       <template v-slot:item.delete="{ item }">
+        <v-btn icon @click="editRegistration(item)"><v-icon>mdi-pencil</v-icon></v-btn>
         <v-btn icon @click="deleteRegistration(item.id)"><v-icon>mdi-delete</v-icon></v-btn>
       </template>
     </v-data-table>
+
+    <edit-registration-modal/>
   </div>
 </template>
 
@@ -53,15 +56,18 @@
 import {mapActions, mapGetters} from "vuex";
 import {weekdaysDictionary} from "@/config/lists";
 import {trialStatuses} from "@/config/lists";
+import EditRegistrationModal from "@/components/common/modals/admin/editRegistrationModal";
 
 export default {
   name: "registrations",
+  components: {EditRegistrationModal},
   data: () => ({
     isLoading: false,
 
     trialStatuses,
 
     tableHeaders: [
+      { text: 'Тип', value: 'title', sortable: false},
       { text: 'Номер родителя', value: 'parent_phone', sortable: false},
       { text: 'Ребенок', value: 'child', sortable: false},
       { text: 'Группа', value: 'group', sortable: false},
@@ -108,6 +114,11 @@ export default {
 
     getColorClass({status}) {
       return `registrations__row--${status || "start"}`
+    },
+
+    // Удалить запись
+    async editRegistration(registration) {
+      this.$modal.show("edit-registration", {registration})
     },
 
     // Удалить запись
