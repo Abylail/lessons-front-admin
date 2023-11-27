@@ -1,5 +1,3 @@
-import login from "@/pages/login";
-
 export const state = () => ({
   // Список предметов (общий)
   subjectList: [],

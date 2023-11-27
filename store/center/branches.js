@@ -5,7 +5,7 @@ export const state = () => ({
 
 export const getters = {
   // Список филиалов
-  getBranchList: state => state.branchList,
+  getBranchList: state => state.branchList || [],
 }
 
 export const mutations = {

@@ -19,7 +19,7 @@
           </v-list>
         </v-menu>
       </div>
-      <div class="toolbar__bottom columns-3">
+      <div class="toolbar__bottom">
         <v-select
           label="Предметы" placeholder="Все предметы"
           v-model="innerFilterParams.institution_subject_id"
@@ -33,6 +33,14 @@
           :items="weekdays"
           item-text="name" item-value="code" height="40"
           multiple outlined dense hide-details persistent-placeholder
+        />
+        <v-select
+          v-if="branchList.length > 1"
+          clabel="Филиалы" placeholder="Все филиалы"
+          v-model="innerFilterParams.institution_branch_id"
+          :items="branchList"
+          item-text="address" item-value="id" height="40"
+          multiple outlined dense hide-details persistent-placeholder clearable
         />
         <v-btn color="primary" @click="filterHandle()">Применить</v-btn>
       </div>
@@ -51,8 +59,6 @@
             </v-btn>
           </template>
           <v-list>
-            <v-list-item two-line @click="downloadTeacherTables()"><v-icon class="mr-3">mdi-download</v-icon>Скачать расписание для каждого учителя (Несколько файлов)</v-list-item>
-            <v-divider/>
             <v-list-item two-line @click="downloadFullTable()"><v-icon class="mr-3">mdi-download</v-icon>Скачать все расписание (По дням)</v-list-item>
             <v-divider/>
             <v-list-item two-line @click="downloadGroupList()"><v-icon class="mr-3">mdi-download</v-icon>Скачать список групп</v-list-item>
@@ -89,6 +95,14 @@
             v-model="innerFilterParams.days"
             :items="weekdays"
             item-text="name" item-value="code" height="40"
+            multiple outlined dense hide-details persistent-placeholder clearable
+          />
+          <v-select
+            v-if="branchList.length > 1"
+            class="mb-3" label="Филиалы" placeholder="Все филиалы"
+            v-model="innerFilterParams.institution_branch_id"
+            :items="branchList"
+            item-text="address" item-value="id" height="40"
             multiple outlined dense hide-details persistent-placeholder clearable
           />
         </div>
@@ -339,6 +353,14 @@ export default {
 
   &__extra-button {
 
+  }
+
+  &__bottom {
+    display: flex;
+    column-gap: 8px;
+    * > {
+      flex: 1;
+    }
   }
 
 }

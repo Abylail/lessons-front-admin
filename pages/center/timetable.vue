@@ -54,6 +54,9 @@ export default {
         // По предметам
         if (!this.filterBySubject(group)) return false;
 
+        // По филиалам
+        if (!this.filterByBranch(group)) return false;
+
         return true;
       });
     },
@@ -88,6 +91,11 @@ export default {
     filterBySubject(group) {
       if (!this.filterParams.institution_subject_id?.length) return true;
       return this.filterParams.institution_subject_id.includes(group.institution_subject_id);
+    },
+    // Фильтр по предметам
+    filterByBranch(group) {
+      if (!this.filterParams.institution_branch_id?.length) return true;
+      return this.filterParams.institution_branch_id.includes(group.institution_branch_id);
     },
 
     // Фильтр по учителям

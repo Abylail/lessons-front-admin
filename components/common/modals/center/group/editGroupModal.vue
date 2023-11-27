@@ -24,7 +24,6 @@
             label="Филиал (обязательно)"
             v-model="group.institution_branch_id"
             :items="[...branchList, {address: '+ новый филиал', id: 'new'}]"
-            :disabled="!isNewGroup"
             item-text="address" item-value="id"
             outlined dense
             @change="$event === 'new' ? createNewBranch() : null"

@@ -76,7 +76,6 @@ export default {
       if (this.validate()) {
         this.isLoading = true;
         const canReg = await this._sendSmsCode({phone: this.userInfo.phone});
-        console.log("canReg", canReg);
         this.isLoading = false;
         if (canReg) {this.$emit("next");}
       }

@@ -56,7 +56,7 @@ export const actions = {
     const centerId = rootGetters["auth/getCenterId"];
     // Не писать "прочитан" если нет ответа или если уже прочитан
     if (!centerId || !appealInfo.answer || appealInfo.center_read) return;
-    console.log("read appeal", appealInfo);
+
     await this.$api.$post(`/api/v1/appeal/read/${appealInfo.id}`)
       .then(async ({err, body}) => {
         if (!err) {
