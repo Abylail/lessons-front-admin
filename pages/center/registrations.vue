@@ -60,6 +60,7 @@ export default {
 
     // Получить перевод дня недели
     getDate(date) {
+      if (!date) return ""
       return new Date(date).toLocaleDateString()
     },
 
