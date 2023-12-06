@@ -78,7 +78,7 @@ export default {
         { icon: "mdi-account-group", name: "Пользователи", route: "/admin/users", roles: [rolesDict.admin.code]},
         { icon: "mdi-school-outline", name: "Учреждения", route: "/admin/institutions", roles: [rolesDict.admin.code]},
         { icon: "mdi-account-group", name: "Записи от клиентов", route: "/admin/trialRegistrations", roles: [rolesDict.admin.code]},
-        // { icon: "mdi-email-outline", name: "Обращения", route: "/admin/appeals", roles: []},
+        { icon: "mdi-email-outline", name: "Обращения", route: "/admin/requests", roles: [rolesDict.admin.code]},
       ]
     }
   },

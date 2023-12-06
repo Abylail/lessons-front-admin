@@ -57,3 +57,10 @@ export const trialStatuses = [//["start", "confirmed", "rejected", "enrolled"]
   {code: "rejected", name: "Не купил"},
   {code: "enrolled", name: "Купил"},
 ]
+
+export const requestStatuses = [
+  { code: "start", name: "Не обработан" },
+  { code: "processed", name: "Обработан" },
+  { code: "later", name: "Позже" },
+  { code: "no_answer", name: "Не отвечает" },
+]
