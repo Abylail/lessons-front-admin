@@ -76,6 +76,6 @@ export const actions = {
           this.$toast.success("Фото загруженно");
         }
       })
-    await dispatch("fetchCenterInfo");
+    await dispatch("fetchTeacherList");
   },
 }
