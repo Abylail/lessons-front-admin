@@ -11,6 +11,9 @@
       hide-default-footer
       disable-pagination
     >
+      <template v-slot:item.text="{ item }">
+        <pre>{{ item.text }}</pre>
+      </template>
       <template v-slot:item.createdAt="{ item }">
         {{ new Date(item.createdAt).toLocaleString() }}
       </template>

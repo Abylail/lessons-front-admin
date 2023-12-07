@@ -16,6 +16,14 @@
       mobile-breakpoint="0"
       disable-pagination
     >
+      <template  v-slot:item.photo="{ item }">
+        <base-photo-input
+          :value="item.photo"
+          :loading="isPhotoLoading"
+          :max-width="200"
+          @upload="inputPhotoHandle($event, item)"
+        />
+      </template>
       <template v-slot:item.actions="{ item }">
         <v-btn icon><v-icon>mdi-timetable</v-icon></v-btn>
         <v-btn icon @click="editHandle(item)"><v-icon>mdi-pencil</v-icon></v-btn>
@@ -34,17 +42,21 @@
 import EditTeacherModal from "@/components/common/modals/center/teacher/editTeacherModal";
 import {mapActions, mapGetters} from "vuex";
 import RemoveTeacherModal from "@/components/common/modals/center/teacher/removeTeacherModal";
+import BasePhotoInput from "@/components/base/BasePhotoInput";
 export default {
   name: "teachers",
-  components: {RemoveTeacherModal, EditTeacherModal},
+  components: {BasePhotoInput, RemoveTeacherModal, EditTeacherModal},
   data: () => ({
     tableHeaders: [
-      { text: 'Имя', value: 'full_name', sortable: false},
+      { text: 'ФИО', value: 'full_name', sortable: false},
+      { text: 'Фото', value: 'photo', sortable: false},
       { text: '', value: 'actions', sortable: false, width: 150},
     ],
     teacherList: [],
 
     isLoading: true,
+
+    isPhotoLoading: false,
   }),
   computed: {
     ...mapGetters({
@@ -62,7 +74,17 @@ export default {
   methods: {
     ...mapActions({
       _fetchList: "center/teachers/fetchTeacherList",
+      _uploadPhoto: "center/teachers/uploadPhoto"
     }),
+
+    // Загрузка фото
+    async inputPhotoHandle(base64Image, teacher) {
+      if (!base64Image) return;
+      if (teacher.photo && !confirm("Вы точно хотите сменить лого?")) return;
+      this.isPhotoLoading = true;
+      await this._uploadPhoto({base64: base64Image, teacherId: teacher.id});
+      this.isPhotoLoading = false;
+    },
 
     async fetchList() {
       this.isLoading = true;

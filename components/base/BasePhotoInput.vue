@@ -4,10 +4,10 @@
     <div class="base-photo-input__list" :class="{disabled: isLoading}">
       <div class="base-photo-input__item" :style="{height: imageSize, width: imageSize}" v-for="(imageUrl, index) in selfValue" :key="index">
         <img class="base-photo-input__image" :src="getImageUrl(imageUrl)"/>
-        <div class="base-photo-input__edit" v-if="!multiple" @click.stop="triggerInput()"><v-icon>mdi-pencil</v-icon></div>
+        <div class="base-photo-input__edit" v-if="!multiple" @click.prevent="triggerInput()"><v-icon>mdi-pencil</v-icon></div>
         <div class="base-photo-input__remove" v-else @click.stop="removeHandle(imageUrl)"><v-icon>mdi-close</v-icon></div>
       </div>
-      <div class="base-photo-input__add" :style="{height: imageSize, width: imageSize}" v-if="showPlus" @click.stop="triggerInput()">
+      <div class="base-photo-input__add" :style="{height: imageSize, width: imageSize}" v-if="showPlus" @click.prevent="triggerInput()">
         <v-icon color="primary">mdi-plus</v-icon>
       </div>
     </div>
@@ -41,7 +41,7 @@ export default {
     },
     maxWidth: {
       type: Number,
-      default: 800
+      default: 600
     },
   },
   data: () => ({

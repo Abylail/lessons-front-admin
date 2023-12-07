@@ -72,6 +72,7 @@ export default {
   methods: {
     ...mapActions({
       _fetchTimetable: "center/timetable/fetchTimetable",
+      _fetchTeachers: "center/teachers/fetchTeacherList",
     }),
 
     // Создать группу (кнопка)
@@ -81,7 +82,7 @@ export default {
 
     async fetchTimetable() {
       this.isLoading = true;
-      await this._fetchTimetable();
+      await Promise.all([this._fetchTimetable(), this._fetchTeachers()])
       this.isLoading = false;
     },
 

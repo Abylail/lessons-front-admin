@@ -11,7 +11,7 @@
         </div>
 
         <h3 class="mb-3">Основное</h3>
-        <div class="relative-columns-2">
+        <div class="relative-columns-3">
           <v-select
             label="Предмет (обязательно)"
             v-model="group.institution_subject_id"
@@ -28,14 +28,15 @@
             outlined dense
             @change="$event === 'new' ? createNewBranch() : null"
           />
+          <v-select
+            label="Учитель"
+            v-model="group.teacher_id"
+            :items="[{id: null, full_name: 'Не указан'}, ...teacherList, {full_name: '+ новый учитель', id: 'new'}]"
+            item-text="full_name" item-value="id"
+            outlined dense
+            @change="$event === 'new' ? createNewTeacher() : null"
+          />
         </div>
-
-<!--        <h3 class="mb-3">Описание группы</h3>-->
-<!--        <v-textarea-->
-<!--          label="Описание группы на русском" rows="2"-->
-<!--          v-model="group.description"-->
-<!--          outlined dense auto-grow-->
-<!--        />-->
 
         <h3 class="mb-3">Цена</h3>
         <div class="relative-columns-3">

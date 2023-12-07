@@ -66,7 +66,7 @@ export default {
       return [
         { icon: "mdi-domain", name: "Моя компания", route: "/center/settings", roles: [rolesDict.center_director.code]},
         { icon: "mdi-timetable", name: "Расписание", route: "/center/timetable", roles: [rolesDict.center_director.code]},
-        // { icon: "mdi-human", name: "Учителя", route: "/center/teachers", roles: ["center_director"]},
+        { icon: "mdi-human", name: "Учителя", route: "/center/teachers", roles: [rolesDict.center_director.code]},
         { icon: "mdi-map-marker", name: "Адреса и филиалы", route: "/center/branches", roles: [rolesDict.center_director.code]},
         { icon: "mdi-bookshelf", name: "Мои предметы", route: "/center/subjects", roles: [rolesDict.center_director.code]},
         { icon: "mdi-account-group", name: `Записи ${this.registrationsCount ? `(${this.registrationsCount})`: ""}`, route: "/center/registrations", roles: [rolesDict.center_director.code]},

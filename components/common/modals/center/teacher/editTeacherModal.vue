@@ -4,7 +4,13 @@
       <h2>Учитель</h2>
       <div class="edit-teacher__form">
         <v-text-field label="Имя" v-model="teacher.full_name" outlined dense/>
-        <v-text-field label="Телефон" v-model="teacher.phone" v-mask="'+7 (###) ###-##-##'" outlined dense/>
+        <v-textarea label="Описание учителя" v-model="teacher.description" outlined dense no-resize/>
+        <v-text-field label="Стаж" v-model="teacher.experience" type="number" outlined dense/>
+        <v-text-field label="Возраст" v-model="teacher.age" type="number" outlined dense/>
+        <v-btn-toggle v-model="teacher.gender" color="primary" dense>
+          <v-btn value="M">Мужчина</v-btn>
+          <v-btn value="W">Женщина</v-btn>
+        </v-btn-toggle>
       </div>
       <div class="edit-teacher__actions">
         <v-btn @click="closeSelf()">Отменить</v-btn>
@@ -100,7 +106,7 @@ export default {
 .edit-teacher {
 
   &__form {
-    margin-top: 20px;
+    margin: 20px 0;
   }
 
   &__actions {
