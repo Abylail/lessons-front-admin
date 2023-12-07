@@ -21,6 +21,7 @@
           :value="item.photo"
           :loading="isPhotoLoading"
           :max-width="200"
+          size="small"
           @upload="inputPhotoHandle($event, item)"
         />
       </template>
