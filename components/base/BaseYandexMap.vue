@@ -28,7 +28,7 @@ export default {
       this.map = new ymaps.Map("base-yandex-map", {
         center: this.value || almatyCenterCoords,
         zoom: this.value ? 14 : 12,
-        controls: ["zoomControl"],
+        controls: ["zoomControl", "searchControl"],
       });
 
       // Случаю клик
