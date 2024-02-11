@@ -73,6 +73,7 @@ export default {
         // { icon: "mdi-email-outline", name: `Мои обращения ${this.newCenterAppealsCount ? `(${this.newCenterAppealsCount})` : ""}`, route: "/center/appeals", roles: [rolesDict.center_director.code]},
 
         { icon: "mdi-cog", name: "Основные настройки", route: "/admin/settings", roles: [rolesDict.admin.code]},
+        { icon: "mdi-teddy-bear", name: "Игрушки", route: "/admin/toys", roles: [rolesDict.admin.code]},
         { icon: "mdi-format-list-bulleted", name: "Категории", route: "/admin/categories", roles: [rolesDict.admin.code]},
         { icon: "mdi-book-multiple", name: "Предметы", route: "/admin/subjects", roles: [rolesDict.admin.code]},
         { icon: "mdi-account-group", name: "Пользователи", route: "/admin/users", roles: [rolesDict.admin.code]},
