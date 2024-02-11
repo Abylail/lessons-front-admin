@@ -11,18 +11,19 @@
       :headers="tableHeaders"
       :items="toys"
       :loading="isLoading"
+      mobile-breakpoint="0"
       item-key="id"
       hide-default-footer
       disable-pagination
     >
       <template v-slot:item.photos="{ item }">
-        <div>{{ item.photos }}</div>
         <base-photo-input
           :value="item.photos"
           :loading="isPhotoLoading"
+          size="small"
           multiple
-          @upload="inputPhotoHandle($event)"
-          @remove="removePhotoHandle($event)"
+          @upload="inputPhotoHandle($event, item)"
+          @remove="removePhotoHandle($event, item)"
         />
       </template>
       <template v-slot:item.actions="{ item }">
@@ -44,14 +45,14 @@ export default {
   components: {BasePhotoInput, EditToyModal},
   data: () => ({
     tableHeaders: [
-      { text: 'Фото', value: 'photos', sortable: false},
       { text: 'Название', value: 'name_ru', sortable: false},
+      { text: 'Фото', value: 'photos', sortable: false},
       { text: 'Токены', value: 'tokens', sortable: false},
       { text: '', value: 'actions', sortable: false, width: 50},
     ],
 
     isLoading: true,
-    isPhotoLoading: true,
+    isPhotoLoading: false,
   }),
   computed: {
     ...mapGetters({

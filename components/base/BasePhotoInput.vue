@@ -89,6 +89,7 @@ export default {
 
     // Вызвать инпут
     triggerInput() {
+      console.log("click")
       this.$refs.input.click();
     },
 
@@ -154,6 +155,7 @@ export default {
     align-items: center;
     justify-content: center;
     position: relative;
+    z-index: 10;
     border: 2px solid #1976d2;
     border-radius: 5px;
     cursor: pointer;
