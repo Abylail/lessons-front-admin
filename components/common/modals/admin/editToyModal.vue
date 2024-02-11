@@ -120,10 +120,32 @@ export default {
         this.$toast("Введите имя")
         return false;
       }
+
       if (!this.toy.description_ru || !this.toy.description_kz) {
-        this.$toast("Введите имя")
+        this.$toast("Введите описание")
         return false;
       }
+
+      if (!this.toy.price) {
+        this.$toast("Введите цену")
+        return false;
+      }
+
+      if (!this.toy.kaspiUrl) {
+        this.$toast("Введите ссылку kaspi")
+        return false;
+      }
+
+      if (!this.toy.life_time) {
+        this.$toast("Введите срок службы")
+        return false;
+      }
+
+      if (!this.toy.max_age) {
+        this.$toast("Введите максимальный возраст")
+        return false;
+      }
+
       return true;
     },
 

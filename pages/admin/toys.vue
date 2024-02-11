@@ -10,8 +10,6 @@
       class="toys__table elevation-1"
       :headers="tableHeaders"
       :items="toys"
-      :loading="isLoading"
-      mobile-breakpoint="0"
       item-key="id"
       hide-default-footer
       disable-pagination
@@ -25,6 +23,16 @@
           @upload="inputPhotoHandle($event, item)"
           @remove="removePhotoHandle($event, item)"
         />
+      </template>
+      <template v-slot:item.age="{ item }">
+        <span>
+          {{ item.min_age }} - {{ item.max_age }} лет
+        </span>
+      </template>
+      <template v-slot:item.token="{ item }">
+        <span>
+          {{ getToken(item) }}
+        </span>
       </template>
       <template v-slot:item.actions="{ item }">
         <v-btn icon @click="updateHandle(item)"><v-icon>mdi-pencil</v-icon></v-btn>
@@ -47,7 +55,9 @@ export default {
     tableHeaders: [
       { text: 'Название', value: 'name_ru', sortable: false},
       { text: 'Фото', value: 'photos', sortable: false},
-      { text: 'Токены', value: 'tokens', sortable: false},
+      { text: 'Цена', value: 'price', sortable: false},
+      { text: 'Токены', value: 'token', sortable: false},
+      { text: 'Возраст', value: 'age', sortable: false},
       { text: '', value: 'actions', sortable: false, width: 50},
     ],
 
@@ -66,6 +76,16 @@ export default {
       _removePhoto: "admin/toys/removePhoto",
     }),
 
+    getToken(toy) {
+      // время окупаемости
+      const okkTime = toy?.price > 12000
+        ? toy.life_time/3
+        : toy?.price < 5001
+          ? 2
+          : 3;
+      return parseInt((toy.price / okkTime)/120);
+    },
+
     // Запрос
     async fetchToys() {
       this.isLoading = true;
@@ -81,11 +101,6 @@ export default {
     // Обновить
     updateHandle(toy) {
       this.$modal.show("edit-toy", {toy})
-    },
-
-    // удалить
-    deleteHandle() {
-
     },
 
     async inputPhotoHandle(base64Image, toy) {
