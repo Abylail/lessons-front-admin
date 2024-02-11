@@ -15,6 +15,16 @@
       hide-default-footer
       disable-pagination
     >
+      <template v-slot:item.photos="{ item }">
+        <div>{{ item.photos }}</div>
+        <base-photo-input
+          :value="item.photos"
+          :loading="isPhotoLoading"
+          multiple
+          @upload="inputPhotoHandle($event)"
+          @remove="removePhotoHandle($event)"
+        />
+      </template>
       <template v-slot:item.actions="{ item }">
         <v-btn icon @click="updateHandle(item)"><v-icon>mdi-pencil</v-icon></v-btn>
       </template>
@@ -27,19 +37,21 @@
 <script>
 import {mapActions, mapGetters} from "vuex";
 import EditToyModal from "@/components/common/modals/admin/editToyModal";
+import BasePhotoInput from "@/components/base/BasePhotoInput";
 
 export default {
   name: "toys",
-  components: {EditToyModal},
+  components: {BasePhotoInput, EditToyModal},
   data: () => ({
     tableHeaders: [
-      { text: 'Фото', value: 'photo', sortable: false},
+      { text: 'Фото', value: 'photos', sortable: false},
       { text: 'Название', value: 'name_ru', sortable: false},
       { text: 'Токены', value: 'tokens', sortable: false},
       { text: '', value: 'actions', sortable: false, width: 50},
     ],
 
-    isLoading: true
+    isLoading: true,
+    isPhotoLoading: true,
   }),
   computed: {
     ...mapGetters({
@@ -49,6 +61,8 @@ export default {
   methods: {
     ...mapActions({
       _fetchToys: "admin/toys/fetchToysList",
+      _addPhoto: "admin/toys/addPhoto",
+      _removePhoto: "admin/toys/removePhoto",
     }),
 
     // Запрос
@@ -71,6 +85,20 @@ export default {
     // удалить
     deleteHandle() {
 
+    },
+
+    async inputPhotoHandle(base64Image, toy) {
+      if (!base64Image) return;
+      this.isPhotoLoading = true;
+      await this._addPhoto({buffer: base64Image, toyId: toy.id});
+      this.isPhotoLoading = false;
+    },
+
+    async removePhotoHandle(imagePath, toy) {
+      if (!imagePath) return;
+      this.isPhotoLoading = true;
+      await this._removePhoto({imagePath, toyId: toy.id});
+      this.isPhotoLoading = false;
     }
   },
   mounted() {

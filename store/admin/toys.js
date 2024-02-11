@@ -66,4 +66,28 @@ export const actions = {
         })
     })
   },
+
+  // Загрузка фото
+  async addPhoto({ commit, rootGetters, dispatch }, {buffer, toyId}) {
+    await this.$api.$post(`/api/v1/admin/toy/uploadPhoto/${toyId}`, {buffer})
+      .then(({err}) => {
+        if (!err) {
+          this.$toast.success("Фото загруженно");
+        }
+      })
+    await dispatch("fetchToysList");
+  },
+
+  // Удаление фото
+  async removePhoto({ commit, rootGetters, dispatch }, {imagePath, toyId}) {
+    const { institution_id } = rootGetters["auth/getUserInfo"];
+    if (!institution_id) return;
+    await this.$api.$post(`/api/v1/admin/toy/deletePhoto/${toyId}`, {imagePath})
+      .then(({err}) => {
+        if (!err) {
+          this.$toast("Фото удаленно");
+        }
+      })
+    await dispatch("fetchToysList");
+  },
 }
