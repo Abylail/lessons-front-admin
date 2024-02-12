@@ -30,14 +30,14 @@
         </div>
         <div class="columns-2">
           <v-text-field
-            label="Минимальный возраст"
+            label="Минимальный возраст (в месяцах)"
             v-model="toy.min_age"
             type="number"
             default="0"
             outlined dense
           />
           <v-text-field
-            label="Максимальный возраст"
+            label="Максимальный возраст (в месяцах)"
             v-model="toy.max_age"
             type="number"
             default="8"
@@ -81,7 +81,7 @@ import BasePhoneInput from "@/components/base/BasePhoneInput";
 
 const toyDefault = {
   min_age: 0,
-  max_age: 8,
+  max_age: 96,
   life_time: 12,
 }
 export default {
