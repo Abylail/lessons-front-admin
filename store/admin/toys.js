@@ -80,8 +80,6 @@ export const actions = {
 
   // Удаление фото
   async removePhoto({ commit, rootGetters, dispatch }, {imagePath, toyId}) {
-    const { institution_id } = rootGetters["auth/getUserInfo"];
-    if (!institution_id) return;
     await this.$api.$put(`/api/v1/admin/toy/deletePhoto/${toyId}`, {imagePath})
       .then(({err}) => {
         if (!err) {
