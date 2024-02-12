@@ -26,7 +26,7 @@
       </template>
       <template v-slot:item.age="{ item }">
         <span>
-          {{ item.min_age }} - {{ item.max_age }} лет
+          {{ getAge(item) }}
         </span>
       </template>
       <template v-slot:item.token="{ item }">
@@ -84,6 +84,17 @@ export default {
           ? 2
           : 3;
       return parseInt((toy.price / okkTime)/120);
+    },
+
+    // Получить возраст
+    getAge(toy) {
+      const minAge = toy.min_age % 12 === 0
+        ? `${toy.min_age/12} лет`
+        : `${toy.min_age} мес`;
+      const maxAge = toy.max_age % 12 === 0
+        ? `${toy.max_age/12} лет`
+        : `${toy.max_age} мес`;
+      return `${minAge} - ${maxAge}`
     },
 
     // Запрос
