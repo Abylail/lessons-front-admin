@@ -57,6 +57,13 @@ export const trialStatuses = [//["start", "confirmed", "rejected", "enrolled"]
   {code: "rejected", name: "Не купил"},
   {code: "enrolled", name: "Купил"},
 ]
+export const toySubscribeStatuses = [//["start", "confirmed", "rejected", "enrolled"]
+  {code: "start", name: "Не обработан"},
+  {code: "confirmed", name: "Покупает (процесс)"},
+  {code: "rejected", name: "Отказ"},
+  {code: "enrolled", name: "Пользуется"},
+  {code: "no_answer", name: "Не отвечает"},
+]
 
 export const requestStatuses = [
   { code: "start", name: "Не обработан" },
