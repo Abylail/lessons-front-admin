@@ -3,7 +3,8 @@
     <h2 class="toys__title">Список игрушек</h2>
 
     <div class="toys__tools">
-      <v-btn color="primary" outlined @click="createHandle()">Добавить игрушек +</v-btn>
+      <v-btn color="primary" outlined @click="createHandle()">Добавить +</v-btn>
+      <v-text-field label="Поиск по названию" v-model="searchText" dense outlined hide-details clearable/>
     </div>
 
     <v-data-table
@@ -63,11 +64,20 @@ export default {
 
     isLoading: true,
     isPhotoLoading: false,
+
+    searchText: "",
   }),
   computed: {
     ...mapGetters({
-      toys: "admin/toys/getToyList",
+      _toys: "admin/toys/getToyList",
     }),
+
+    // Список игрушек
+    toys() {
+      if (!this.searchText) return this._toys;
+      const lowerSearch = this.searchText?.toLowerCase();
+      return this._toys.filter(({name_ru}) => name_ru?.toLowerCase().includes(lowerSearch));
+    }
   },
   methods: {
     ...mapActions({
@@ -143,6 +153,13 @@ export default {
 
   &__table {
     margin-top: 20px;
+  }
+
+  &__tools {
+    display: flex;
+    flex-direction: row;
+    column-gap: 8px;
+    align-items: center;
   }
 
 }
