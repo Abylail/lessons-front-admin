@@ -1,6 +1,6 @@
 <template>
   <div class="toys page">
-    <h2 class="toys__title">Список игрушек</h2>
+    <h2 class="toys__title">Список игрушек ({{ _toys.length }})</h2>
 
     <div class="toys__tools">
       <v-btn color="primary" outlined @click="createHandle()">Добавить +</v-btn>
@@ -15,6 +15,10 @@
       hide-default-footer
       disable-pagination
     >
+      <template v-slot:item.name_ru="{ item }">
+        <a v-if="item.kaspiUrl" target="_blank" :href="item.kaspiUrl">{{ item.name_ru }}</a>
+        <span v-else>{{ item.name_ru }}</span>
+      </template>
       <template v-slot:item.photos="{ item }">
         <base-photo-input
           :value="item.photos"

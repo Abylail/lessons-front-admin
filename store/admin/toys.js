@@ -25,6 +25,17 @@ export const actions = {
       })
   },
 
+  // Получить одну
+  getOne({ commit }, toy) {
+    return new Promise(resolve => {
+      this.$api.$get(`/api/v1/admin/toy/get/${toy.id}`)
+        .then(({err, body}) => {
+          if (!err) return resolve(body);
+          resolve(null);
+        })
+    })
+  },
+
   // Создать игрушки
   async createToy({ rootGetters, dispatch  }, toyInfo) {
     return new Promise(resolve => {
