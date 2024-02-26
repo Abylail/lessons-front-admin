@@ -33,7 +33,7 @@
 
 <script>
 import {mapActions, mapGetters} from "vuex";
-import EditToyCategoryModal from "../../components/common/modals/admin/EditToyCategoryModal";
+import EditToyCategoryModal from "../../components/common/modals/admin/editToyCategoryModal";
 
 export default {
   name: "toysCategories",
