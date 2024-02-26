@@ -64,6 +64,15 @@
             type="number"
             outlined dense
           />
+          <v-select
+            label="Категории"
+            item-value="id"
+            item-text="name_ru"
+            v-model="toy.categories"
+            :items="categories"
+            :disabled="isNew"
+            multiple outlined dense return-object
+          />
         </div>
       </div>
       <div class="edit-toy__actions">
@@ -76,7 +85,7 @@
 </template>
 
 <script>
-import {mapActions} from "vuex";
+import {mapActions, mapGetters} from "vuex";
 import BasePhoneInput from "@/components/base/BasePhoneInput";
 
 const toyDefault = {
@@ -93,6 +102,9 @@ export default {
     isLoading: false,
   }),
   computed: {
+    ...mapGetters({
+      categories: "admin/toysCategories/getCategoryList"
+    }),
     // Новое
     isNew() {
       return !this.toy.id

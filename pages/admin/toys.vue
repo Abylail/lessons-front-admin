@@ -15,9 +15,10 @@
       hide-default-footer
       disable-pagination
     >
-      <template v-slot:item.name_ru="{ item }">
+      <template v-slot:item.name="{ item }">
         <a v-if="item.kaspiUrl" target="_blank" :href="item.kaspiUrl">{{ item.name_ru }}</a>
         <span v-else>{{ item.name_ru }}</span>
+        <div>{{ item.price }}тг</div>
       </template>
       <template v-slot:item.photos="{ item }">
         <base-photo-input
@@ -39,6 +40,13 @@
           {{ getToken(item) }}
         </span>
       </template>
+      <template v-slot:item.categories="{ item }">
+        <v-chip
+          class="mr-1 mb-1 mt-1" outlined small
+          v-for="category in item.categories" :key="category.id"
+        >{{ category.name_ru }}</v-chip>
+        <spanv v-if="!item.categories.length">-</spanv>
+      </template>
       <template v-slot:item.actions="{ item }">
         <v-btn icon @click="updateHandle(item)"><v-icon>mdi-pencil</v-icon></v-btn>
       </template>
@@ -58,11 +66,11 @@ export default {
   components: {BasePhotoInput, EditToyModal},
   data: () => ({
     tableHeaders: [
-      { text: 'Название', value: 'name_ru', sortable: false},
+      { text: 'Описание', value: 'name', sortable: false},
       { text: 'Фото', value: 'photos', sortable: false},
-      { text: 'Цена', value: 'price', sortable: false},
-      { text: 'Токены', value: 'token', sortable: false},
       { text: 'Возраст', value: 'age', sortable: false},
+      { text: 'Токены', value: 'token', sortable: true},
+      { text: 'Категории', value: 'categories', sortable: true},
       { text: '', value: 'actions', sortable: false, width: 50},
     ],
 
@@ -86,6 +94,7 @@ export default {
   methods: {
     ...mapActions({
       _fetchToys: "admin/toys/fetchToysList",
+      fetchCategoryList: "admin/toysCategories/fetchCategoryList",
       _addPhoto: "admin/toys/addPhoto",
       _removePhoto: "admin/toys/removePhoto",
     }),
@@ -143,6 +152,7 @@ export default {
     }
   },
   mounted() {
+    this.fetchCategoryList();
     this.fetchToys();
   }
 }
