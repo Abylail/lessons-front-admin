@@ -74,6 +74,42 @@
             multiple outlined dense return-object
           />
         </div>
+        <div class="columns-2">
+          <v-text-field
+            label="Размер (рус)"
+            v-model="toy.size_ru"
+            outlined dense
+          />
+          <v-text-field
+            label="Размер (каз)"
+            v-model="toy.size_kz"
+            outlined dense
+          />
+        </div>
+        <div class="columns-2">
+          <v-text-field
+            label="Материал (рус)"
+            v-model="toy.material_ru"
+            outlined dense
+          />
+          <v-text-field
+            label="Материал (каз)"
+            v-model="toy.material_kz"
+            outlined dense
+          />
+        </div>
+        <div class="columns-2">
+          <v-text-field
+            label="Предназначение (рус)"
+            v-model="toy.purpose_ru"
+            outlined dense
+          />
+          <v-text-field
+            label="Предназначение (каз)"
+            v-model="toy.purpose_kz"
+            outlined dense
+          />
+        </div>
       </div>
       <div class="edit-toy__actions">
         <v-btn @click="closeSelf()">Отменить</v-btn>
