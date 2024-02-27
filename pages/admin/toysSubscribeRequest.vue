@@ -1,6 +1,9 @@
 <template>
   <div class="tsq page">
-    <h2 class="tsq__title">Завки на подписку</h2>
+    <h2 class="tsq__title">
+      <span>Завки на подписку</span>
+      <v-btn outlined small color="primary" @click="$modal.show('toy-rate-calculator')">Калькулятор</v-btn>
+    </h2>
 
     <div class="tsq__list">
       <v-card class="tsq__card" v-for="request in requests" :key="request.id">
@@ -35,15 +38,19 @@
         </v-expansion-panels>
       </v-card>
     </div>
+
+    <toy-rate-calculator-modal/>
   </div>
 </template>
 
 <script>
 import {mapActions, mapGetters} from "vuex";
 import {toySubscribeStatuses} from "@/config/lists";
+import ToyRateCalculatorModal from "@/components/common/modals/admin/toyRateCalculatorModal";
 
 export default {
   name: "toysSubscribeRequest",
+  components: {ToyRateCalculatorModal},
   data: () => ({
     isLoading: false,
 
@@ -74,7 +81,10 @@ export default {
 
     async goKaspi(toy) {
       const fullToy = await this.getToy(toy);
-      if (!!fullToy?.kaspiUrl) window.open(fullToy?.kaspiUrl, "_blank")
+      if (!!fullToy?.kaspiUrl) {
+        if (this.$device.isMobile) window.location.href = fullToy?.kaspiUrl;
+        else window.open(fullToy?.kaspiUrl, "_blank")
+      }
     },
 
     getTokensCount(cart) {
