@@ -11,3 +11,12 @@ export const uniqList = (list = [], uniqProperty = "id") => {
 
 /** Удаление из номера лишний символов */
 export const phonePreparing = phone => phone && phone.replaceAll(/\D+/g, "")
+
+/** Сколько дней осталось до даты */
+const today = new Date();
+export const daysLeft = (future) => {
+  const futureFate = new Date(future);
+  let difference = futureFate.getTime() - today.getTime();
+
+  return Math.ceil(difference / (1000 * 3600 * 24));
+}
