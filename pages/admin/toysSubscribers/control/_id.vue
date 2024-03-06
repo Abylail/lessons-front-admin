@@ -104,6 +104,8 @@
 
       <h3 class="mb-3">Товары</h3>
 
+      <toys-control v-model="subscribe.activeToys"/>
+
       <h3 class="mb-3">Для менеджера</h3>
       <div class="relative-columns-3">
         <v-text-field
@@ -127,9 +129,10 @@
 import BasePhoneInput from "@/components/base/BasePhoneInput";
 import {mapActions} from "vuex";
 import {dateFormat} from "@/plugins/filters";
+import ToysControl from "@/components/common/toys/toysControl";
 
 export default {
-  components: {BasePhoneInput},
+  components: {ToysControl, BasePhoneInput},
   data: () => ({
     subscribe: {active: true},
 

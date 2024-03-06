@@ -20,3 +20,14 @@ export const daysLeft = (future) => {
 
   return Math.ceil(difference / (1000 * 3600 * 24));
 }
+
+/** Сколько токенов стоит игрушка */
+export const getToken = ({price, life_time}) => {
+  // время окупаемости
+  const okkTime = price > 12000
+    ? life_time/3
+    : price < 5001
+      ? 1.5
+      : 3;
+  return parseInt((price / okkTime)/120);
+};

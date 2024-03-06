@@ -16,7 +16,8 @@ export const mutations = {
 
 export const actions = {
   // Получить список игрушек
-  async fetchToysList({ commit, state }) {
+  async fetchToysList({ commit, state }, force = false) {
+    if (!force && !!state.toys.length) return;
     await this.$api.$get(`/api/v1/admin/toy/get`)
       .then(({err, body}) => {
         if (!err) {
@@ -43,7 +44,7 @@ export const actions = {
         .then(({err, body}) => {
           if (!err) {
             this.$toast.success("Игрушка создана");
-            dispatch("fetchToysList");
+            dispatch("fetchToysList", true);
           }
           resolve(!err);
         })
@@ -57,7 +58,7 @@ export const actions = {
         .then(({err, body}) => {
           if (!err) {
             this.$toast.success("Игрушка обновлена");
-            dispatch("fetchToysList");
+            dispatch("fetchToysList", true);
           }
           resolve(!err);
         })
@@ -71,7 +72,7 @@ export const actions = {
         .then(({err, body}) => {
           if (!err) {
             this.$toast("Игрушка удалена");
-            dispatch("fetchToysList");
+            dispatch("fetchToysList", true);
           }
           resolve(!err);
         })
@@ -86,7 +87,7 @@ export const actions = {
           this.$toast.success("Фото загруженно");
         }
       })
-    await dispatch("fetchToysList");
+    await dispatch("fetchToysList", true);
   },
 
   // Удаление фото
@@ -97,6 +98,6 @@ export const actions = {
           this.$toast("Фото удаленно");
         }
       })
-    await dispatch("fetchToysList");
+    await dispatch("fetchToysList", true);
   },
 }
