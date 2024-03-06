@@ -8,7 +8,7 @@
     <div class="ts__list">
       <v-card class="mb-5 mt-5" :flat="daysLeft(subscriber.endSubscription) < 0" v-for="subscriber in subscribers" :key="subscriber.id" @click="$router.push(`/admin/toysSubscribers/control/${subscriber.id}`)">
         <v-card-title>
-          {{ subscriber.phone }} ({{ subscriber.name }}) - {{ subscriber.rate }}
+          <a :href="`https://wa.me/${subscriber.phone}`" @click.stop>{{ subscriber.phone }}</a>. ({{ subscriber.name }}) - {{ subscriber.rate }}
           <v-chip outlined class="ml-5" small v-if="subscriber.status">{{ subscriber.status }}</v-chip>
         </v-card-title>
         <v-card-subtitle v-if="daysLeft(subscriber.endSubscription) >= 0">

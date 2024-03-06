@@ -7,7 +7,7 @@
 
     <div class="tsq__list">
       <v-card class="tsq__card" v-for="request in requests" :key="request.id">
-        <v-card-title>{{ request.phone }} Тариф - {{ request.rate.name_ru }}</v-card-title>
+        <v-card-title><a :href="`https://wa.me/${request.phone}`">{{ request.phone }}</a>. Тариф - {{ request.rate.name_ru }}</v-card-title>
         <v-card-subtitle>Дата создания: {{ request.createdAt | dateTimeFormat}}</v-card-subtitle>
         <v-card-actions>
           <v-select
