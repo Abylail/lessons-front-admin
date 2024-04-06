@@ -7,7 +7,7 @@ export default {
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
     titleTemplate: '%s - lessons-front-admin',
-    title: 'lessons-front-admin',
+    title: 'Kidup админ',
     htmlAttrs: {
       lang: 'en'
     },
@@ -18,7 +18,7 @@ export default {
       { name: 'format-detection', content: 'telephone=no' }
     ],
     link: [
-      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
+      { rel: 'icon', type: 'image', href: '/kidup-logo.jpg' }
     ]
   },
 
@@ -62,7 +62,32 @@ export default {
     "@nuxtjs/axios",
     "vue2-editor/nuxt",
     "@nuxtjs/dotenv",
+    "@nuxtjs/pwa"
   ],
+
+  pwa: {
+    icon: {
+      fileName: 'kidup-logo.jpg',
+    },
+    manifest: {
+      name: 'Kidup админ',
+      short_name: 'Kidup админ',
+      lang: 'ru',
+      theme_color: '№1976d2',
+      background_color: '#1976d2',
+      start_url: '/adminpanel',
+      icons: [
+        {
+          src: '/kidup-logo.jpg',
+          sizes: '512x512',
+          type: 'image',
+        },
+      ],
+    },
+    workbox: {
+      offline: false,
+    },
+  },
 
   // Axios
   axios: {
