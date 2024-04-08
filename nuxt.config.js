@@ -93,18 +93,10 @@ export default {
   axios: {
     baseURL: process.env.BACKEND_URL,
     credentials: true,
-    proxy: true
   },
 
   router: {
     base: process.env.BASE_URL
-  },
-
-  proxy: {
-    [process.env.BASE_URL + "/api"]: {
-      target: process.env.BACKEND_URL,
-      pathRewrite: {[process.env.BASE_URL]: ''}
-    }
   },
 
   // Toastification
