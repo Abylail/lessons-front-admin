@@ -6,7 +6,7 @@ const createCatcher = toast => err => {
 }
 
 /** Создание ссылки */
-const createUrl = url => process.env.BASE_URL + url;
+const createUrl = url => url;
 
 /** Создание options */
 const createOptions = (options, store) => {
