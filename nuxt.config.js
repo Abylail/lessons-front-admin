@@ -73,14 +73,14 @@ export default {
       name: 'Kidup админ',
       short_name: 'Kidup админ',
       lang: 'ru',
-      theme_color: '№1976d2',
+      theme_color: '#1976d2',
       background_color: '#1976d2',
       start_url: '/adminpanel',
       icons: [
         {
           src: '/kidup-logo.jpg',
           sizes: '512x512',
-          type: 'image',
+          type: 'image/jpg',
         },
       ],
     },
