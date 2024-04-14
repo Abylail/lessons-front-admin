@@ -18,7 +18,7 @@ export default {
       { name: 'format-detection', content: 'telephone=no' }
     ],
     link: [
-      { rel: 'icon', type: 'image', href: '/kidup-logo.jpg' }
+      { rel: 'icon', type: 'image/jpg', href: '/kidup-logo.jpg' }
     ]
   },
 

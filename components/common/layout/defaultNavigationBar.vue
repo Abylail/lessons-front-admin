@@ -1,5 +1,5 @@
 <template>
-  <v-navigation-drawer app :value="open" :permanent="$device.isDesktop" @input="$emit('input:open', $event)">
+  <v-navigation-drawer class="navigation-bar" app :value="open" :permanent="$device.isDesktop" @input="$emit('input:open', $event)">
 
     <!-- USER CARD -->
     <v-sheet class="pa-4">
@@ -77,6 +77,7 @@ export default {
         { icon: "mdi-teddy-bear", name: "Категории игрушек", route: "/admin/toysCategories", roles: [rolesDict.admin.code]},
         { icon: "mdi-teddy-bear", name: "Подписчики", route: "/admin/toysSubscribers", roles: [rolesDict.admin.code]},
         { icon: "mdi-teddy-bear", name: "Заявки на подписку", route: "/admin/toysSubscribeRequest", roles: [rolesDict.admin.code]},
+        { icon: "mdi-teddy-bear", name: "Пакеты", route: "/admin/toysPacks", roles: [rolesDict.admin.code]},
         { icon: "mdi-format-list-bulleted", name: "Категории", route: "/admin/categories", roles: [rolesDict.admin.code]},
         { icon: "mdi-book-multiple", name: "Предметы", route: "/admin/subjects", roles: [rolesDict.admin.code]},
         { icon: "mdi-account-group", name: "Пользователи", route: "/admin/users", roles: [rolesDict.admin.code]},
@@ -96,6 +97,8 @@ export default {
 
 <style lang="scss" scoped>
 .navigation-bar {
+  max-height: 100vh;
+  overflow: auto;
 
   &__avatar {
     display: grid;

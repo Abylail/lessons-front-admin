@@ -2,7 +2,7 @@
   <div class="tsq page">
     <h2 class="tsq__title">
       <span>Завки на подписку</span>
-      <v-btn outlined small color="primary" @click="$modal.show('edit-toy-subscriber')">Калькулятор</v-btn>
+      <v-btn outlined small color="primary" @click="$modal.show('toy-rate-calculator')">Калькулятор</v-btn>
     </h2>
 
     <div class="tsq__list">
