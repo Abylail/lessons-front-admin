@@ -1,5 +1,5 @@
 <template>
-  <modal name="edit-category-pack" close-button @onShow="getPayload()" @onHide="clear()">
+  <modal name="edit-category-pack" :close-on-out-click="false" close-button @onShow="getPayload()" @onHide="clear()">
     <div class="edit-category-pack">
       <h2>Категория</h2>
       <div class="edit-category-pack__form">
