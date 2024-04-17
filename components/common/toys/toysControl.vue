@@ -72,7 +72,7 @@ export default {
 
     selectedToys: {
       get() {
-        return JSON.parse(this.value);
+        return JSON.parse(this.value) || [];
       },
       set(val) {
         this.$emit("input", JSON.stringify(val))
