@@ -29,6 +29,10 @@
           <nuxt-link to="/registration">Зарегестрироваться</nuxt-link>
         </div>
 
+        <div class="login-page__registration">
+          <nuxt-link to="/login/resetPass">Забыли пароль?</nuxt-link>
+        </div>
+
       </div>
     </v-card>
 

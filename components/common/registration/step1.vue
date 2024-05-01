@@ -2,7 +2,7 @@
   <div class="step-1">
 
     <v-text-field
-      label="Сотовый номер"
+      label="Сотовый номер (Управляющего центром)"
       v-model="userInfo.phone"
       v-mask="'+7 (###) ###-##-##'"
       :error-messages="error.phone"

@@ -74,6 +74,7 @@
           />
           <v-text-field
             label="Ссылка на инстаграм"
+            placeholder="https:// ..."
             v-model="institution.instagram_url"
             outlined dense
           />

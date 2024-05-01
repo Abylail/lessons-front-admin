@@ -30,7 +30,7 @@
     <div class="settings__center">
       <h2 class="settings__sub-title">Контакты</h2>
       <div class="relative-columns-2">
-        <v-text-field label="Ссылка на инстаграм" v-model="centerInfo.instagram_url" outlined dense/>
+        <v-text-field label="Ссылка на инстаграм" placeholder="https:// ..." v-model="centerInfo.instagram_url" outlined dense/>
         <v-text-field label="Email" v-model="centerInfo.email" outlined dense/>
       </div>
 

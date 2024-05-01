@@ -93,4 +93,24 @@ export const actions = {
         }
       })
   },
+
+  // Отправка смс кода
+  sendSmsCode({ commit }, {phone}) {
+    return new Promise(resolve => {
+      this.$api.$post("/api/v1/admin/user/sendConfirmSms", {phone})
+        .then(({err, body}) => {
+          resolve(!err);
+        })
+    })
+  },
+
+  // Задать новый пароль
+  resetPass({}, {phone, sms_code, password}) {
+    return new Promise(resolve => {
+      this.$api.$post("/api/v1/admin/user/resetPass", {phone, sms_code, password})
+        .then(({err, body}) => {
+          resolve(!err);
+        })
+    })
+  },
 }

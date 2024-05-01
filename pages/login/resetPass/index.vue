@@ -1,8 +1,8 @@
 <template>
-  <div class="login-page" @keyup.enter="loginHandle()">
+  <div class="login-page">
 
-    <v-card class="login-page__card">
-      <v-card-title>Введите номер</v-card-title>
+    <v-card class="login-page__card" v-if="step === 0">
+      <v-card-title>Сброс пароля</v-card-title>
       <div class="login-page__main">
 
         <!-- phone -->
@@ -11,10 +11,36 @@
           v-model="authData.phone"
           ref="phoneInput"
           outlined
+          dense
         />
 
-        <v-btn color="primary" :loading="isLoading" block @click="loginHandle()">Отправить</v-btn>
+        <v-btn color="primary" :loading="isLoading" block @click="sendCodeHandle()">Отправить смс код</v-btn>
+      </div>
+    </v-card>
 
+    <v-card class="login-page__card" v-if="step === 1">
+      <v-card-title>Введите смс код <br/>и новый пароль</v-card-title>
+      <div class="login-page__main">
+
+        <!-- OTP -->
+        <v-otp-input
+          ref="input"
+          v-model="authData.sms_code"
+          length="4"
+          type="number"
+        />
+
+        <!-- PASSWORD -->
+        <v-text-field
+          label="Пароль"
+          v-model="authData.password"
+          :type="showPassword ? 'text' : 'password'"
+          :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
+          outlined
+          @click:append="showPassword = !showPassword"
+        />
+
+        <v-btn color="primary" :loading="isLoading" block @click="submit()">Сохранить пароль</v-btn>
       </div>
     </v-card>
 
@@ -34,9 +60,12 @@ export default {
     showPassword: false,
     isLoading: false,
 
+    step: 0,
+
     authData: {
       phone: null,
       password: null,
+      sms_code: null
     },
 
     errors: {
@@ -46,22 +75,30 @@ export default {
   }),
   methods: {
     ...mapActions({
-      _login: "auth/login"
+      _sendSmsCode: "auth/sendSmsCode",
+      _resetPass: "auth/resetPass"
     }),
     validate() {
 
     },
-    async loginHandle() {
-      if (!this.authData.phone || !this.authData.password) return;
+    async sendCodeHandle() {
       this.isLoading = true;
-      this.showPassword = false;
-      await this._login({
+      const isSuccess =  await this._sendSmsCode({
         phone: this.authData.phone,
-        password: this.authData.password,
       })
+      if (isSuccess) this.step++;
       this.isLoading = false;
-      this.$router.push("/");
-    }
+    },
+
+    async submit() {
+      this.isLoading = true;
+      const isSuccess = await this._resetPass(this.authData);
+      if (isSuccess) {
+        this.$toast.success("Пароль обновленн");
+        this.$router.push("/login")
+      }
+      this.isLoading = false;
+    },
   },
 }
 </script>

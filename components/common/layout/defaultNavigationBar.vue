@@ -20,8 +20,8 @@
         v-for="({icon, name, route, roles}, index) in links"
         v-show="roleAccess(roles)"
         :key="index"
-        :to="route"
         link
+        @click="goRoute(route)"
       >
         <v-list-item-icon>
           <v-icon>{{ icon }}</v-icon>
@@ -70,6 +70,7 @@ export default {
         { icon: "mdi-map-marker", name: "Адреса и филиалы", route: "/center/branches", roles: [rolesDict.center_director.code]},
         { icon: "mdi-bookshelf", name: "Мои предметы", route: "/center/subjects", roles: [rolesDict.center_director.code]},
         { icon: "mdi-account-group", name: `Записи ${this.registrationsCount ? `(${this.registrationsCount})`: ""}`, route: "/center/registrations", roles: [rolesDict.center_director.code]},
+        { icon: "mdi-help-circle-outline", name: "Помощь", route: "https://wa.me/+77056707891", roles: [rolesDict.center_director.code]},
         // { icon: "mdi-email-outline", name: `Мои обращения ${this.newCenterAppealsCount ? `(${this.newCenterAppealsCount})` : ""}`, route: "/center/appeals", roles: [rolesDict.center_director.code]},
 
         { icon: "mdi-cog", name: "Основные настройки", route: "/admin/settings", roles: [rolesDict.admin.code]},
@@ -90,6 +91,11 @@ export default {
   methods: {
     roleAccess(linkRoles) {
       return linkRoles.includes(this.role);
+    },
+
+    goRoute(route) {
+      if (route.startsWith("http")) window.location = route;
+      else this.$router.push(route);
     }
   }
 }

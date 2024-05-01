@@ -1,4 +1,10 @@
+export const state = () => ({
+  phone: null,
+})
 
+export const getters = {
+  getPhone: state => state.phone,
+}
 
 export const mutations = {
   set(state, [namespace, value]) {
@@ -12,30 +18,26 @@ export const actions = {
   sendSmsCode({ commit }, {phone}) {
     const serializedPhone = "+" + phone.replaceAll(/\D+/g, "");
     return new Promise(resolve => {
-      this.$api.$post("/api/v1/user/signup/send-sms", {phone: serializedPhone})
+      this.$api.$post("/api/v1/admin/user/sendConfirmSms", {phone: serializedPhone})
         .then(({err, body}) => {
-          if (!err) commit("set", ["token", body]);
+          if (!err) {
+            commit("set", ["phone", serializedPhone]);
+            commit("set", ["token", body]);
+          }
           resolve(!err);
         })
     })
   },
 
-  // Подтверждение телефона
-  confirmSmsCode({ commit, state }, {code}) {
+  // Создание пароля
+  sendInfo({ state, dispatch, commit }, form) {
     return new Promise(resolve => {
-      this.$api.$post("/api/v1/user/signup/check-sms", {sms_code: code, token: state.token})
-        .then(({err, body}) => {
-          resolve(!err)
+      this.$api.$post("/api/v1/admin/user/center/register", {...form, phone: state.phone})
+        .then(async ({err, body}) => {
+          if (!err) this.$cookies.set("userToken", body.token);
+          resolve(!err);
         })
     })
-  },
-
-  // Создание пароля
-  async setPassword({ state, dispatch }, { password, role }) {
-    await this.$api.$post("/api/v1/user/signup/passwords", {role_code: role, password, re_password: password, token: state.token})
-      .then(async ({err, body}) => {
-        if (!err) await dispatch("auth/tokenAuth", body, {root: true});
-      })
   },
 
 }
