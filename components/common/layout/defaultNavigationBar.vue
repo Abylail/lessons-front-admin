@@ -74,6 +74,7 @@ export default {
         // { icon: "mdi-email-outline", name: `Мои обращения ${this.newCenterAppealsCount ? `(${this.newCenterAppealsCount})` : ""}`, route: "/center/appeals", roles: [rolesDict.center_director.code]},
 
         { icon: "mdi-cog", name: "Основные настройки", route: "/admin/settings", roles: [rolesDict.admin.code]},
+        { icon: "mdi-list-box", name: "Объявления", route: "/admin/announcements", roles: [rolesDict.admin.code]},
         { icon: "mdi-teddy-bear", name: "Игрушки", route: "/admin/toys", roles: [rolesDict.admin.code]},
         { icon: "mdi-teddy-bear", name: "Категории игрушек", route: "/admin/toysCategories", roles: [rolesDict.admin.code]},
         { icon: "mdi-teddy-bear", name: "Подписчики", route: "/admin/toysSubscribers", roles: [rolesDict.admin.code]},
