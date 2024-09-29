@@ -45,6 +45,7 @@ export default {
     tableHeaders: [
       { text: "Название", value: "title", sortable: false },
       { text: 'Цена', value: 'price', sortable: false},
+      { text: 'Цена доставки', value: 'delivery_price', sortable: false},
       { text: 'Телефон', value: 'seller.phone', sortable: false},
       { text: 'Обновлен', value: 'updatedAt', sortable: false,},
       { text: '', value: 'actions', sortable: false,},

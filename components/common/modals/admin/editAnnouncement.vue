@@ -20,11 +20,22 @@
           outlined dense
         />
         <v-text-field
-          label="Цена"
+          label="Цена товара"
           v-model="announcement.price"
           type="number"
           outlined dense
         />
+        <v-text-field
+          label="Цена доставки"
+          :value="announcement.delivery_price"
+          type="number"
+          outlined dense disabled
+        />
+
+        <div>
+          Цена для пользователя
+          <strong>цена товара + цена доставки</strong>
+        </div>
 
         <div class="mb-5" v-if="announcement.status === 'waitingPayment' || announcement.status === 'ordered'">
           <div>Нужна дезинфекция: {{ announcement.need_disinfected ? "Да" : "Нет"  }}</div>
